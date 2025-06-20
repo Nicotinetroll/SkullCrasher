@@ -10,7 +10,6 @@ namespace OctoberStudio.Abilities
         private static readonly int FIREBALL_EXPLOSION_HASH = "Fireball Explosion".GetHashCode();
 
         [SerializeField] Collider2D fireballCollider;
-
         [SerializeField] ParticleSystem explosionParticle;
         [SerializeField] GameObject visuals;
 
@@ -22,6 +21,11 @@ namespace OctoberStudio.Abilities
         public float Lifetime { get; set; }
         public float Speed { get; set; }
         public float Size { get; set; }
+
+        /// <summary>
+        /// Marks if the projectile is a critical hit.
+        /// </summary>
+        public bool IsCritical { get; set; }
 
         public event UnityAction<FireballProjectileBehavior> onFinished;
 
@@ -47,7 +51,6 @@ namespace OctoberStudio.Abilities
             if (enemy != null)
             {
                 movementCoroutine.Stop();
-
                 Explode();
             }
         }
@@ -62,8 +65,7 @@ namespace OctoberStudio.Abilities
             for (int i = 0; i < enemies.Count; i++)
             {
                 var enemy = enemies[i];
-
-                enemy.TakeDamage(PlayerBehavior.Player.Damage * DamageMultiplier);
+                enemy.TakeDamage(PlayerBehavior.Player.Damage * DamageMultiplier, IsCritical);
             }
 
             explosionParticle.Play();
@@ -86,6 +88,9 @@ namespace OctoberStudio.Abilities
 
             visuals.SetActive(true);
             fireballCollider.enabled = true;
+
+            // Reset crit flag
+            IsCritical = false;
         }
     }
 }

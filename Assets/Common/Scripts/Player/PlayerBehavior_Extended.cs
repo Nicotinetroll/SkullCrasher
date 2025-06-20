@@ -57,5 +57,14 @@ namespace PalbaGames
 
             return player.Damage;
         }
+
+        /// <summary>
+        /// Returns calculated damage and whether it was critical.
+        /// </summary>
+        public float GetFinalDamage(float baseDamage, out bool isCritical)
+        {
+            isCritical = Random.value <= criticalChance / 100f;
+            return isCritical ? baseDamage * criticalMultiplier : baseDamage;
+        }
     }
 }

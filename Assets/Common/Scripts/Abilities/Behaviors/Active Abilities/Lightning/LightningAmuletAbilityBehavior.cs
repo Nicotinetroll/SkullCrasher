@@ -3,9 +3,13 @@ using OctoberStudio.Pool;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using PalbaGames;
 
 namespace OctoberStudio.Abilities
 {
+    /// <summary>
+    /// Active ability that spawns lightning strikes dealing damage and possibly crits to enemies in range.
+    /// </summary>
     public class LightningAmuletAbilityBehavior : AbilityBehavior<LightningAmuletAbilityData, LightningAmuletAbilityLevel>
     {
         private static readonly int LIGHTNING_AMULET_HASH = "Lightning Amulet".GetHashCode();
@@ -16,7 +20,6 @@ namespace OctoberStudio.Abilities
         public PoolComponent<ParticleSystem> lightningPool;
 
         private List<IEasingCoroutine> easingCoroutines = new List<IEasingCoroutine>();
-
         private Coroutine abilityCoroutine;
 
         private void Awake()
@@ -27,7 +30,6 @@ namespace OctoberStudio.Abilities
         public override void Init(AbilityData data, int stageId)
         {
             base.Init(data, stageId);
-
             abilityCoroutine = StartCoroutine(AbilityCoroutine());
         }
 
@@ -35,39 +37,59 @@ namespace OctoberStudio.Abilities
         {
             while (true)
             {
-                for(int i = 0; i < AbilityLevel.LightningsCount; i++)
+                for (int i = 0; i < AbilityLevel.LightningsCount; i++)
                 {
                     yield return new WaitForSeconds(AbilityLevel.DurationBetweenHits);
 
                     var particle = lightningPool.GetEntity();
-
                     var spawner = StageController.EnemiesSpawner;
                     var enemy = spawner.GetRandomVisibleEnemy();
 
-                    if(enemy != null)
+                    if (enemy != null)
                     {
                         particle.transform.position = enemy.transform.position;
 
-                        enemy.TakeDamage(PlayerBehavior.Player.Damage * AbilityLevel.Damage);
+                        float baseDamage = PlayerBehavior.Player.Damage * AbilityLevel.Damage;
+                        float finalDamage = baseDamage;
+                        bool isCrit = false;
+
+                        if (PlayerBehavior_Extended.Instance != null)
+                        {
+                            finalDamage = PlayerBehavior_Extended.Instance.GetFinalDamage(baseDamage, out isCrit);
+                        }
+
+                        enemy.TakeDamage(finalDamage, isCrit);
 
                         var enemiesInRadius = StageController.EnemiesSpawner.GetEnemiesInRadius(enemy.transform.position, AbilityLevel.AdditionalDamageRadius);
 
-                        foreach(var closeEnemy in enemiesInRadius)
+                        foreach (var closeEnemy in enemiesInRadius)
                         {
-                            if (closeEnemy != enemy) closeEnemy.TakeDamage(PlayerBehavior.Player.Damage * AbilityLevel.AdditionalDamage);
+                            if (closeEnemy != enemy)
+                            {
+                                float splashDamage = PlayerBehavior.Player.Damage * AbilityLevel.AdditionalDamage;
+                                float finalSplash = splashDamage;
+                                bool isCritSplash = false;
+
+                                if (PlayerBehavior_Extended.Instance != null)
+                                {
+                                    finalSplash = PlayerBehavior_Extended.Instance.GetFinalDamage(splashDamage, out isCritSplash);
+                                }
+
+                                closeEnemy.TakeDamage(finalSplash, isCritSplash);
+                            }
                         }
-                    } else
+                    }
+                    else
                     {
                         particle.transform.position = PlayerBehavior.Player.transform.position + Vector3.up + Vector3.left;
                     }
 
                     IEasingCoroutine easingCoroutine = null;
-                    easingCoroutine = EasingManager.DoAfter(1, () =>
+                    easingCoroutine = EasingManager.DoAfter(1f, () =>
                     {
                         particle.gameObject.SetActive(false);
                         easingCoroutines.Remove(easingCoroutine);
                     });
-
                     easingCoroutines.Add(easingCoroutine);
 
                     GameController.AudioManager.PlaySound(LIGHTNING_AMULET_HASH);
@@ -79,16 +101,17 @@ namespace OctoberStudio.Abilities
 
         public override void Clear()
         {
-            StopCoroutine(abilityCoroutine);
+            if (abilityCoroutine != null)
+                StopCoroutine(abilityCoroutine);
 
-            for (int i = 0; i < easingCoroutines.Count; i++)
+            foreach (var easing in easingCoroutines)
             {
-                var easingCoroutine = easingCoroutines[i];
-                if (easingCoroutine.ExistsAndActive()) easingCoroutine.Stop();
+                if (easing.ExistsAndActive())
+                    easing.Stop();
             }
 
+            easingCoroutines.Clear();
             lightningPool.Destroy();
-
             base.Clear();
         }
     }

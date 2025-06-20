@@ -188,7 +188,7 @@ namespace OctoberStudio
             bool isCritical = !Mathf.Approximately(finalDamage, baseDamage);
             float totalDamage = finalDamage * projectile.DamageMultiplier;
 
-            TakeDamage(totalDamage);
+            TakeDamage(totalDamage, isCritical);
 
             if (HP > 0)
             {
@@ -242,9 +242,8 @@ namespace OctoberStudio
             onHealthChanged?.Invoke(HP, MaxHP);
 
             // Show damage text immediately (no accumulation logic)
-            string damageText = isCritical 
-                ? $"CRIT:{Mathf.RoundToInt(damage)}" 
-                : Mathf.RoundToInt(damage).ToString();
+            string damageText = Mathf.RoundToInt(damage).ToString();
+
 
             StageController.WorldSpaceTextManager.SpawnText(
                 transform.position + new Vector3(Random.Range(-0.1f, 0.1f), Random.value * 0.1f),

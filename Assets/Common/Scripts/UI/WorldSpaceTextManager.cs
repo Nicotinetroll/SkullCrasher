@@ -4,34 +4,41 @@ using UnityEngine;
 
 namespace OctoberStudio.UI
 {
+    /// <summary>
+    /// Handles spawning of floating damage text in world space, including critical hit variations.
+    /// </summary>
     public class WorldSpaceTextManager : MonoBehaviour
     {
+        [Header("References")]
         [SerializeField] RectTransform canvasRect;
         [SerializeField] GameObject textIndicatorPrefab;
+        [SerializeField] GameObject critTextIndicatorPrefab;
 
+        [Header("Animation")]
         [SerializeField] AnimationCurve scaleCurve;
         [SerializeField] AnimationCurve positionCurve;
-        [SerializeField] float maxScale;
-        [SerializeField] float maxY;
-        [SerializeField] float duration;
+        [SerializeField] float maxScale = 1f;
+        [SerializeField] float maxY = 20f;
+        [SerializeField] float duration = 1f;
 
-        private PoolComponent<TextIndicatorBehavior> indicatorsPool;
-        private Queue<IndicatorData> indicators = new Queue<IndicatorData>();
+        private PoolComponent<TextIndicatorBehavior> normalPool;
+        private PoolComponent<TextIndicatorBehavior> critPool;
+        private Queue<IndicatorData> indicators = new();
 
         private void Start()
         {
-            indicatorsPool = new PoolComponent<TextIndicatorBehavior>(textIndicatorPrefab, 500, canvasRect);
+            normalPool = new PoolComponent<TextIndicatorBehavior>(textIndicatorPrefab, 500, canvasRect);
+            critPool = new PoolComponent<TextIndicatorBehavior>(critTextIndicatorPrefab, 100, canvasRect);
         }
 
         public void SpawnText(Vector2 worldPos, string text, bool isCritical = false)
         {
+            Debug.Log($"[Text Spawned] Text: {text} | IsCrit: {isCritical}");
             var viewportPos = Camera.main.WorldToViewportPoint(worldPos);
-            var indicator = indicatorsPool.GetEntity();
+            var pool = isCritical ? critPool : normalPool;
 
-            // Optional: Add prefix or formatting
-            var displayText = isCritical ? $"<color=red>{text}</color>" : text;
-
-            indicator.SetText(displayText);
+            var indicator = pool.GetEntity();
+            indicator.SetText(text);
             indicator.SetAnchors(viewportPos);
             indicator.SetPosition(Vector2.zero);
 
@@ -39,28 +46,20 @@ namespace OctoberStudio.UI
             {
                 indicator = indicator,
                 spawnTime = Time.time,
-                startPosition = Vector2.zero,
                 worldPosition = worldPos
             });
         }
 
         private void Update()
         {
-            while (indicators.Count > 0)
+            while (indicators.Count > 0 && Time.time > indicators.Peek().spawnTime + duration)
             {
-                var data = indicators.Peek();
-
-                if (Time.time > data.spawnTime + duration)
-                {
-                    indicators.Dequeue();
-                    data.indicator.gameObject.SetActive(false);
-                }
-                else break;
+                indicators.Dequeue().indicator.gameObject.SetActive(false);
             }
 
             foreach (var data in indicators)
             {
-                var t = (Time.time - data.spawnTime) / duration;
+                float t = (Time.time - data.spawnTime) / duration;
                 data.indicator.SetPosition(Vector2.up * positionCurve.Evaluate(t) * maxY);
                 data.indicator.SetScale(Vector3.one * scaleCurve.Evaluate(t) * maxScale);
                 data.indicator.SetAnchors(Camera.main.WorldToViewportPoint(data.worldPosition));
@@ -71,7 +70,6 @@ namespace OctoberStudio.UI
         {
             public TextIndicatorBehavior indicator;
             public float spawnTime;
-            public Vector2 startPosition;
             public Vector2 worldPosition;
         }
     }

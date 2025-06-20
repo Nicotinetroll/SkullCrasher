@@ -1,9 +1,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using PalbaGames;
 
 namespace OctoberStudio.Abilities
 {
+    /// <summary>
+    /// Damaging aura that slows down enemies inside its zone.
+    /// Deals damage periodically and optionally applies critical strikes.
+    /// </summary>
     public class TimeZoneAbilityBehavior : AbilityBehavior<TimeGazerAbilityData, TimeGazerAbilityLevel>
     {
         public static readonly int TIME_GAZER_HASH = "Time Gazer".GetHashCode();
@@ -11,22 +16,19 @@ namespace OctoberStudio.Abilities
         [SerializeField] CircleCollider2D abilityCollider;
         [SerializeField] Transform visuals;
 
-        private Dictionary<EnemyBehavior, float> enemies = new Dictionary<EnemyBehavior, float>();
-
+        private readonly Dictionary<EnemyBehavior, float> enemies = new();
         private Effect slowDownEffect;
-
         private float lastTimeSound;
 
         private void Awake()
         {
             slowDownEffect = new Effect(EffectType.Speed, 1);
-            lastTimeSound = -100;
+            lastTimeSound = -100f;
         }
 
         public override void Init(AbilityData data, int stageId)
         {
             base.Init(data, stageId);
-
             slowDownEffect.SetModifier(AbilityLevel.SlowDownMultiplier);
         }
 
@@ -34,56 +36,62 @@ namespace OctoberStudio.Abilities
         {
             transform.position = PlayerBehavior.CenterPosition;
 
-            visuals.localScale = Vector2.one * AbilityLevel.FieldRadius * 2 * PlayerBehavior.Player.SizeMultiplier;
-            abilityCollider.radius = AbilityLevel.FieldRadius * PlayerBehavior.Player.SizeMultiplier;
+            float radius = AbilityLevel.FieldRadius * PlayerBehavior.Player.SizeMultiplier;
+            visuals.localScale = Vector2.one * radius * 2f;
+            abilityCollider.radius = radius;
 
-            if(Time.time - lastTimeSound > 5)
+            if (Time.time - lastTimeSound > 5f)
             {
                 lastTimeSound = Time.time;
-
                 GameController.AudioManager.PlaySound(TIME_GAZER_HASH);
             }
         }
 
         private void OnTriggerEnter2D(Collider2D collision)
         {
-            EnemyBehavior enemy = collision.GetComponent<EnemyBehavior>();
+            var enemy = collision.GetComponent<EnemyBehavior>();
+            if (enemy == null || enemies.ContainsKey(enemy)) return;
 
-            if (!enemies.ContainsKey(enemy))
-            {
-                enemies.Add(enemy, Time.time);
-
-                enemy.TakeDamage(AbilityLevel.Damage * PlayerBehavior.Player.Damage);
-
-                enemy.AddEffect(slowDownEffect);
-            }
+            enemies.Add(enemy, Time.time);
+            ApplyDamage(enemy);
+            enemy.AddEffect(slowDownEffect);
         }
 
         private void Update()
         {
+            float cooldown = AbilityLevel.DamageCooldown * PlayerBehavior.Player.CooldownMultiplier;
+
             foreach (var enemy in enemies.Keys.ToList())
             {
-                float time = enemies[enemy];
-
-                if (Time.time - time > AbilityLevel.DamageCooldown * PlayerBehavior.Player.CooldownMultiplier)
+                if (Time.time - enemies[enemy] > cooldown)
                 {
                     enemies[enemy] = Time.time;
-
-                    enemy.TakeDamage(AbilityLevel.Damage * PlayerBehavior.Player.Damage);
+                    ApplyDamage(enemy);
                 }
             }
         }
 
         private void OnTriggerExit2D(Collider2D collision)
         {
-            EnemyBehavior enemy = collision.GetComponent<EnemyBehavior>();
+            var enemy = collision.GetComponent<EnemyBehavior>();
+            if (enemy == null || !enemies.ContainsKey(enemy)) return;
 
-            if (enemies.ContainsKey(enemy))
+            enemies.Remove(enemy);
+            enemy.RemoveEffect(slowDownEffect);
+        }
+
+        private void ApplyDamage(EnemyBehavior enemy)
+        {
+            float baseDamage = PlayerBehavior.Player.Damage * AbilityLevel.Damage;
+            float finalDamage = baseDamage;
+            bool isCrit = false;
+
+            if (AbilityLevel.CanCrit && PlayerBehavior_Extended.Instance != null)
             {
-                enemies.Remove(enemy);
-
-                enemy.RemoveEffect(slowDownEffect);
+                finalDamage = PlayerBehavior_Extended.Instance.GetFinalDamage(baseDamage, out isCrit);
             }
+
+            enemy.TakeDamage(finalDamage, isCrit);
         }
     }
 }

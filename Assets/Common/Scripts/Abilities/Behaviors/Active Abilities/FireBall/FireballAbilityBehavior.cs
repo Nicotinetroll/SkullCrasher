@@ -1,5 +1,6 @@
 using OctoberStudio.Extensions;
 using OctoberStudio.Pool;
+using PalbaGames;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -35,33 +36,40 @@ namespace OctoberStudio.Abilities
         {
             while (true)
             {
-                for(int i = 0; i < AbilityLevel.ProjectilesCount; i++)
+                for (int i = 0; i < AbilityLevel.ProjectilesCount; i++)
                 {
                     var fireball = fireballPool.GetEntity();
-
                     fireball.transform.position = PlayerBehavior.CenterPosition;
 
                     var closestEnemy = StageController.EnemiesSpawner.GetClosestEnemy(PlayerBehavior.CenterPosition);
 
-                    if(closestEnemy != null)
+                    if (closestEnemy != null)
                     {
                         Vector2 direction = (closestEnemy.Center - fireball.transform.position.XY()).normalized;
                         fireball.transform.rotation = Quaternion.FromToRotation(Vector2.up, direction);
-                    } else
+                    }
+                    else
                     {
                         fireball.transform.rotation = Quaternion.FromToRotation(Vector2.up, Random.insideUnitCircle.normalized);
                     }
 
-                    fireball.DamageMultiplier = AbilityLevel.Damage;
+                    // Critical logic
+                    bool isCrit = false;
+                    float baseDamage = PlayerBehavior.Player.Damage * AbilityLevel.Damage;
+
+                    if (PlayerBehavior_Extended.Instance != null)
+                        baseDamage = PlayerBehavior_Extended.Instance.GetFinalDamage(baseDamage, out isCrit);
+
+                    fireball.DamageMultiplier = baseDamage / PlayerBehavior.Player.Damage; // keep multiplier logic
+                    fireball.IsCritical = isCrit;
+
                     fireball.Speed = AbilityLevel.Speed;
                     fireball.Lifetime = AbilityLevel.FireballLifetime;
                     fireball.Size = AbilityLevel.ProjectileSize;
                     fireball.ExplosionRadius = AbilityLevel.ExplosionRadius;
 
                     fireball.onFinished += OnFireballFinished;
-
                     fireball.Init();
-
                     aliveFireballs.Add(fireball);
 
                     yield return new WaitForSeconds(AbilityLevel.TimeBetweenFireballs);
@@ -74,7 +82,6 @@ namespace OctoberStudio.Abilities
         private void OnFireballFinished(FireballProjectileBehavior fireball)
         {
             fireball.onFinished -= OnFireballFinished;
-
             aliveFireballs.Remove(fireball);
         }
 
@@ -82,12 +89,10 @@ namespace OctoberStudio.Abilities
         {
             StopCoroutine(abilityCoroutine);
 
-            for(int i = 0; i < aliveFireballs.Count; i++)
+            for (int i = 0; i < aliveFireballs.Count; i++)
             {
                 var fireball = aliveFireballs[i];
-
                 fireball.onFinished -= OnFireballFinished;
-
                 fireball.Clear();
             }
 
@@ -97,7 +102,6 @@ namespace OctoberStudio.Abilities
         public override void Clear()
         {
             Disable();
-
             base.Clear();
         }
     }

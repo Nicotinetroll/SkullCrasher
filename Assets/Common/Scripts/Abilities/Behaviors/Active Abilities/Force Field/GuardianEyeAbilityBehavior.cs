@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using PalbaGames;
 
 namespace OctoberStudio.Abilities
 {
@@ -12,7 +13,6 @@ namespace OctoberStudio.Abilities
         [SerializeField] Transform visuals;
 
         private Dictionary<EnemyBehavior, float> enemies = new Dictionary<EnemyBehavior, float>();
-
         private float lastTimeSound;
 
         private void Awake()
@@ -24,19 +24,18 @@ namespace OctoberStudio.Abilities
         {
             transform.position = PlayerBehavior.CenterPosition;
 
-            visuals.localScale = Vector2.one * AbilityLevel.FieldRadius * 2 * PlayerBehavior.Player.SizeMultiplier;
-            abilityCollider.radius = AbilityLevel.FieldRadius * PlayerBehavior.Player.SizeMultiplier;
+            float sizeMultiplier = PlayerBehavior.Player.SizeMultiplier;
+            visuals.localScale = Vector2.one * AbilityLevel.FieldRadius * 2 * sizeMultiplier;
+            abilityCollider.radius = AbilityLevel.FieldRadius * sizeMultiplier;
         }
 
         private void OnTriggerEnter2D(Collider2D collision)
         {
             EnemyBehavior enemy = collision.GetComponent<EnemyBehavior>();
-
             if (!enemies.ContainsKey(enemy))
             {
                 enemies.Add(enemy, Time.time);
-
-                enemy.TakeDamage(AbilityLevel.Damage * PlayerBehavior.Player.Damage);
+                ApplyDamage(enemy);
             }
         }
 
@@ -44,20 +43,16 @@ namespace OctoberStudio.Abilities
         {
             foreach (var enemy in enemies.Keys.ToList())
             {
-                float time = enemies[enemy];
-
-                if(Time.time - time > AbilityLevel.DamageCooldown * PlayerBehavior.Player.CooldownMultiplier)
+                if (Time.time - enemies[enemy] > AbilityLevel.DamageCooldown * PlayerBehavior.Player.CooldownMultiplier)
                 {
                     enemies[enemy] = Time.time;
-
-                    enemy.TakeDamage(AbilityLevel.Damage * PlayerBehavior.Player.Damage);
+                    ApplyDamage(enemy);
                 }
             }
 
-            if(Time.time - lastTimeSound > 5f)
+            if (Time.time - lastTimeSound > 5f)
             {
                 lastTimeSound = Time.time;
-
                 GameController.AudioManager.PlaySound(GUARDIAN_EYE_HASH);
             }
         }
@@ -65,11 +60,21 @@ namespace OctoberStudio.Abilities
         private void OnTriggerExit2D(Collider2D collision)
         {
             EnemyBehavior enemy = collision.GetComponent<EnemyBehavior>();
-
             if (enemies.ContainsKey(enemy))
             {
                 enemies.Remove(enemy);
             }
+        }
+
+        private void ApplyDamage(EnemyBehavior enemy)
+        {
+            float baseDamage = PlayerBehavior.Player.Damage;
+            float finalDamage = PlayerBehavior_Extended.Instance?.GetFinalDamage() ?? baseDamage;
+
+            bool isCrit = !Mathf.Approximately(baseDamage, finalDamage);
+            float totalDamage = AbilityLevel.Damage * finalDamage;
+
+            enemy.TakeDamage(totalDamage, isCrit);
         }
     }
 }

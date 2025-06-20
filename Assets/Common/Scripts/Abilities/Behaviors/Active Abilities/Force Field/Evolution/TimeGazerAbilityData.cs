@@ -34,5 +34,10 @@ namespace OctoberStudio.Abilities
         [Tooltip("Enemy will take damage every 'damageCooldown' seconds")]
         [SerializeField, Min(0f)] float damageCooldown;
         public float DamageCooldown => damageCooldown;
+
+        [Tooltip("Should the zone damage be able to Crit?")]
+        [SerializeField] bool canCrit = true;
+        public bool CanCrit => canCrit;
     }
+
 }
