@@ -7,7 +7,6 @@ namespace OctoberStudio.UI
     public class WorldSpaceTextManager : MonoBehaviour
     {
         [SerializeField] RectTransform canvasRect;
-
         [SerializeField] GameObject textIndicatorPrefab;
 
         [SerializeField] AnimationCurve scaleCurve;
@@ -24,16 +23,25 @@ namespace OctoberStudio.UI
             indicatorsPool = new PoolComponent<TextIndicatorBehavior>(textIndicatorPrefab, 500, canvasRect);
         }
 
-        public void SpawnText(Vector2 worldPos, string text)
+        public void SpawnText(Vector2 worldPos, string text, bool isCritical = false)
         {
             var viewportPos = Camera.main.WorldToViewportPoint(worldPos);
-
             var indicator = indicatorsPool.GetEntity();
 
-            indicator.SetText(text);
+            // Optional: Add prefix or formatting
+            var displayText = isCritical ? $"<color=red>{text}</color>" : text;
+
+            indicator.SetText(displayText);
             indicator.SetAnchors(viewportPos);
             indicator.SetPosition(Vector2.zero);
-            indicators.Enqueue(new IndicatorData() { indicator = indicator, spawnTime = Time.time, startPosition = Vector2.zero, worldPosition = worldPos }); ;
+
+            indicators.Enqueue(new IndicatorData
+            {
+                indicator = indicator,
+                spawnTime = Time.time,
+                startPosition = Vector2.zero,
+                worldPosition = worldPos
+            });
         }
 
         private void Update()
@@ -42,24 +50,19 @@ namespace OctoberStudio.UI
             {
                 var data = indicators.Peek();
 
-                if(Time.time > data.spawnTime + duration)
+                if (Time.time > data.spawnTime + duration)
                 {
                     indicators.Dequeue();
-
                     data.indicator.gameObject.SetActive(false);
-                } else
-                {
-                    break;
                 }
+                else break;
             }
 
-            foreach(var data in indicators)
+            foreach (var data in indicators)
             {
                 var t = (Time.time - data.spawnTime) / duration;
-
                 data.indicator.SetPosition(Vector2.up * positionCurve.Evaluate(t) * maxY);
                 data.indicator.SetScale(Vector3.one * scaleCurve.Evaluate(t) * maxScale);
-
                 data.indicator.SetAnchors(Camera.main.WorldToViewportPoint(data.worldPosition));
             }
         }

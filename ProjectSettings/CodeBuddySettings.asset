@@ -1,0 +1,132 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &1
+MonoBehaviour:
+  m_ObjectHideFlags: 53
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -238398659, guid: c26a3580856bebf4f9f37e7b8a655bd0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  aiAssistantsSettings:
+    modelIndex: 2
+    useCustomModel: 0
+    customModelName: pai-001-light-beta
+    temperature: 0.01
+    baseUrl: https://api.openai.com/
+    instructions: "I want you to write clean Unity Engine C# code by request and
+      have a conversation with me about my project or unity in general.\r\nBe very
+      concise in your responses.\r\nThe code must follow Unity Codestyle. \r\nIn
+      case of a class or method add a comment section to it. \r\nDo not comment on
+      every line of code. \r\nYou must add comments to the class itself and all public
+      members of the class. \r\nInclude all necessary namespaces for the code to
+      compile.\r\nYou must ask for source code file if I ask you to modify existing
+      code and you dont have it in the conversation."
+    apiKey: 
+    assistantId: 
+    syncNeeded: 1
+  aiCompletionsSettings:
+    modelIndex: 6
+    useCustomModel: 0
+    customModelName: pai-001-light-beta
+    temperature: 0.01
+    baseUrl: https://api.openai.com/
+    instructions: "I want you to write clean Unity Engine C# code by request and
+      have a conversation with me about my project or unity in general.\r\nBe very
+      concise in your responses.\r\nThe code must follow Unity Codestyle. \r\nIn
+      case of a class or method add a comment section to it. \r\nDo not comment on
+      every line of code. \r\nYou must add comments to the class itself and all public
+      members of the class. \r\nInclude all necessary namespaces for the code to
+      compile.\r\nYou must ask for source code file if I ask you to modify existing
+      code and you dont have it in the conversation."
+    apiKey: 
+    modelList:
+    - o3-mini
+    - o1
+    - o1-pro
+    - o1-mini
+    - gpt-4.5-preview
+    - gpt-4o
+    - gpt-4o-mini
+    - gpt-4
+    - gpt-4-turbo
+    - gpt-3.5-turbo
+  ollamaSettings:
+    modelIndex: 0
+    useCustomModel: 0
+    customModelName: 
+    temperature: 0.01
+    baseUrl: http://localhost:11434/api/
+    instructions: "I want you to write clean Unity Engine C# code by request and
+      have a conversation with me about my project or unity in general.\r\nBe very
+      concise in your responses.\r\nThe code must follow Unity Codestyle. \r\nIn
+      case of a class or method add a comment section to it. \r\nDo not comment on
+      every line of code. \r\nYou must add comments to the class itself and all public
+      members of the class. \r\nInclude all necessary namespaces for the code to
+      compile.\r\nYou must ask for source code file if I ask you to modify existing
+      code and you dont have it in the conversation."
+    contextSize: 2048
+    modelList: []
+  deepSeekSettings:
+    modelIndex: 0
+    useCustomModel: 0
+    customModelName: deepseek-chat
+    temperature: 0.01
+    baseUrl: https://api.deepseek.com/
+    instructions: "I want you to write clean Unity Engine C# code by request and
+      have a conversation with me about my project or unity in general.\r\nBe very
+      concise in your responses.\r\nThe code must follow Unity Codestyle. \r\nIn
+      case of a class or method add a comment section to it. \r\nDo not comment on
+      every line of code. \r\nYou must add comments to the class itself and all public
+      members of the class. \r\nInclude all necessary namespaces for the code to
+      compile.\r\nYou must ask for source code file if I ask you to modify existing
+      code and you dont have it in the conversation."
+    apiKey: 
+  geminiSettings:
+    modelIndex: 0
+    useCustomModel: 0
+    customModelName: gemini-2.0-flash
+    temperature: 0.01
+    baseUrl: https://generativelanguage.googleapis.com/
+    instructions: "I want you to write clean Unity Engine C# code by request and
+      have a conversation with me about my project or unity in general.\r\nBe very
+      concise in your responses.\r\nThe code must follow Unity Codestyle. \r\nIn
+      case of a class or method add a comment section to it. \r\nDo not comment on
+      every line of code. \r\nYou must add comments to the class itself and all public
+      members of the class. \r\nInclude all necessary namespaces for the code to
+      compile.\r\nYou must ask for source code file if I ask you to modify existing
+      code and you dont have it in the conversation."
+    apiKey: 
+    modelList:
+    - gemini-2.0-flash
+    - gemini-2.5-flash-preview-04-17
+    - imagen-3.0-generate-002
+  claudeSettings:
+    modelIndex: 0
+    useCustomModel: 0
+    customModelName: claude-3-opus-20240229
+    temperature: 0.01
+    baseUrl: https://api.anthropic.com/
+    instructions: "I want you to write clean Unity Engine C# code by request and
+      have a conversation with me about my project or unity in general.\r\nBe very
+      concise in your responses.\r\nThe code must follow Unity Codestyle. \r\nIn
+      case of a class or method add a comment section to it. \r\nDo not comment on
+      every line of code. \r\nYou must add comments to the class itself and all public
+      members of the class. \r\nInclude all necessary namespaces for the code to
+      compile.\r\nYou must ask for source code file if I ask you to modify existing
+      code and you dont have it in the conversation."
+    apiKey: 
+    modelList:
+    - claude-3-opus-20240229
+    - claude-3-sonnet-20240229
+    - claude-3-haiku-20240229
+    maxTokens: 4096
+  selectedServiceIndex: 0
+  includeEditorFolder: 0
+  askWhereToSave: 0
+  saveFolderName: Scripts
+  excludedFolders: []

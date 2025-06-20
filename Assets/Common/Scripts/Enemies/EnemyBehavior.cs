@@ -3,6 +3,7 @@ using OctoberStudio.Enemy;
 using OctoberStudio.Extensions;
 using OctoberStudio.Timeline;
 using System.Collections.Generic;
+using PalbaGames;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Serialization;
@@ -172,25 +173,37 @@ namespace OctoberStudio
         private void OnTriggerEnter2D(Collider2D other)
         {
             ProjectileBehavior projectile = other.GetComponent<ProjectileBehavior>();
+            if (projectile == null) return;
 
-            if(projectile != null)
+            if (PlayerBehavior.Player == null) return;
+
+            float baseDamage = PlayerBehavior.Player.Damage;
+            float finalDamage = baseDamage;
+
+            if (PlayerBehavior_Extended.Instance != null)
             {
-                TakeDamage(PlayerBehavior.Player.Damage * projectile.DamageMultiplier);
+                finalDamage = PlayerBehavior_Extended.Instance.GetFinalDamage();
+            }
 
-                if(HP > 0)
+            bool isCritical = !Mathf.Approximately(finalDamage, baseDamage);
+            float totalDamage = finalDamage * projectile.DamageMultiplier;
+
+            TakeDamage(totalDamage);
+
+            if (HP > 0)
+            {
+                if (projectile.KickBack && canBeKickedBack)
                 {
-                    if (projectile.KickBack && canBeKickedBack)
-                    {
-                        KickBack(PlayerBehavior.CenterPosition);
-                    }
+                    KickBack(PlayerBehavior.CenterPosition);
+                }
 
-                    if(projectile.Effects != null && projectile.Effects.Count > 0)
-                    {
-                        AddEffects(projectile.Effects);
-                    }
+                if (projectile.Effects != null && projectile.Effects.Count > 0)
+                {
+                    AddEffects(projectile.Effects);
                 }
             }
         }
+
 
         public float GetDamage()
         {
@@ -220,37 +233,32 @@ namespace OctoberStudio
             return Data.EnemyDrop;
         }
 
-        public void TakeDamage(float damage)
+        public void TakeDamage(float damage, bool isCritical = false)
         {
             if (!IsAlive) return;
             if (IsInvulnerable) return;
 
             HP -= damage;
-
             onHealthChanged?.Invoke(HP, MaxHP);
 
-            // Showing Damage Text
-            damageTextValue += damage;
-            if (Time.unscaledTime - lastTimeDamageText > 0.2f && damageTextValue >= 1)
-            {
-                var damageText = Mathf.RoundToInt(damageTextValue).ToString();
-                StageController.WorldSpaceTextManager.SpawnText(transform.position + new Vector3(Random.Range(-0.1f, 0.1f), Random.value * 0.1f), damageText);
+            // Show damage text immediately (no accumulation logic)
+            string damageText = isCritical 
+                ? $"CRIT:{Mathf.RoundToInt(damage)}" 
+                : Mathf.RoundToInt(damage).ToString();
 
-                damageTextValue = 0;
-                lastTimeDamageText = Time.unscaledTime;
-            } else
-            {
-                damageTextValue += damage;
-            }
+            StageController.WorldSpaceTextManager.SpawnText(
+                transform.position + new Vector3(Random.Range(-0.1f, 0.1f), Random.value * 0.1f),
+                damageText,
+                isCritical
+            );
 
-            // Playing Damage Sound
-            if(Time.frameCount != lastFrameHitSound && Time.unscaledTime - lastTimeHitSound > 0.2f)
+            // Play damage sound
+            if (Time.frameCount != lastFrameHitSound && Time.unscaledTime - lastTimeHitSound > 0.2f)
             {
                 GameController.AudioManager.PlaySound(HIT_HASH);
-
                 lastFrameHitSound = Time.frameCount;
                 lastTimeHitSound = Time.unscaledTime;
-            }   
+            }
 
             if (HP <= 0)
             {
@@ -258,24 +266,30 @@ namespace OctoberStudio
             }
             else
             {
-                // Flashing Color on hit
+                // Flash color
                 if (!damageCoroutine.ExistsAndActive())
                 {
                     FlashHit(true);
                 }
 
-                // Scaling on Hit
+                // Scale effect
                 if (!scaleCoroutine.ExistsAndActive())
                 {
-                    var x = transform.localScale.x;
-
-                    scaleCoroutine = transform.DoLocalScale(new Vector3(x * (1 - hitScaleAmount), (1 + hitScaleAmount), 1), 0.07f).SetEasing(EasingType.SineOut).SetOnFinish(() =>
+                    float x = transform.localScale.x;
+                    scaleCoroutine = transform.DoLocalScale(
+                        new Vector3(x * (1 - hitScaleAmount), (1 + hitScaleAmount), 1), 
+                        0.07f
+                    ).SetEasing(EasingType.SineOut).SetOnFinish(() =>
                     {
-                        scaleCoroutine = transform.DoLocalScale(new Vector3(x, 1, 1), 0.07f).SetEasing(EasingType.SineInOut);
+                        scaleCoroutine = transform.DoLocalScale(
+                            new Vector3(x, 1, 1), 
+                            0.07f
+                        ).SetEasing(EasingType.SineInOut);
                     });
                 }
             }
         }
+
 
         private void FlashHit(bool resetMaterial, UnityAction onFinish = null)
         {
