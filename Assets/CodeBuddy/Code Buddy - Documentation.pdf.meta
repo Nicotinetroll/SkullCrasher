@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 5359d493ad153fb48a292e3438b15749
+DefaultImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 300457
+  packageName: Code Buddy - project-aware code generation with ChatGPT, Gemini, Ollama,
+    etc.
+  packageVersion: 2.7.1
+  assetPath: Assets/CodeBuddy/Code Buddy - Documentation.pdf
+  uploadId: 762781
