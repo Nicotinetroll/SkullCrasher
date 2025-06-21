@@ -1939,12 +1939,12 @@ PrefabInstance:
     - target: {fileID: -5157754982475648978, guid: 8e6d8d2dabc65504d87acf063e0db163,
         type: 3}
       propertyPath: criticalChance
-      value: 70
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: -5157754982475648978, guid: 8e6d8d2dabc65504d87acf063e0db163,
         type: 3}
       propertyPath: criticalMultiplier
-      value: 10
+      value: 1.4
       objectReference: {fileID: 0}
     - target: {fileID: 849641011305831769, guid: 8e6d8d2dabc65504d87acf063e0db163,
         type: 3}
