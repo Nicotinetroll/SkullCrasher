@@ -13,8 +13,11 @@ namespace PalbaGames
         [Tooltip("Chance for a critical strike in % (0–100)")]
         public float criticalChance = 10f;
 
-        [Tooltip("Critical damage multiplier (e.g., 2 = double damage)")]
-        public float criticalMultiplier = 2f;
+        [Tooltip("Minimum critical damage multiplier (e.g., 1.5 = +50%)")]
+        public float criticalMultiplierMin = 1.5f;
+
+        [Tooltip("Maximum critical damage multiplier (e.g., 5 = +400%)")]
+        public float criticalMultiplierMax = 3f;
 
         private OctoberStudio.PlayerBehavior player;
 
@@ -53,7 +56,10 @@ namespace PalbaGames
             }
 
             if (Random.value <= criticalChance / 100f)
-                return player.Damage * criticalMultiplier;
+            {
+                float multiplier = Random.Range(criticalMultiplierMin, criticalMultiplierMax);
+                return player.Damage * multiplier;
+            }
 
             return player.Damage;
         }
@@ -64,7 +70,14 @@ namespace PalbaGames
         public float GetFinalDamage(float baseDamage, out bool isCritical)
         {
             isCritical = Random.value <= criticalChance / 100f;
-            return isCritical ? baseDamage * criticalMultiplier : baseDamage;
+
+            if (isCritical)
+            {
+                float multiplier = Random.Range(criticalMultiplierMin, criticalMultiplierMax);
+                return baseDamage * multiplier;
+            }
+
+            return baseDamage;
         }
     }
 }
