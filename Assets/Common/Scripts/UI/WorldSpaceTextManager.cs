@@ -1,6 +1,7 @@
 using OctoberStudio.Pool;
 using System.Collections.Generic;
 using UnityEngine;
+using MoreMountains.Feedbacks;
 
 namespace OctoberStudio.UI
 {
@@ -13,6 +14,9 @@ namespace OctoberStudio.UI
         [SerializeField] RectTransform canvasRect;
         [SerializeField] GameObject textIndicatorPrefab;
         [SerializeField] GameObject critTextIndicatorPrefab;
+
+        [Header("Feedbacks")]
+        [SerializeField] MMF_Player globalCritFeedbackPlayer;
 
         [Header("Animation")]
         [SerializeField] AnimationCurve scaleCurve;
@@ -41,6 +45,12 @@ namespace OctoberStudio.UI
             indicator.SetText(text);
             indicator.SetAnchors(viewportPos);
             indicator.SetPosition(Vector2.zero);
+
+            // Pass global feedbacks for crit
+            if (isCritical && globalCritFeedbackPlayer != null)
+            {
+                indicator.SetGlobalFeedbacks(globalCritFeedbackPlayer);
+            }
 
             indicators.Enqueue(new IndicatorData
             {

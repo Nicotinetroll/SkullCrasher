@@ -9,11 +9,13 @@ namespace OctoberStudio.UI
     /// </summary>
     public class TextIndicatorBehavior : MonoBehaviour
     {
+        [Header("References")]
         [SerializeField] RectTransform rectTransform;
         [SerializeField] TMP_Text textComponent;
 
         [Header("Feedbacks")]
-        [SerializeField] MMF_Player feedbackPlayer;
+        [SerializeField] MMF_Player feedbackPlayer;       // Local (per-instance) feedback
+        [SerializeField] MMF_Player globalFeedbacks;      // Global (scene-wide) feedback
 
         /// <summary>
         /// Sets the displayed text and triggers feedback.
@@ -22,13 +24,20 @@ namespace OctoberStudio.UI
         {
             textComponent.text = text;
 
+            // Local feedback (on this indicator)
             if (feedbackPlayer != null)
             {
-                feedbackPlayer.StopFeedbacks();     // Reset
-                feedbackPlayer.PlayFeedbacks();     // Spusti znova
+                feedbackPlayer.StopFeedbacks();
+                feedbackPlayer.PlayFeedbacks();
+            }
+
+            // Global feedback (e.g. Bloom, Camera Shake)
+            if (globalFeedbacks != null)
+            {
+                globalFeedbacks.StopFeedbacks();
+                globalFeedbacks.PlayFeedbacks();
             }
         }
-
 
         /// <summary>
         /// Sets the anchor point in viewport space.
@@ -54,5 +63,11 @@ namespace OctoberStudio.UI
         {
             rectTransform.localScale = scale;
         }
+        
+        public void SetGlobalFeedbacks(MMF_Player global)
+        {
+            globalFeedbacks = global;
+        }
+
     }
 }
