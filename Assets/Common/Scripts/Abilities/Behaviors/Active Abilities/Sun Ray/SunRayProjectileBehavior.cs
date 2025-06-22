@@ -1,22 +1,24 @@
 using OctoberStudio.Easing;
 using OctoberStudio.Extensions;
 using System.Collections;
+using PalbaGames;
 using UnityEngine;
 using UnityEngine.Events;
 
 namespace OctoberStudio
 {
+    /// <summary>
+    /// Sun ray projectile that locks onto enemies and deals periodic damage.
+    /// </summary>
     public class SunRayProjectileBehavior : MonoBehaviour
     {
         public UnityAction<SunRayProjectileBehavior> onFinished;
 
         public float Lifetime { get; set; }
-
         public float DamagePerSecond { get; set; }
         public float DamageInterval { get; set; }
         public float AdditionalDamagePerSecond { get; set; }
         public float AdditionalDamageRadius { get; set; }
-
         public float Speed { get; set; }
 
         public EnemyBehavior Target { get; private set; }
@@ -27,40 +29,38 @@ namespace OctoberStudio
 
         private float spawnTime;
         private float lastDamageTime;
-
         private Vector3 offset;
+
+        // 🔥 Custom ability type for tracking
+        public AbilityType SourceAbilityType { get; private set; } = AbilityType.SolarMagnifier;
 
         public void Spawn(EnemyBehavior target)
         {
             Target = target;
 
-            if(Target != null)
+            if (Target != null)
             {
                 transform.position = Target.transform.position;
                 IsTargetLocked = true;
-
                 Target.onEnemyDied += OnEnemyDied;
-            } else
+            }
+            else
             {
                 IsTargetLocked = false;
-
                 transform.position = PlayerBehavior.Player.transform.position + new Vector3(-1, 1, 0);
-
                 waitingCoroutine = StartCoroutine(WaitingForTarget());
             }
 
             spawnTime = Time.time;
             lastDamageTime = Time.time - 100000;
-
             offset = Random.onUnitSphere.XY().normalized * 0.075f;
         }
 
         private IEnumerator WaitingForTarget()
         {
-            while(Target == null)
+            while (Target == null)
             {
                 yield return null;
-
                 Target = StageController.EnemiesSpawner.GetClosestEnemy(transform.position);
             }
 
@@ -76,25 +76,29 @@ namespace OctoberStudio
 
             if (Time.time > lastDamageTime + DamageInterval)
             {
+                float totalDamage = DamagePerSecond * PlayerBehavior.Player.Damage * DamageInterval;
+
                 if (IsTargetLocked && Target != null)
                 {
-                    Target.TakeDamage(DamagePerSecond * PlayerBehavior.Player.Damage * DamageInterval);
+                    var extended = Target.GetComponent<EnemyBehavior_Extended>();
+                    extended?.TakeDamageFromAbility(totalDamage, SourceAbilityType);
                 }
 
                 var closeEnemies = StageController.EnemiesSpawner.GetEnemiesInRadius(transform.position, AdditionalDamageRadius);
-
-                foreach(var enemy in closeEnemies)
+                foreach (var enemy in closeEnemies)
                 {
-                    if(enemy != Target)
+                    if (enemy != Target)
                     {
-                        enemy.TakeDamage(AdditionalDamagePerSecond * PlayerBehavior.Player.Damage * DamageInterval);
+                        float splash = AdditionalDamagePerSecond * PlayerBehavior.Player.Damage * DamageInterval;
+                        var extended = enemy.GetComponent<EnemyBehavior_Extended>();
+                        extended?.TakeDamageFromAbility(splash, SourceAbilityType);
                     }
                 }
 
                 lastDamageTime = Time.time;
             }
 
-            if(Time.time > spawnTime + Lifetime)
+            if (Time.time > spawnTime + Lifetime)
             {
                 onFinished?.Invoke(this);
                 Disable();
@@ -105,11 +109,13 @@ namespace OctoberStudio
         {
             Target.onEnemyDied += OnEnemyDied;
 
-            var distanve = Vector2.Distance(transform.position, Target.transform.position);
-            var time = distanve / (Speed * PlayerBehavior.Player.ProjectileSpeedMultiplier);
+            float dist = Vector2.Distance(transform.position, Target.transform.position);
+            float time = dist / (Speed * PlayerBehavior.Player.ProjectileSpeedMultiplier);
 
             movementCoroutine.StopIfExists();
-            movementCoroutine = transform.DoPosition(Target.transform, time).SetEasing(EasingType.SineIn).SetOnFinish(() => IsTargetLocked = true);
+            movementCoroutine = transform.DoPosition(Target.transform, time)
+                .SetEasing(EasingType.SineIn)
+                .SetOnFinish(() => IsTargetLocked = true);
         }
 
         private void OnEnemyDied(EnemyBehavior enemy)
@@ -119,10 +125,11 @@ namespace OctoberStudio
 
             Target = StageController.EnemiesSpawner.GetClosestEnemy(transform.position);
 
-            if(Target != null)
+            if (Target != null)
             {
                 MoveToTarget();
-            } else
+            }
+            else
             {
                 waitingCoroutine = StartCoroutine(WaitingForTarget());
             }
@@ -130,16 +137,16 @@ namespace OctoberStudio
 
         public void Disable()
         {
-            if(Target != null)
+            if (Target != null)
             {
                 Target.onEnemyDied -= OnEnemyDied;
             }
-            
-            movementCoroutine.StopIfExists();
 
+            movementCoroutine.StopIfExists();
             IsTargetLocked = false;
 
-            if (waitingCoroutine != null) StopCoroutine(waitingCoroutine);
+            if (waitingCoroutine != null)
+                StopCoroutine(waitingCoroutine);
 
             gameObject.SetActive(false);
         }

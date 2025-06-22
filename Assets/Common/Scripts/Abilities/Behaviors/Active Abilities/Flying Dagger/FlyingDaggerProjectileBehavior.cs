@@ -4,6 +4,9 @@ using UnityEngine.Events;
 
 namespace OctoberStudio.Abilities
 {
+    /// <summary>
+    /// Logic for individual flying dagger projectiles.
+    /// </summary>
     public class FlyingDaggerProjectileBehavior : ProjectileBehavior
     {
         private static readonly int FLYING_DAGGER_LAUNCH_HASH = "Flying Dagger Launch".GetHashCode();
@@ -20,13 +23,13 @@ namespace OctoberStudio.Abilities
         public void Spawn(Vector2 force)
         {
             Init();
-            transform.localScale = Vector3.one * Size * PlayerBehavior.Player.SizeMultiplier;
+            SourceAbilityType = AbilityType.FlyingDagger;
 
+            transform.localScale = Vector3.one * Size * PlayerBehavior.Player.SizeMultiplier;
             KickBack = true;
 
             rigidBody.linearVelocity = Vector2.zero;
             rigidBody.angularVelocity = 0;
-
             transform.rotation = Quaternion.identity;
 
             rigidBody.AddForce(force, ForceMode2D.Impulse);

@@ -3,6 +3,7 @@ using OctoberStudio.Pool;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using PalbaGames;
 
 namespace OctoberStudio.Abilities
 {
@@ -21,7 +22,7 @@ namespace OctoberStudio.Abilities
 
         private Coroutine abilityCoroutine;
 
-        private List<IEasingCoroutine> easingCoroutines = new List<IEasingCoroutine>();
+        private List<IEasingCoroutine> easingCoroutines = new();
 
         private void Awake()
         {
@@ -32,7 +33,6 @@ namespace OctoberStudio.Abilities
         public override void Init(AbilityData data, int stageId)
         {
             base.Init(data, stageId);
-
             abilityCoroutine = StartCoroutine(AbilityCoroutine());
         }
 
@@ -53,7 +53,11 @@ namespace OctoberStudio.Abilities
                     {
                         particle.transform.position = enemy.transform.position;
 
-                        enemy.TakeDamage(PlayerBehavior.Player.Damage * AbilityLevel.Damage);
+                        var ext = enemy.GetComponent<EnemyBehavior_Extended>();
+                        ext?.TakeDamageFromAbility(
+                            PlayerBehavior.Player.Damage * AbilityLevel.Damage,
+                            AbilityType.ThunderRing
+                        );
                     }
                     else
                     {
@@ -69,9 +73,9 @@ namespace OctoberStudio.Abilities
                         angle += 360f / AbilityLevel.BallLightningCount;
 
                         ball.Init(particle.transform.position, Quaternion.Euler(0, 0, angle) * Vector2.up);
-
                         ball.DamageMultiplier = AbilityLevel.BallDamage;
                         ball.KickBack = false;
+                        ball.SourceAbilityType = AbilityType.ThunderRing;
                     }
 
                     IEasingCoroutine easingCoroutine = null;
@@ -86,7 +90,9 @@ namespace OctoberStudio.Abilities
                     GameController.AudioManager.PlaySound(THUNDER_RING_STRIKE_HASH);
                 }
 
-                yield return new WaitForSeconds(AbilityLevel.AbilityCooldown * PlayerBehavior.Player.CooldownMultiplier - AbilityLevel.DurationBetweenHits);
+                yield return new WaitForSeconds(
+                    AbilityLevel.AbilityCooldown * PlayerBehavior.Player.CooldownMultiplier - AbilityLevel.DurationBetweenHits
+                );
             }
         }
 
@@ -94,9 +100,8 @@ namespace OctoberStudio.Abilities
         {
             StopCoroutine(abilityCoroutine);
 
-            for(int i = 0; i < easingCoroutines.Count; i++)
+            foreach (var easingCoroutine in easingCoroutines)
             {
-                var easingCoroutine = easingCoroutines[i];
                 if (easingCoroutine.ExistsAndActive()) easingCoroutine.Stop();
             }
 

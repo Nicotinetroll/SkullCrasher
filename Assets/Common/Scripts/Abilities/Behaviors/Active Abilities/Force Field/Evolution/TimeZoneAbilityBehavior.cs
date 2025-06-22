@@ -91,7 +91,11 @@ namespace OctoberStudio.Abilities
                 finalDamage = PlayerBehavior_Extended.Instance.GetFinalDamage(baseDamage, out isCrit);
             }
 
-            enemy.TakeDamage(finalDamage, isCrit);
+            var extended = enemy.GetComponent<EnemyBehavior_Extended>();
+            if (extended != null)
+            {
+                extended.TakeDamageFromAbility(finalDamage, AbilityType.TimeGazer, isCrit);
+            }
         }
     }
 }

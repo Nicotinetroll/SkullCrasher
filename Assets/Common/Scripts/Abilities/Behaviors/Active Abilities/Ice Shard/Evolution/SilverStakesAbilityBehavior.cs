@@ -6,6 +6,9 @@ using UnityEngine;
 
 namespace OctoberStudio.Abilities
 {
+    /// <summary>
+    /// Launches fast-moving silver projectiles that damage enemies on contact.
+    /// </summary>
     public class SilverStakesAbilityBehavior : AbilityBehavior<SilverStakesAbilityData, SilverStakesAbilityLevel>
     {
         public static readonly int SILVER_STAKES_LAUNCH_HASH = "Silver Stakes Launch".GetHashCode();
@@ -14,11 +17,11 @@ namespace OctoberStudio.Abilities
         public GameObject SilverShardPrefab => silverShardPrefab;
 
         private PoolComponent<IceShardProjectileBehavior> projectilePool;
-        public List<IceShardProjectileBehavior> projectiles = new List<IceShardProjectileBehavior>();
+        public List<IceShardProjectileBehavior> projectiles = new();
 
         private void Awake()
         {
-            projectilePool = new PoolComponent<IceShardProjectileBehavior>("Quick Silver Projectiule", SilverShardPrefab, 6);
+            projectilePool = new PoolComponent<IceShardProjectileBehavior>("Quick Silver Projectile", SilverShardPrefab, 6);
         }
 
         public override void Init(AbilityData data, int stageId)
@@ -33,6 +36,9 @@ namespace OctoberStudio.Abilities
                 projectile.SetData(AbilityLevel.ProjectileSize, AbilityLevel.Damage, AbilityLevel.ProjectileSpeed);
                 projectile.Direction = Random.onUnitSphere.SetZ(0).normalized;
 
+                // 🔧 Opravený property názov pre tracking
+                projectile.SourceAbilityType = AbilityType.SilverStakes;
+
                 projectiles.Add(projectile);
             }
 
@@ -41,9 +47,9 @@ namespace OctoberStudio.Abilities
 
         private void Disable()
         {
-            for (int i = 0; i < projectiles.Count; i++)
+            foreach (var projectile in projectiles)
             {
-                projectiles[i].gameObject.SetActive(false);
+                projectile.gameObject.SetActive(false);
             }
 
             projectiles.Clear();
@@ -52,7 +58,6 @@ namespace OctoberStudio.Abilities
         public override void Clear()
         {
             Disable();
-
             base.Clear();
         }
     }

@@ -5,6 +5,9 @@ using UnityEngine;
 
 namespace OctoberStudio.Abilities
 {
+    /// <summary>
+    /// Active ability that spawns multiple daggers in a circle, each dealing damage on hit.
+    /// </summary>
     public class TwinDaggerAbilityBehavior : AbilityBehavior<TwinDaggerAbilityData, TwinDaggerAbilityLevel>
     {
         public static readonly int TWIN_DAGGERS_HASH = "Twin Daggers Launch".GetHashCode();
@@ -13,9 +16,8 @@ namespace OctoberStudio.Abilities
         public GameObject DaggerPrefab => daggerPrefab;
 
         private PoolComponent<SimplePlayerProjectileBehavior> projectilePool;
-
         private Coroutine abilityCoroutine;
-        private List<SimplePlayerProjectileBehavior> projectiles = new List<SimplePlayerProjectileBehavior>();
+        private readonly List<SimplePlayerProjectileBehavior> projectiles = new();
 
         private void Awake()
         {
@@ -25,9 +27,7 @@ namespace OctoberStudio.Abilities
         protected override void SetAbilityLevel(int stageId)
         {
             base.SetAbilityLevel(stageId);
-
             Disable();
-
             abilityCoroutine = StartCoroutine(AbilityCoroutine());
         }
 
@@ -39,16 +39,14 @@ namespace OctoberStudio.Abilities
                 {
                     var projectile = projectilePool.GetEntity();
 
-                    projectile.transform.position = PlayerBehavior.CenterPosition;
+                    var angle = 360f / AbilityLevel.ProjectileCount * i;
+                    var direction = Quaternion.Euler(0, 0, angle) * Vector2.up;
 
+                    projectile.Init(PlayerBehavior.CenterPosition, direction, AbilityType.TwinDagger);
                     projectile.DamageMultiplier = AbilityLevel.Damage;
+                    projectile.KickBack = true;
 
                     projectile.onFinished += OnProjectileFinished;
-
-                    var angle = 360f / AbilityLevel.ProjectileCount * i;
-
-                    projectile.Init(projectile.transform.position, Quaternion.Euler(0, 0, angle) * Vector2.up);
-                    projectile.KickBack = true;
                     projectiles.Add(projectile);
                 }
 
@@ -60,14 +58,12 @@ namespace OctoberStudio.Abilities
 
         private void Disable()
         {
-            if (abilityCoroutine != null) StopCoroutine(abilityCoroutine);
+            if (abilityCoroutine != null)
+                StopCoroutine(abilityCoroutine);
 
-            for (int i = 0; i < projectiles.Count; i++)
+            foreach (var projectile in projectiles)
             {
-                var projectile = projectiles[i];
-
                 projectile.onFinished -= OnProjectileFinished;
-
                 projectile.Clear();
             }
 
@@ -77,14 +73,12 @@ namespace OctoberStudio.Abilities
         private void OnProjectileFinished(SimplePlayerProjectileBehavior projectile)
         {
             projectile.onFinished -= OnProjectileFinished;
-
             projectiles.Remove(projectile);
         }
 
         public override void Clear()
         {
             Disable();
-
             base.Clear();
         }
     }

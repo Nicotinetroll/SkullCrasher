@@ -2,6 +2,9 @@ using UnityEngine;
 
 namespace OctoberStudio.Abilities
 {
+    /// <summary>
+    /// Handles initialization and logic of the Mace Ball ability which launches a spinning boulder.
+    /// </summary>
     public class MaceBallAbilityBehavior : AbilityBehavior<MaceBallAbilityData, MaceBallAbilityLevel>
     {
         public static readonly int MACE_BALL_LAUNCH_HASH = "Mace Ball Launch".GetHashCode();
@@ -21,7 +24,14 @@ namespace OctoberStudio.Abilities
         {
             base.SetAbilityLevel(stageId);
 
-            boulderProjectileBehavior.SetData(AbilityLevel.Size, AbilityLevel.DamageMultiplier, AbilityLevel.Speed, AbilityLevel.AngularSpeed);
+            boulderProjectileBehavior.SetData(
+                AbilityLevel.Size,
+                AbilityLevel.DamageMultiplier,
+                AbilityLevel.Speed,
+                AbilityLevel.AngularSpeed
+            );
+
+            boulderProjectileBehavior.SourceAbilityType = AbilityType.MaceBall;
         }
 
         public override void Clear()

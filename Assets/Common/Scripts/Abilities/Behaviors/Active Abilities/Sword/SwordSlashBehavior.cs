@@ -20,6 +20,8 @@ namespace OctoberStudio.Abilities
         {
             base.Init();
 
+            SourceAbilityType = AbilityType.SteelSword;
+
             transform.localScale = Vector3.one * Size * PlayerBehavior.Player.SizeMultiplier;
 
             slashCollider.enabled = true;
@@ -31,6 +33,7 @@ namespace OctoberStudio.Abilities
                 Disable();
             });
         }
+
 
         public void Disable()
         {

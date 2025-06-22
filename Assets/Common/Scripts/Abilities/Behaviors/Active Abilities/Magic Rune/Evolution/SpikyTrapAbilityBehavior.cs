@@ -27,7 +27,6 @@ namespace OctoberStudio.Abilities
         public override void Init(AbilityData data, int stageId)
         {
             base.Init(data, stageId);
-
             StartCoroutine(AbilityCoroutine());
         }
 
@@ -38,13 +37,11 @@ namespace OctoberStudio.Abilities
                 for (int i = 0; i < AbilityLevel.MinesCount; i++)
                 {
                     var mine = trapPool.GetEntity();
-
                     mine.transform.position = PlayerBehavior.CenterPosition + Random.onUnitSphere.XY().normalized * AbilityLevel.MineSpawnRadius * Random.Range(0.9f, 1.1f);
                     mine.SetData(AbilityLevel, spikePool);
                 }
 
                 GameController.AudioManager.PlaySound(SPIKY_TRAP_SET_UP_HASH);
-
                 yield return new WaitForSeconds(AbilityLevel.AbilityCooldown * PlayerBehavior.Player.CooldownMultiplier);
             }
         }

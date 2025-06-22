@@ -17,6 +17,9 @@ namespace OctoberStudio.Abilities
 
         public void SetData(float size, float damageMultiplier, float speed, float angularSpeed)
         {
+            // 🔥 Track damage source
+            SourceAbilityType = AbilityType.RollingStone;
+            
             transform.localScale = Vector3.one * size;
 
             Size = size;

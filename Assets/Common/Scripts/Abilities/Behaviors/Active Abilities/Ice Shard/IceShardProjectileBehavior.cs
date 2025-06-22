@@ -2,6 +2,9 @@ using UnityEngine;
 
 namespace OctoberStudio.Abilities
 {
+    /// <summary>
+    /// Handles logic for flying Ice Shard projectiles in camera space.
+    /// </summary>
     public class IceShardProjectileBehavior : CameraSpaceProjectile
     {
         [SerializeField] BoxCollider2D boxCollider;
@@ -17,8 +20,10 @@ namespace OctoberStudio.Abilities
             transform.localScale = Vector3.one * size * PlayerBehavior.Player.SizeMultiplier;
 
             DamageMultiplier = damageMultiplier;
-
             Speed = speed;
+
+            // 🔥 Priraď AbilityType pre tracking
+            SourceAbilityType = AbilityType.IceShard;
         }
 
         public override void Update()

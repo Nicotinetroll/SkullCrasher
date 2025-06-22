@@ -1,10 +1,14 @@
 using OctoberStudio.Easing;
+using PalbaGames;
 using UnityEngine;
 using UnityEngine.Events;
 
 namespace OctoberStudio.Abilities
 {
-    public class FireballProjectileBehavior : MonoBehaviour
+    /// <summary>
+    /// Handles logic for Fireball projectile with AoE explosion and damage tracking.
+    /// </summary>
+    public class FireballProjectileBehavior : ProjectileBehavior
     {
         private static readonly int FIREBALL_LAUNCH_HASH = "Fireball Launch".GetHashCode();
         private static readonly int FIREBALL_EXPLOSION_HASH = "Fireball Explosion".GetHashCode();
@@ -16,7 +20,6 @@ namespace OctoberStudio.Abilities
         private IEasingCoroutine movementCoroutine;
         private IEasingCoroutine disableCoroutine;
 
-        public float DamageMultiplier { get; set; }
         public float ExplosionRadius { get; set; }
         public float Lifetime { get; set; }
         public float Speed { get; set; }
@@ -31,6 +34,10 @@ namespace OctoberStudio.Abilities
 
         public void Init()
         {
+            base.Init();
+
+            SourceAbilityType = AbilityType.Fireball;
+
             transform.localScale = Vector3.one * Size * PlayerBehavior.Player.SizeMultiplier;
 
             var distance = Speed * Lifetime * PlayerBehavior.Player.DurationMultiplier;
@@ -65,7 +72,9 @@ namespace OctoberStudio.Abilities
             for (int i = 0; i < enemies.Count; i++)
             {
                 var enemy = enemies[i];
-                enemy.TakeDamage(PlayerBehavior.Player.Damage * DamageMultiplier, IsCritical);
+                var extended = enemy.GetComponent<EnemyBehavior_Extended>();
+
+                extended?.TakeDamageFromAbility(PlayerBehavior.Player.Damage * DamageMultiplier, SourceAbilityType, IsCritical);
             }
 
             explosionParticle.Play();
@@ -89,7 +98,6 @@ namespace OctoberStudio.Abilities
             visuals.SetActive(true);
             fireballCollider.enabled = true;
 
-            // Reset crit flag
             IsCritical = false;
         }
     }

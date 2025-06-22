@@ -1,8 +1,12 @@
 using OctoberStudio.Easing;
 using UnityEngine;
+using PalbaGames;
 
 namespace OctoberStudio.Abilities
 {
+    /// <summary>
+    /// Behavior for individual Magic Rune mines that explode on enemy contact or after lifetime.
+    /// </summary>
     public class MagicRuneMineBehavior : MonoBehaviour
     {
         private static readonly int MAGIC_RUNE_EXPLOSION_HASH = "Magic Rune Explosion".GetHashCode();
@@ -14,6 +18,11 @@ namespace OctoberStudio.Abilities
         public float DamageMultiplier { get; private set; }
         public float DamageRadius { get; private set; }
 
+        /// <summary>
+        /// Used for tracking the origin of damage.
+        /// </summary>
+        public AbilityType SourceAbilityType { get; set; } = AbilityType.None;
+
         private IEasingCoroutine lifetimeCoroutine;
 
         public void SetData(MagicRuneAbilityLevel stage)
@@ -23,7 +32,6 @@ namespace OctoberStudio.Abilities
             mineTriggerCollider.radius = stage.MineTriggerRadius / size;
 
             DamageMultiplier = stage.Damage;
-
             DamageRadius = stage.MineDamageRadius * PlayerBehavior.Player.SizeMultiplier;
 
             mineVisuals.SetActive(true);
@@ -36,8 +44,7 @@ namespace OctoberStudio.Abilities
         private void OnTriggerEnter2D(Collider2D collision)
         {
             var enemy = collision.GetComponent<EnemyBehavior>();
-
-            if(enemy != null)
+            if (enemy != null)
             {
                 Explode();
             }
@@ -49,12 +56,19 @@ namespace OctoberStudio.Abilities
             mineVisuals.SetActive(false);
 
             var enemies = StageController.EnemiesSpawner.GetEnemiesInRadius(transform.position, DamageRadius);
-
-            for(int i = 0; i < enemies.Count; i++)
+            foreach (var enemy in enemies)
             {
-                var enemy = enemies[i];
+                float baseDamage = PlayerBehavior.Player.Damage;
+                float finalDamage = baseDamage * DamageMultiplier;
 
-                enemy.TakeDamage(PlayerBehavior.Player.Damage * DamageMultiplier);
+                bool isCrit = false;
+                if (PlayerBehavior_Extended.Instance != null)
+                {
+                    finalDamage = PlayerBehavior_Extended.Instance.GetFinalDamage(baseDamage * DamageMultiplier, out isCrit);
+                }
+
+                var extended = enemy.GetComponent<EnemyBehavior_Extended>();
+                extended?.TakeDamageFromAbility(finalDamage, SourceAbilityType, isCrit);
             }
 
             explosionParticle.Play();

@@ -5,6 +5,9 @@ using UnityEngine.Events;
 
 namespace OctoberStudio
 {
+    /// <summary>
+    /// Basic player projectile with simple forward movement and impact logic.
+    /// </summary>
     public class SimplePlayerProjectileBehavior : ProjectileBehavior
     {
         [SerializeField] float speed;
@@ -25,46 +28,58 @@ namespace OctoberStudio
 
         public UnityAction<SimplePlayerProjectileBehavior> onFinished;
 
+        /// <summary>
+        /// Initialize projectile with position and direction.
+        /// </summary>
         public void Init(Vector2 position, Vector2 direction)
         {
-            Init();
+            base.Init();
 
             transform.position = position;
             transform.localScale = Vector3.one * PlayerBehavior.Player.SizeMultiplier;
             this.direction = direction;
 
-            for (int i = 0; i < particles.Count; i++)
+            foreach (var particle in particles)
             {
-                particles[i].Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
-                particles[i].Clear();
-                particles[i].Play();
+                particle.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+                particle.Clear();
+                particle.Play();
             }
 
-            if (rotatingPart != null) rotatingPart.rotation = Quaternion.FromToRotation(Vector2.up, direction);
+            if (rotatingPart != null)
+                rotatingPart.rotation = Quaternion.FromToRotation(Vector2.up, direction);
 
             Speed = speed * PlayerBehavior.Player.ProjectileSpeedMultiplier;
-
             spawnTime = Time.time;
-
             LifeTime = lifetime * PlayerBehavior.Player.DurationMultiplier;
 
-            if (trail != null) trail.Clear();
+            trail?.Clear();
+        }
+
+        /// <summary>
+        /// Initialize projectile with source ability type.
+        /// </summary>
+        public void Init(Vector2 position, Vector2 direction, AbilityType sourceAbility)
+        {
+            Init(position, direction);
+            SourceAbilityType = sourceAbility;
         }
 
         private void Update()
         {
-            if (spriteRenderer != null && !spriteRenderer.isVisible) Clear();
+            if (spriteRenderer != null && !spriteRenderer.isVisible)
+            {
+                Clear();
+                onFinished?.Invoke(this);
+                return;
+            }
 
             transform.position += direction * Time.deltaTime * Speed;
 
-            if (LifeTime > 0)
+            if (LifeTime > 0 && Time.time - spawnTime > LifeTime)
             {
-                if(Time.time - spawnTime > LifeTime)
-                {
-                    Clear();
-
-                    onFinished?.Invoke(this);
-                }
+                Clear();
+                onFinished?.Invoke(this);
             }
         }
 
@@ -73,18 +88,16 @@ namespace OctoberStudio
             if (rotatingPart == null) return null;
 
             rotatingPart.localScale = initialScale;
-
             scaleCoroutine = rotatingPart.DoLocalScale(targetScale, 0.25f);
-
             return scaleCoroutine;
         }
 
         public void Clear()
         {
-            for (int i = 0; i < particles.Count; i++)
+            foreach (var particle in particles)
             {
-                particles[i].Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
-                particles[i].Clear();
+                particle.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+                particle.Clear();
             }
 
             scaleCoroutine.StopIfExists();
@@ -96,7 +109,6 @@ namespace OctoberStudio
             if (selfDestructOnHit)
             {
                 Clear();
-
                 onFinished?.Invoke(this);
             }
         }

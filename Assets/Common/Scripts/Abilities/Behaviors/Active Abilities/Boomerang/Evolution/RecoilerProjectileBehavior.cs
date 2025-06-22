@@ -21,10 +21,14 @@ namespace OctoberStudio.Abilities
             Init();
             transform.localScale = Vector3.one * Size * PlayerBehavior.Player.SizeMultiplier;
 
+            // 🔥 Dôležité: nastav AbilityType pre damage tracking
+            SourceAbilityType = AbilityType.Recoiler;
+
             KickBack = false;
 
             movementCoroutine = StartCoroutine(MovementCoroutine(startingAngle));
         }
+
 
         private IEnumerator MovementCoroutine(float startingAngle)
         {

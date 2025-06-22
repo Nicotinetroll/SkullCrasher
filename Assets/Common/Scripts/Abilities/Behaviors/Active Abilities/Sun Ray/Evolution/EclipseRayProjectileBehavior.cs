@@ -1,9 +1,13 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
+using PalbaGames;
 
 namespace OctoberStudio.Abilities
 {
+    /// <summary>
+    /// Spiral projectile that shrinks toward the player over time.
+    /// </summary>
     public class EclipseRayProjectileBehavior : ProjectileBehavior
     {
         public UnityAction<EclipseRayProjectileBehavior> onFinished;
@@ -21,44 +25,44 @@ namespace OctoberStudio.Abilities
 
             KickBack = false;
 
+            // ✅ Neprepisuj property, iba nastav
+            SourceAbilityType = AbilityType.LunarProjector;
+
             movementCoroutine = StartCoroutine(MovementCoroutine(startingAngle));
         }
 
         private IEnumerator MovementCoroutine(float startingAngle)
         {
-            var time = 0f;
-            var duration = ProjectileLifetime * PlayerBehavior.Player.DurationMultiplier;
+            float time = 0f;
+            float duration = ProjectileLifetime * PlayerBehavior.Player.DurationMultiplier;
+            float distance = InitialRadius * PlayerBehavior.Player.SizeMultiplier;
+            float currentDistance = distance;
 
-            var startPosition = PlayerBehavior.Player.transform.position;
+            Vector3 startPosition = PlayerBehavior.Player.transform.position;
 
-            var distance = InitialRadius * PlayerBehavior.Player.SizeMultiplier;
-            var currentDistance = distance;
-            do
+            while (time < duration)
             {
                 time += Time.deltaTime;
-                var t = time / duration;
 
-                var angle = startingAngle + time * AngularSpeed * PlayerBehavior.Player.ProjectileSpeedMultiplier;
-
+                float angle = startingAngle + time * AngularSpeed * PlayerBehavior.Player.ProjectileSpeedMultiplier;
                 currentDistance -= Time.deltaTime * (distance / duration);
 
-                var position = startPosition + Quaternion.Euler(0, 0, angle) * Vector3.up * currentDistance;
-
+                Vector3 position = startPosition + Quaternion.Euler(0, 0, angle) * Vector3.up * currentDistance;
                 transform.position = position;
 
                 yield return null;
-
-            } while (time < duration);
+            }
 
             gameObject.SetActive(false);
             onFinished?.Invoke(this);
-
             movementCoroutine = null;
         }
 
         public void Disable()
         {
-            if (movementCoroutine != null) StopCoroutine(movementCoroutine);
+            if (movementCoroutine != null)
+                StopCoroutine(movementCoroutine);
+
             gameObject.SetActive(false);
         }
     }

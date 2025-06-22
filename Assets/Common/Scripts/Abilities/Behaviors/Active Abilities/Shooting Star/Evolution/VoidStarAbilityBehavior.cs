@@ -5,6 +5,9 @@ using UnityEngine;
 
 namespace OctoberStudio.Abilities
 {
+    /// <summary>
+    /// Handles logic for rotating orbit of void star projectiles around the player.
+    /// </summary>
     public class VoidStarAbilityBehavior : AbilityBehavior<VoidStarAbilityData, VoidStartAbilityLevel>
     {
         public static readonly int VOID_STARS_LAUNCH_HASH = "Void Stars Launch".GetHashCode();
@@ -12,10 +15,9 @@ namespace OctoberStudio.Abilities
         [SerializeField] GameObject starPrefab;
         public GameObject StarPrefab => starPrefab;
 
-        private List<ShootingStarProjectile> stars = new List<ShootingStarProjectile>();
-        float angle = 0;
-
-        private float radiusMultiplier = 1;
+        private List<ShootingStarProjectile> stars = new();
+        private float angle = 0f;
+        private float radiusMultiplier = 1f;
 
         private PoolComponent<ShootingStarProjectile> projectilesPool;
 
@@ -27,7 +29,6 @@ namespace OctoberStudio.Abilities
         public override void Init(AbilityData data, int levelId)
         {
             base.Init(data, levelId);
-
             GameController.AudioManager.PlaySound(VOID_STARS_LAUNCH_HASH);
         }
 
@@ -35,9 +36,9 @@ namespace OctoberStudio.Abilities
         {
             base.SetAbilityLevel(stageId);
 
-            for (int i = 0; i < stars.Count; i++)
+            foreach (var star in stars)
             {
-                stars[i].gameObject.SetActive(false);
+                star.gameObject.SetActive(false);
             }
 
             stars.Clear();
@@ -47,43 +48,41 @@ namespace OctoberStudio.Abilities
                 var star = projectilesPool.GetEntity();
 
                 star.Init();
-
                 star.DamageMultiplier = AbilityLevel.Damage;
                 star.KickBack = true;
 
-                star.Spawn();
+                // ⬇ Set AbilityType for damage tracking
+                star.SourceAbilityType = AbilityType.VoidStar;
 
+                star.Spawn();
                 stars.Add(star);
             }
 
-            EasingManager.DoFloat(0, 1, 0.5f, value => radiusMultiplier = value).SetEasing(EasingType.SineOut);
+            EasingManager.DoFloat(0, 1, 0.5f, value => radiusMultiplier = value)
+                         .SetEasing(EasingType.SineOut);
         }
 
         private void LateUpdate()
         {
             transform.position = PlayerBehavior.CenterPosition;
-
             angle += AbilityLevel.AngularSpeed * PlayerBehavior.Player.ProjectileSpeedMultiplier * Time.deltaTime;
 
             for (int i = 0; i < stars.Count; i++)
             {
-                float projectileAngle = 360f / stars.Count * i;
-
-                projectileAngle += angle;
-
-                stars[i].transform.localPosition = transform.position + Quaternion.Euler(0, 0, projectileAngle) * Vector3.up * AbilityLevel.Radius * radiusMultiplier * PlayerBehavior.Player.SizeMultiplier;
+                float projectileAngle = 360f / stars.Count * i + angle;
+                Vector3 offset = Quaternion.Euler(0, 0, projectileAngle) * Vector3.up * AbilityLevel.Radius * radiusMultiplier * PlayerBehavior.Player.SizeMultiplier;
+                stars[i].transform.localPosition = transform.position + offset;
             }
         }
 
         public override void Clear()
         {
-            for (int i = 0; i < stars.Count; i++)
+            foreach (var star in stars)
             {
-                stars[i].Clear();
+                star.Clear();
             }
 
             stars.Clear();
-
             projectilesPool.Destroy();
 
             base.Clear();

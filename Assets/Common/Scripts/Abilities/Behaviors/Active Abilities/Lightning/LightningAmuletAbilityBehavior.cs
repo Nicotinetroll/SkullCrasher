@@ -58,24 +58,27 @@ namespace OctoberStudio.Abilities
                             finalDamage = PlayerBehavior_Extended.Instance.GetFinalDamage(baseDamage, out isCrit);
                         }
 
-                        enemy.TakeDamage(finalDamage, isCrit);
+                        // ✅ TRACKNI damage
+                        var ext = enemy.GetComponent<EnemyBehavior_Extended>();
+                        ext?.TakeDamageFromAbility(finalDamage, AbilityType.LightningAmulet, isCrit);
 
-                        var enemiesInRadius = StageController.EnemiesSpawner.GetEnemiesInRadius(enemy.transform.position, AbilityLevel.AdditionalDamageRadius);
+                        var enemiesInRadius = spawner.GetEnemiesInRadius(enemy.transform.position, AbilityLevel.AdditionalDamageRadius);
 
                         foreach (var closeEnemy in enemiesInRadius)
                         {
                             if (closeEnemy != enemy)
                             {
-                                float splashDamage = PlayerBehavior.Player.Damage * AbilityLevel.AdditionalDamage;
-                                float finalSplash = splashDamage;
-                                bool isCritSplash = false;
+                                float splashBase = PlayerBehavior.Player.Damage * AbilityLevel.AdditionalDamage;
+                                float splashFinal = splashBase;
+                                bool splashCrit = false;
 
                                 if (PlayerBehavior_Extended.Instance != null)
                                 {
-                                    finalSplash = PlayerBehavior_Extended.Instance.GetFinalDamage(splashDamage, out isCritSplash);
+                                    splashFinal = PlayerBehavior_Extended.Instance.GetFinalDamage(splashBase, out splashCrit);
                                 }
 
-                                closeEnemy.TakeDamage(finalSplash, isCritSplash);
+                                var splashExt = closeEnemy.GetComponent<EnemyBehavior_Extended>();
+                                splashExt?.TakeDamageFromAbility(splashFinal, AbilityType.LightningAmulet, splashCrit);
                             }
                         }
                     }

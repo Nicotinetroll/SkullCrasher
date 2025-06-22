@@ -60,7 +60,7 @@ namespace OctoberStudio.Abilities
                     var aliveDuration = Time.time - spawnTime;
                     var position = PlayerBehavior.CenterPosition + direction * aliveDuration * AbilityLevel.ProjectileSpeed * PlayerBehavior.Player.ProjectileSpeedMultiplier;
 
-                    projectile.Init(position, direction);
+                    projectile.Init(position, direction, AbilityType.WoodenWand);
                     projectile.Speed = AbilityLevel.ProjectileSpeed * PlayerBehavior.Player.ProjectileSpeedMultiplier;
                     projectile.transform.localScale = Vector3.one * AbilityLevel.ProjectileSize * PlayerBehavior.Player.SizeMultiplier;
                     projectile.LifeTime = AbilityLevel.ProjectileLifetime;

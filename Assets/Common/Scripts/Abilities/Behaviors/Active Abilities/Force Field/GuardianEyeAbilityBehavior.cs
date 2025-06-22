@@ -5,6 +5,9 @@ using PalbaGames;
 
 namespace OctoberStudio.Abilities
 {
+    /// <summary>
+    /// Deals damage to enemies within a circular area around the player.
+    /// </summary>
     public class GuardianEyeAbilityBehavior : AbilityBehavior<GuardianEyeAbilityData, GuardianEyeAbilityLevel>
     {
         private static readonly int GUARDIAN_EYE_HASH = "Guardian Eye".GetHashCode();
@@ -74,7 +77,8 @@ namespace OctoberStudio.Abilities
             bool isCrit = !Mathf.Approximately(baseDamage, finalDamage);
             float totalDamage = AbilityLevel.Damage * finalDamage;
 
-            enemy.TakeDamage(totalDamage, isCrit);
+            var extended = enemy.GetComponent<EnemyBehavior_Extended>();
+            extended?.TakeDamageFromAbility(totalDamage, AbilityType.GuardianEye, isCrit);
         }
     }
 }

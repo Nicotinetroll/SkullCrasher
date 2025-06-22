@@ -1,6 +1,7 @@
 using OctoberStudio.Easing;
 using OctoberStudio.Pool;
 using UnityEngine;
+using PalbaGames;
 
 namespace OctoberStudio.Abilities
 {
@@ -12,7 +13,7 @@ namespace OctoberStudio.Abilities
         [SerializeField] GameObject mineVisuals;
         [SerializeField] ParticleSystem explosionParticle;
 
-        PoolComponent<SimplePlayerProjectileBehavior> spikesPool;
+        private PoolComponent<SimplePlayerProjectileBehavior> spikesPool;
 
         public float DamageMultiplier { get; private set; }
         public float DamageRadius { get; private set; }
@@ -33,23 +34,18 @@ namespace OctoberStudio.Abilities
             mineTriggerCollider.radius = stage.MineTriggerRadius / size;
 
             DamageMultiplier = stage.Damage;
-
             DamageRadius = stage.MineDamageRadius * PlayerBehavior.Player.SizeMultiplier;
 
             mineVisuals.SetActive(true);
-
             EasingManager.DoAfter(0.2f, () => mineTriggerCollider.enabled = true);
+
             lifetimeCoroutine = EasingManager.DoAfter(stage.MineLifetime, Explode);
         }
 
         private void OnTriggerEnter2D(Collider2D collision)
         {
             var enemy = collision.GetComponent<EnemyBehavior>();
-
-            if (enemy != null)
-            {
-                Explode();
-            }
+            if (enemy != null) Explode();
         }
 
         private void Explode()
@@ -58,33 +54,31 @@ namespace OctoberStudio.Abilities
             mineVisuals.SetActive(false);
 
             var enemies = StageController.EnemiesSpawner.GetEnemiesInRadius(transform.position, DamageRadius);
-
-            for (int i = 0; i < enemies.Count; i++)
+            foreach (var enemy in enemies)
             {
-                var enemy = enemies[i];
-
-                enemy.TakeDamage(PlayerBehavior.Player.Damage * DamageMultiplier);
+                enemy.GetComponent<EnemyBehavior_Extended>()?.TakeDamageFromAbility(
+                    PlayerBehavior.Player.Damage * DamageMultiplier,
+                    AbilityType.SpikyTrap
+                );
             }
 
             explosionParticle.Play();
 
             float angle = Random.Range(0, 180f);
-
             for (int i = 0; i < spikesCount; i++)
             {
                 var spike = spikesPool.GetEntity();
                 angle += 360f / spikesCount;
 
                 spike.Init(transform.position, Quaternion.Euler(0, 0, angle) * Vector2.up);
-
                 spike.DamageMultiplier = spikeDamageMultiplier;
                 spike.KickBack = false;
+                spike.SourceAbilityType = AbilityType.SpikyTrap;
             }
 
             lifetimeCoroutine.StopIfExists();
 
             GameController.AudioManager.PlaySound(SPIKY_TRAP_EXPLOSION_HASH);
-
             EasingManager.DoAfter(1f, () => gameObject.SetActive(false));
         }
     }

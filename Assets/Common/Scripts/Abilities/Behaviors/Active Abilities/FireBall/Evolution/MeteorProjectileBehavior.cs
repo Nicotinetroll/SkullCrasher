@@ -2,9 +2,13 @@ using OctoberStudio.Easing;
 using OctoberStudio.Extensions;
 using UnityEngine;
 using UnityEngine.Events;
+using PalbaGames;
 
 namespace OctoberStudio.Abilities
 {
+    /// <summary>
+    /// Handles logic for a falling meteor projectile that damages enemies on impact.
+    /// </summary>
     public class MeteorProjectileBehavior : MonoBehaviour
     {
         public static readonly int METEOR_LAUNCH_HASH = "Meteor Launch".GetHashCode();
@@ -22,6 +26,11 @@ namespace OctoberStudio.Abilities
 
         public float DamageMultiplier { get; set; }
         public float ExplosionRadius { get; set; }
+
+        /// <summary>
+        /// The ability that spawned this meteor, used for damage tracking.
+        /// </summary>
+        public AbilityType SourceAbilityType { get; set; } = AbilityType.None;
 
         public void Init(Vector2 impactPosition)
         {
@@ -46,12 +55,23 @@ namespace OctoberStudio.Abilities
             visuals.SetActive(false);
 
             var enemies = StageController.EnemiesSpawner.GetEnemiesInRadius(transform.position, ExplosionRadius);
+            float baseDamage = PlayerBehavior.Player.Damage * DamageMultiplier;
 
             for (int i = 0; i < enemies.Count; i++)
             {
                 var enemy = enemies[i];
 
-                enemy.TakeDamage(PlayerBehavior.Player.Damage * DamageMultiplier);
+                float finalDamage = baseDamage;
+                bool isCrit = false;
+
+                if (PlayerBehavior_Extended.Instance != null)
+                {
+                    finalDamage = PlayerBehavior_Extended.Instance.GetFinalDamage(baseDamage, out isCrit);
+                }
+
+                // 🔥 Tu opravujeme volanie na extended script
+                var extended = enemy.GetComponent<EnemyBehavior_Extended>();
+                extended?.TakeDamageFromAbility(finalDamage, SourceAbilityType, isCrit);
             }
 
             explosionParticle.Play();
@@ -66,13 +86,13 @@ namespace OctoberStudio.Abilities
             GameController.AudioManager.PlaySound(METEOR_IMPACT_HASH);
         }
 
+
         public void Clear()
         {
             movementCoroutine.StopIfExists();
             disableCoroutine.StopIfExists();
 
             gameObject.SetActive(false);
-
             visuals.SetActive(true);
         }
     }
