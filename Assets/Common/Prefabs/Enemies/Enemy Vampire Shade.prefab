@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 5611959192970924213}
   - component: {fileID: 6888026018349220815}
   - component: {fileID: 1982295306974641257}
+  - component: {fileID: -8998461836656335080}
   m_Layer: 7
   m_Name: Enemy Vampire Shade
   m_TagString: Untagged
@@ -122,6 +123,18 @@ CircleCollider2D:
   m_CompositeOrder: 0
   m_Offset: {x: 0.04, y: 0.59}
   m_Radius: 0.25
+--- !u!114 &-8998461836656335080
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1090571174421192766}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c986db93e08d9c42a6280e6ac170cb9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8100825507709330156
 GameObject:
   m_ObjectHideFlags: 0

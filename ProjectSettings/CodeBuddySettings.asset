@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   aiAssistantsSettings:
-    modelIndex: 2
+    modelIndex: 3
     useCustomModel: 0
     customModelName: pai-001-light-beta
     temperature: 0.01
@@ -26,9 +26,9 @@ MonoBehaviour:
       members of the class. \r\nInclude all necessary namespaces for the code to
       compile.\r\nYou must ask for source code file if I ask you to modify existing
       code and you dont have it in the conversation."
-    apiKey: 
-    assistantId: 
-    syncNeeded: 1
+    apiKey: EtjKRbUR6ccjJGrwH5O+tCh0ZqpHTcyPA9KMjSeEeRTJKjqHRXYqGt2qUgTrWzaarDQDqqJrRnaafKKF1dpqpXMV0oR11yKIqsIDVGZO0tbenerZFmSF7MPsYwCETDh4tiSIVdo2yWJwB/SKoHS+VIz+nR3CviGZmrxfqnDGvUfS1DnbgDKYCP3S3+MrFvPw3pbsCDwF75L57kgqWsP3bjbZ6i8BmXT/pQNw0mSFAXaMsp3nUWTeqHKhRVvbeDmk
+    assistantId: asst_WhA4KG1TsXYK9PKIWTA00uGO
+    syncNeeded: 0
   aiCompletionsSettings:
     modelIndex: 6
     useCustomModel: 0
@@ -43,7 +43,7 @@ MonoBehaviour:
       members of the class. \r\nInclude all necessary namespaces for the code to
       compile.\r\nYou must ask for source code file if I ask you to modify existing
       code and you dont have it in the conversation."
-    apiKey: 
+    apiKey: Yh6urfh6+Ia1Ba7aag1PijZeQuFbTs185v7j3NHA6yF+jzrpdFGCWgvmKkz3l3Jhb+N7timaBjVNT3BjrGLnN6iWrLDEnGSYiGoMaYBk85PF0tTy3hbbvM/CY1Wc6HoVs8mjTA4wH/xJKzsVkYJ530HMBekWwyoqGj3vXYAUY8mjbMsc7u0OJ4NztzXlT30lb63imZAs2WlYM3vgXXMZat4+4HNtuIv56YWCSThMqvk8neHIOj0YUOh3s7PVOgo8
     modelList:
     - o3-mini
     - o1

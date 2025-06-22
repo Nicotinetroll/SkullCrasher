@@ -37,7 +37,6 @@ namespace OctoberStudio.UI
 
         public void SpawnText(Vector2 worldPos, string text, bool isCritical = false)
         {
-            Debug.Log($"[Text Spawned] Text: {text} | IsCrit: {isCritical}");
             var viewportPos = Camera.main.WorldToViewportPoint(worldPos);
             var pool = isCritical ? critPool : normalPool;
 

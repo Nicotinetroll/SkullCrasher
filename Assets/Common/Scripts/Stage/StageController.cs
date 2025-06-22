@@ -70,6 +70,9 @@ namespace OctoberStudio
             PlayerBehavior.Player.onPlayerDied += OnGameFailed;
 
             director.stopped += TimelineStopped;
+            
+            PalbaGames.DamageTracker.Instance?.PrintDamageReport();
+            
             if (testingPreset != null) {
                 director.time = testingPreset.StartTime; 
             } else
@@ -98,8 +101,12 @@ namespace OctoberStudio
             {
                 GameController.ChangeMusic(Stage.MusicName);
             }
-        }
+            
+            PalbaGames.DamageTracker.Instance?.ResetStats();
 
+        }
+        
+        // 🔥 RESET damage trackingu na začiatku runu
         private void TimelineStopped(PlayableDirector director)
         {
             if (gameObject.activeSelf)
@@ -112,11 +119,15 @@ namespace OctoberStudio
                 stageSave.IsPlaying = false;
                 GameController.SaveManager.Save(true);
 
+                // 🔥 výpis reportu po výhre
+                PalbaGames.DamageTracker.Instance?.PrintDamageReport();
+
                 gameScreen.Hide();
                 stageCompletedScreen.Show();
                 Time.timeScale = 0;
             }
         }
+
 
         private void OnGameFailed()
         {
@@ -124,6 +135,9 @@ namespace OctoberStudio
 
             stageSave.IsPlaying = false;
             GameController.SaveManager.Save(true);
+            
+            // 🔥 výpis reportu po výhre
+            PalbaGames.DamageTracker.Instance?.PrintDamageReport();
 
             gameScreen.Hide();
             stageFailedScreen.Show();

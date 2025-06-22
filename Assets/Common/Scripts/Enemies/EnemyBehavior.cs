@@ -188,7 +188,9 @@ namespace OctoberStudio
             bool isCritical = !Mathf.Approximately(finalDamage, baseDamage);
             float totalDamage = finalDamage * projectile.DamageMultiplier;
 
-            TakeDamage(totalDamage, isCritical);
+            // 🔥 Použi AbilityType z projectile pre damage tracking
+            var extended = GetComponent<EnemyBehavior_Extended>();
+            extended?.TakeDamageFromAbility(totalDamage, projectile.SourceAbilityType, isCritical);
 
             if (HP > 0)
             {
@@ -203,6 +205,7 @@ namespace OctoberStudio
                 }
             }
         }
+
 
 
         public float GetDamage()

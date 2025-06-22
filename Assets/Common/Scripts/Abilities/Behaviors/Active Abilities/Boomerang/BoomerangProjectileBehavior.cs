@@ -4,6 +4,9 @@ using UnityEngine.Events;
 
 namespace OctoberStudio.Abilities
 {
+    /// <summary>
+    /// Logic for individual boomerang projectiles.
+    /// </summary>
     public class BoomerangProjectileBehavior : ProjectileBehavior
     {
         private static readonly int BOOMERANG_THROW_HASH = "Boomerang Throw".GetHashCode();
@@ -21,6 +24,12 @@ namespace OctoberStudio.Abilities
         public void Spawn(Vector3 direction)
         {
             Init();
+            
+            Debug.Log("[BOOMERANG] Spawned and set AbilityType");
+
+
+            // 🔥 Dôležité: priradíme správnu abilitu
+            SourceAbilityType = AbilityType.Boomerang;
 
             transform.localScale = Vector3.one * Size * PlayerBehavior.Player.SizeMultiplier;
 

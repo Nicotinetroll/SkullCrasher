@@ -2,6 +2,8 @@ namespace OctoberStudio
 {
     public enum AbilityType
     {
+        None = -1,
+        
         ShootingStar = 0,
         GuardianEye = 1,
         LightningAmulet = 2,
