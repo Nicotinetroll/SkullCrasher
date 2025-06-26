@@ -1,21 +1,20 @@
 using System;
-using OctoberStudio;
 using UnityEngine;
 
 namespace PalbaGames.Challenges
 {
-    public class KillXEnemiesInYSecondsChallenge : BaseChallenge
+    public class DealDamageInTimeChallenge : BaseChallenge
     {
-        private int killsRequired;
-        private int killsBefore;
+        private float damageRequired;
+        private float damageBefore;
         private Action onSuccess;
         private Action onFail;
 
         private float lastLoggedSecond = -1;
 
-        public KillXEnemiesInYSecondsChallenge(int kills, float seconds, Action onSuccess, Action onFail)
+        public DealDamageInTimeChallenge(float damage, float seconds, Action onSuccess, Action onFail)
         {
-            this.killsRequired = kills;
+            this.damageRequired = damage;
             this.timeLimit = seconds;
             this.onSuccess = onSuccess;
             this.onFail = onFail;
@@ -24,24 +23,24 @@ namespace PalbaGames.Challenges
         public override void Start()
         {
             timeRemaining = timeLimit;
-            killsBefore = GameController.SaveManager.GetSave<StageSave>("Stage").EnemiesKilled;
-            Debug.Log($"[Challenge] Started: Kill {killsRequired} enemies in {timeLimit} seconds (current total: {killsBefore})");
+            damageBefore = DamageTracker.Instance.TotalDamage;
+            Debug.Log($"[Challenge] Started: Deal {damageRequired} damage in {timeLimit} seconds (current total: {damageBefore})");
         }
 
         public override bool UpdateChallenge(float deltaTime)
         {
             timeRemaining -= deltaTime;
 
-            int currentKills = GameController.SaveManager.GetSave<StageSave>("Stage").EnemiesKilled - killsBefore;
+            float currentDamage = DamageTracker.Instance.TotalDamage - damageBefore;
 
             float floored = Mathf.Floor(timeRemaining);
             if (floored != lastLoggedSecond)
             {
-                Debug.Log($"[Challenge] Progress: {currentKills}/{killsRequired} kills | {floored} sec left");
+                Debug.Log($"[Challenge] Progress: {currentDamage}/{damageRequired} dmg | {floored} sec left");
                 lastLoggedSecond = floored;
             }
 
-            if (currentKills >= killsRequired)
+            if (currentDamage >= damageRequired)
             {
                 Debug.Log("[Challenge] SUCCESS! Challenge completed.");
                 onSuccess?.Invoke();

@@ -60,5 +60,22 @@ namespace PalbaGames
 
             Debug.Log($"TOTAL: {total} dmg");
         }
+        
+        public float TotalDamage
+        {
+            get
+            {
+                float total = 0f;
+                foreach (var dmg in DamageByAbility.Values)
+                {
+                    total += dmg;
+                }
+
+                Debug.Log($"[DamageTracker] TotalDamage = {total}");
+                return total;
+            }
+        }
+
+
     }
 }

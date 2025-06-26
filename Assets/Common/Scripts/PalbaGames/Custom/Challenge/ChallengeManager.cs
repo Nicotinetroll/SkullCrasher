@@ -45,7 +45,7 @@ namespace PalbaGames.Challenges
         {
             if (challengeId == "Kill10In5s")
             {
-                AddChallenge(new KillXEnemiesInYSecondsChallenge(
+                AddChallenge(new KillEnemiesInTimeChallenge(
                     kills: 10,
                     seconds: 5f,
                     onSuccess: () =>

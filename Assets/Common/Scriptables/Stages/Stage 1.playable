@@ -1268,7 +1268,9 @@ MonoBehaviour:
     useSpeedOverride: 0
     speedOverride: 0
     useDropOverride: 0
-    dropOverride: []
+    dropOverride:
+    - dropType: 0
+      chance: 0
     disableOffscreenTeleport: 0
   circularSpawn: 1
   enemiesCount: 7
@@ -1934,6 +1936,7 @@ MonoBehaviour:
   - {fileID: 5434482563291951568}
   - {fileID: -9179325531169304639}
   - {fileID: -9133120068218355185}
+  - {fileID: 9026503889325213718}
   m_FixedDuration: 0
   m_EditorSettings:
     m_Framerate: 60
@@ -2014,6 +2017,26 @@ MonoBehaviour:
     disableOffscreenTeleport: 0
   circularSpawn: 0
   continuousSpawnPerSecond: 20
+--- !u!114 &2268481988125218156
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 499f041be5b6ce74299d9f2439f62af4, type: 3}
+  m_Name: ChallengePlayableAsset
+  m_EditorClassIdentifier: 
+  challengeType: 0
+  amount: 10
+  duration: 20
+  reward: 0
+  enableDropReward: 0
+  dropReward: 0
+  dropCount: 0
+  penalty: 0
 --- !u!114 &2295668183432415732
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -4194,3 +4217,95 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetCameraSize: 6
   easingType: 0
+--- !u!114 &9026503889325213718
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: febd87db9297bac4cb5d6fcd8714c5bc, type: 3}
+  m_Name: Challenge Track
+  m_EditorClassIdentifier: 
+  m_Version: 3
+  m_AnimClip: {fileID: 0}
+  m_Locked: 0
+  m_Muted: 0
+  m_CustomPlayableFullTypename: 
+  m_Curves: {fileID: 0}
+  m_Parent: {fileID: 11400000}
+  m_Children: []
+  m_Clips:
+  - m_Version: 1
+    m_Start: 7.933333333333334
+    m_ClipIn: 0
+    m_Asset: {fileID: 2268481988125218156}
+    m_Duration: 5
+    m_TimeScale: 1
+    m_ParentTrack: {fileID: 9026503889325213718}
+    m_EaseInDuration: 0
+    m_EaseOutDuration: 0
+    m_BlendInDuration: -1
+    m_BlendOutDuration: -1
+    m_MixInCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    m_MixOutCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    m_BlendInCurveMode: 0
+    m_BlendOutCurveMode: 0
+    m_ExposedParameterNames: []
+    m_AnimationCurves: {fileID: 0}
+    m_Recordable: 0
+    m_PostExtrapolationMode: 0
+    m_PreExtrapolationMode: 0
+    m_PostExtrapolationTime: 0
+    m_PreExtrapolationTime: 0
+    m_DisplayName: ChallengePlayableAsset
+  m_Markers:
+    m_Objects: []

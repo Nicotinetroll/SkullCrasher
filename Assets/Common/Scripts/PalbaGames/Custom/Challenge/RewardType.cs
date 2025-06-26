@@ -6,6 +6,5 @@ namespace PalbaGames.Challenges
         BuffDamage,
         BuffCritChance,
         Heal,
-        DropChest
     }
 }

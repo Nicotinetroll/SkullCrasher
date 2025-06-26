@@ -3,6 +3,8 @@ using TMPro;
 using OctoberStudio;
 using System.Collections.Generic;
 using UnityEngine.InputSystem;
+using PalbaGames;
+
 
 namespace PalbaGames
 {
@@ -58,70 +60,84 @@ namespace PalbaGames
         }
 
         private void Update()
+{
+    if (Keyboard.current[toggleKey].wasPressedThisFrame)
+    {
+        visible = !visible;
+        text.enabled = visible;
+        return;
+    }
+
+    if (!visible || player == null || healthbar == null) return;
+
+    dmg.Check(player.Damage);
+    spd.Check(player.Speed);
+    xp.Check(player.XPMultiplier);
+    cd.Check(player.CooldownMultiplier);
+    ps.Check(player.ProjectileSpeedMultiplier);
+    sz.Check(player.SizeMultiplier);
+    dur.Check(player.DurationMultiplier);
+    gold.Check(player.GoldMultiplier);
+    magnet.Check(player.MagnetRadiusSqr);
+    dmgReduction.Check(player.DamageReductionMultiplier);
+
+    float maxHP = healthbar.MaxHP;
+    float currentHP = healthbar.HP;
+
+    if (!Mathf.Approximately(currentHP, prevHP))
+    {
+        hpColor = currentHP > prevHP ? "#00FF00" : "#FF0000";
+        prevHP = currentHP;
+        CancelInvoke(nameof(ResetHPColor));
+        Invoke(nameof(ResetHPColor), highlightDuration);
+    }
+
+    string critStats = "";
+    if (critSource != null)
+    {
+        if (critChance == null) critChance = new(critSource.criticalChance, highlightDuration);
+        if (critMultMin == null) critMultMin = new(critSource.criticalMultiplierMin, highlightDuration);
+        if (critMultMax == null) critMultMax = new(critSource.criticalMultiplierMax, highlightDuration);
+
+        critChance.Check(critSource.criticalChance);
+        critMultMin.Check(critSource.criticalMultiplierMin);
+        critMultMax.Check(critSource.criticalMultiplierMax);
+
+        critStats =
+            critChance.FormatValueOnly("Crit Chance", "%") +
+            critMultMin.FormatValueOnly("Crit xMin") +
+            critMultMax.FormatValueOnly("Crit xMax");
+    }
+
+    float totalDamage = 0f;
+
+    if (DamageTracker.Instance != null && DamageTracker.Instance.DamageByAbility != null)
+    {
+        foreach (var kvp in DamageTracker.Instance.DamageByAbility)
         {
-            if (Keyboard.current[toggleKey].wasPressedThisFrame)
-            {
-                visible = !visible;
-                text.enabled = visible;
-                return;
-            }
-
-            if (!visible || player == null || healthbar == null) return;
-
-            dmg.Check(player.Damage);
-            spd.Check(player.Speed);
-            xp.Check(player.XPMultiplier);
-            cd.Check(player.CooldownMultiplier);
-            ps.Check(player.ProjectileSpeedMultiplier);
-            sz.Check(player.SizeMultiplier);
-            dur.Check(player.DurationMultiplier);
-            gold.Check(player.GoldMultiplier);
-            magnet.Check(player.MagnetRadiusSqr);
-            dmgReduction.Check(player.DamageReductionMultiplier);
-
-            float maxHP = healthbar.MaxHP;
-            float currentHP = healthbar.HP;
-
-            if (!Mathf.Approximately(currentHP, prevHP))
-            {
-                hpColor = currentHP > prevHP ? "#00FF00" : "#FF0000";
-                prevHP = currentHP;
-                CancelInvoke(nameof(ResetHPColor));
-                Invoke(nameof(ResetHPColor), highlightDuration);
-            }
-
-            string critStats = "";
-            if (critSource != null)
-            {
-                if (critChance == null) critChance = new(critSource.criticalChance, highlightDuration);
-                if (critMultMin == null) critMultMin = new(critSource.criticalMultiplierMin, highlightDuration);
-                if (critMultMax == null) critMultMax = new(critSource.criticalMultiplierMax, highlightDuration);
-
-                critChance.Check(critSource.criticalChance);
-                critMultMin.Check(critSource.criticalMultiplierMin);
-                critMultMax.Check(critSource.criticalMultiplierMax);
-
-                critStats =
-                    critChance.FormatValueOnly("Crit Chance", "%") +
-                    critMultMin.FormatValueOnly("Crit xMin") +
-                    critMultMax.FormatValueOnly("Crit xMax");
-            }
-
-            text.text =
-                "<b>PLAYER STATS (F1)</b>\n" +
-                dmg.FormatValueOnly("Damage") +
-                spd.FormatValueOnly("Speed") +
-                $"HP: <color={hpColor}>{maxHP:F0}/{currentHP:F0}</color>\n" +
-                dmgReduction.FormatValueOnly("Dmg Reduction", "", 2) +
-                xp.FormatValueOnly("XP Multiplier") +
-                cd.FormatValueOnly("Cooldown") +
-                ps.FormatValueOnly("Projectile Speed") +
-                sz.FormatValueOnly("Size") +
-                dur.FormatValueOnly("Duration") +
-                gold.FormatValueOnly("Gold") +
-                magnet.FormatValueOnly("Magnet Radius²") +
-                critStats;
+            totalDamage += kvp.Value;
         }
+    }
+
+
+    text.text =
+        "<b>PLAYER STATS (F1)</b>\n" +
+        dmg.FormatValueOnly("Damage") +
+        spd.FormatValueOnly("Speed") +
+        $"HP: <color={hpColor}>{maxHP:F0}/{currentHP:F0}</color>\n" +
+        dmgReduction.FormatValueOnly("Dmg Reduction", "", 2) +
+        xp.FormatValueOnly("XP Multiplier") +
+        cd.FormatValueOnly("Cooldown") +
+        ps.FormatValueOnly("Projectile Speed") +
+        sz.FormatValueOnly("Size") +
+        dur.FormatValueOnly("Duration") +
+        gold.FormatValueOnly("Gold") +
+        magnet.FormatValueOnly("Magnet Radius²") +
+        critStats +
+        $"Total Damage: <color=#FFD700>{totalDamage:F0}</color>\n";
+}
+
+
 
         private void ResetHPColor()
         {
