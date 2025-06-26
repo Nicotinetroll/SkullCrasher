@@ -27,6 +27,9 @@ namespace PalbaGames.Challenges
             }
         }
 
+        /// <summary>
+        /// Adds and starts a new runtime challenge.
+        /// </summary>
         public void AddChallenge(BaseChallenge challenge)
         {
             Debug.Log($"[ChallengeManager] Started challenge: {challenge.GetType().Name}");
@@ -34,15 +37,27 @@ namespace PalbaGames.Challenges
             challenge.Start();
         }
 
+        /// <summary>
+        /// LEGACY HARDCODED MODE – DEPRECATED.
+        /// Left here only as fallback.
+        /// </summary>
         public void TriggerChallenge(string challengeId)
         {
             if (challengeId == "Kill10In5s")
             {
-                AddChallenge(new KillXEnemiesInYSecondsChallenge(10, 5f, () =>
-                {
-                    Debug.Log("[ChallengeManager] Buff activated: DamageBoost for 10s");
-                    BuffManager.Instance.ApplyBuff(BuffType.DamageBoost, 10f);
-                }));
+                AddChallenge(new KillXEnemiesInYSecondsChallenge(
+                    kills: 10,
+                    seconds: 5f,
+                    onSuccess: () =>
+                    {
+                        Debug.Log("[ChallengeManager] Reward: DamageBoost");
+                        BuffManager.Instance.ApplyBuff(BuffType.DamageBoost, 10f);
+                    },
+                    onFail: () =>
+                    {
+                        Debug.Log("[ChallengeManager] Challenge failed – no reward.");
+                    }
+                ));
             }
             else
             {

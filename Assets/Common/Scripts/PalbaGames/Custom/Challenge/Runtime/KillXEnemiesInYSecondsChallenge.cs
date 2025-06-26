@@ -4,23 +4,21 @@ using UnityEngine;
 
 namespace PalbaGames.Challenges
 {
-    /// <summary>
-    /// Challenge: Kill a number of enemies within a time limit.
-    /// Uses StageSave.EnemiesKilled to track kills.
-    /// </summary>
     public class KillXEnemiesInYSecondsChallenge : BaseChallenge
     {
         private int killsRequired;
         private int killsBefore;
         private Action onSuccess;
+        private Action onFail;
 
         private float lastLoggedSecond = -1;
 
-        public KillXEnemiesInYSecondsChallenge(int kills, float seconds, Action onSuccess)
+        public KillXEnemiesInYSecondsChallenge(int kills, float seconds, Action onSuccess, Action onFail)
         {
             this.killsRequired = kills;
             this.timeLimit = seconds;
             this.onSuccess = onSuccess;
+            this.onFail = onFail;
         }
 
         public override void Start()
@@ -53,6 +51,7 @@ namespace PalbaGames.Challenges
             if (timeRemaining <= 0f)
             {
                 Debug.Log("[Challenge] FAILED. Time ran out.");
+                onFail?.Invoke();
                 return true;
             }
 
