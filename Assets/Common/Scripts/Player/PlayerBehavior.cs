@@ -78,12 +78,23 @@ namespace OctoberStudio
         public bool IsMovingAlowed { get; set; }
 
         private bool invincible = false;
-
         private List<EnemyBehavior> enemiesInside = new List<EnemyBehavior>();
 
         private CharactersSave charactersSave;
         public CharacterData Data { get; set; }
         private CharacterBehavior Character { get; set; }
+
+        public float BaseDamage { get; private set; }
+        public float BaseSpeed { get; private set; }
+        public float BaseHP { get; private set; }
+        public float BaseMagnetRadius { get; private set; }
+        public float BaseCooldownMultiplier { get; private set; }
+        public float BaseXPMultiplier { get; private set; }
+        public float BaseDamageReductionPercent { get; private set; }
+        public float BaseProjectileSpeedMultiplier { get; private set; }
+        public float BaseSizeMultiplier { get; private set; }
+        public float BaseDurationMultiplier { get; private set; }
+        public float BaseGoldMultiplier { get; private set; }
 
         private void Awake()
         {
@@ -95,7 +106,20 @@ namespace OctoberStudio
             Character.transform.ResetLocal();
 
             instance = this;
-            healthbar.Init(Data.BaseHP);
+
+            BaseDamage = Data.BaseDamage;
+            BaseHP = Data.BaseHP;
+            BaseSpeed = speed;
+            BaseMagnetRadius = defaultMagnetRadius;
+            BaseCooldownMultiplier = cooldownMultiplier;
+            BaseXPMultiplier = xpMultiplier;
+            BaseDamageReductionPercent = initialDamageReductionPercent;
+            BaseProjectileSpeedMultiplier = initialProjectileSpeedMultiplier;
+            BaseSizeMultiplier = initialSizeMultiplier;
+            BaseDurationMultiplier = initialDurationMultiplier;
+            BaseGoldMultiplier = initialGoldMultiplier;
+
+            healthbar.Init(BaseHP);
             healthbar.SetAutoHideWhenMax(true);
             healthbar.SetAutoShowOnChanged(true);
 
@@ -106,13 +130,12 @@ namespace OctoberStudio
             RecalculateXPMuliplier(1);
             RecalculateCooldownMuliplier(1);
             RecalculateDamageReduction(0);
-            RecalculateProjectileSpeedMultiplier(1f);
-            RecalculateSizeMultiplier(1f);
+            RecalculateProjectileSpeedMultiplier(1);
+            RecalculateSizeMultiplier(1);
             RecalculateDurationMultiplier(1);
             RecalculateGoldMultiplier(1);
 
             LookDirection = Vector2.right;
-
             IsMovingAlowed = true;
         }
 
@@ -120,7 +143,7 @@ namespace OctoberStudio
         {
             if (healthbar.IsZero) return;
 
-            foreach(var enemy in enemiesInside)
+            foreach (var enemy in enemiesInside)
             {
                 if (Time.time - enemy.LastTimeDamagedPlayer > enemyInsideDamageInterval)
                 {
@@ -132,7 +155,6 @@ namespace OctoberStudio
             if (!IsMovingAlowed) return;
 
             var input = GameController.InputManager.MovementValue;
-
             float joysticPower = input.magnitude;
             Character.SetSpeed(joysticPower);
 
@@ -141,141 +163,98 @@ namespace OctoberStudio
                 var frameMovement = input * Time.deltaTime * Speed;
 
                 if (StageController.FieldManager.ValidatePosition(transform.position + Vector3.right * frameMovement.x, fenceOffset))
-                {
                     transform.position += Vector3.right * frameMovement.x;
-                }
 
                 if (StageController.FieldManager.ValidatePosition(transform.position + Vector3.up * frameMovement.y, fenceOffset))
-                {
                     transform.position += Vector3.up * frameMovement.y;
-                }
 
                 collisionHelper.transform.localPosition = Vector3.zero;
-
                 Character.SetLocalScale(new Vector3(input.x > 0 ? 1 : -1, 1, 1));
-
                 LookDirection = input.normalized;
             }
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public bool IsInsideMagnetRadius(Transform target)
+        public void RecalculateDamage(float multiplier)
         {
-            return (transform.position - target.position).sqrMagnitude <= MagnetRadiusSqr;
-        }
-
-        public void RecalculateMagnetRadius(float magnetRadiusMultiplier)
-        {
-            MagnetRadiusSqr = Mathf.Pow(defaultMagnetRadius * magnetRadiusMultiplier, 2);
-        }
-
-        public void RecalculateMoveSpeed(float moveSpeedMultiplier)
-        {
-            Speed = speed * moveSpeedMultiplier;
-        }
-
-        public void RecalculateDamage(float damageMultiplier)
-        {
-            Damage = Data.BaseDamage * damageMultiplier;
+            Damage = BaseDamage * multiplier;
             if (GameController.UpgradesManager.IsUpgradeAquired(UpgradeType.Damage))
-            {
                 Damage *= GameController.UpgradesManager.GetUpgadeValue(UpgradeType.Damage);
-            }
         }
+        public void SetBaseDamage(float value) { BaseDamage = value; RecalculateDamage(1f); }
 
-        public void RecalculateMaxHP(float maxHPMultiplier)
+        public void RecalculateMoveSpeed(float multiplier) { Speed = BaseSpeed * multiplier; }
+        public void SetBaseSpeed(float value) { BaseSpeed = value; RecalculateMoveSpeed(1f); }
+
+        public void RecalculateMaxHP(float multiplier)
         {
             var upgradeValue = GameController.UpgradesManager.GetUpgadeValue(UpgradeType.Health);
-            healthbar.ChangeMaxHP((Data.BaseHP + upgradeValue) * maxHPMultiplier);
+            healthbar.ChangeMaxHP((BaseHP + upgradeValue) * multiplier);
         }
+        public void SetBaseHP(float value) { BaseHP = value; RecalculateMaxHP(1f); }
 
-        public void RecalculateXPMuliplier(float xpMultiplier)
+        public void RecalculateMagnetRadius(float multiplier) { MagnetRadiusSqr = Mathf.Pow(BaseMagnetRadius * multiplier, 2); }
+        public void SetBaseMagnetRadius(float value) { BaseMagnetRadius = value; RecalculateMagnetRadius(1f); }
+
+        public void RecalculateXPMuliplier(float multiplier) { XPMultiplier = BaseXPMultiplier * multiplier; }
+        public void SetBaseXPMultiplier(float value) { BaseXPMultiplier = value; RecalculateXPMuliplier(1f); }
+
+        public void RecalculateCooldownMuliplier(float multiplier) { CooldownMultiplier = BaseCooldownMultiplier * multiplier; }
+        public void SetBaseCooldownMultiplier(float value) { BaseCooldownMultiplier = value; RecalculateCooldownMuliplier(1f); }
+
+        public void RecalculateDamageReduction(float extraPercent)
         {
-            XPMultiplier = this.xpMultiplier * xpMultiplier;
-        }
-
-        public void RecalculateCooldownMuliplier(float cooldownMultiplier)
-        {
-            CooldownMultiplier = this.cooldownMultiplier * cooldownMultiplier;
-        }
-
-        public void RecalculateDamageReduction(float damageReductionPercent)
-        {
-            DamageReductionMultiplier = (100f - initialDamageReductionPercent - damageReductionPercent) / 100f;
-
+            float totalPercent = BaseDamageReductionPercent + extraPercent;
+            DamageReductionMultiplier = (100f - totalPercent) / 100f;
             if (GameController.UpgradesManager.IsUpgradeAquired(UpgradeType.Armor))
-            {
                 DamageReductionMultiplier *= GameController.UpgradesManager.GetUpgadeValue(UpgradeType.Armor);
-            } 
         }
+        public void SetBaseDamageReductionPercent(float value) { BaseDamageReductionPercent = value; RecalculateDamageReduction(0f); }
 
-        public void RecalculateProjectileSpeedMultiplier(float projectileSpeedMultiplier)
-        {
-            ProjectileSpeedMultiplier = initialProjectileSpeedMultiplier * projectileSpeedMultiplier;
-        }
+        public void RecalculateProjectileSpeedMultiplier(float multiplier) { ProjectileSpeedMultiplier = BaseProjectileSpeedMultiplier * multiplier; }
+        public void SetBaseProjectileSpeedMultiplier(float value) { BaseProjectileSpeedMultiplier = value; RecalculateProjectileSpeedMultiplier(1f); }
 
-        public void RecalculateSizeMultiplier(float sizeMultiplier)
-        {
-            SizeMultiplier = initialSizeMultiplier * sizeMultiplier;
-        }
+        public void RecalculateSizeMultiplier(float multiplier) { SizeMultiplier = BaseSizeMultiplier * multiplier; }
+        public void SetBaseSizeMultiplier(float value) { BaseSizeMultiplier = value; RecalculateSizeMultiplier(1f); }
 
-        public void RecalculateDurationMultiplier(float durationMultiplier)
-        {
-            DurationMultiplier = initialDurationMultiplier * durationMultiplier;
-        }
+        public void RecalculateDurationMultiplier(float multiplier) { DurationMultiplier = BaseDurationMultiplier * multiplier; }
+        public void SetBaseDurationMultiplier(float value) { BaseDurationMultiplier = value; RecalculateDurationMultiplier(1f); }
 
-        public void RecalculateGoldMultiplier(float goldMultiplier)
-        {
-            GoldMultiplier = initialGoldMultiplier * goldMultiplier;
-        }
+        public void RecalculateGoldMultiplier(float multiplier) { GoldMultiplier = BaseGoldMultiplier * multiplier; }
+        public void SetBaseGoldMultiplier(float value) { BaseGoldMultiplier = value; RecalculateGoldMultiplier(1f); }
 
-        public void RestoreHP(float hpPercent)
-        {
-            healthbar.AddPercentage(hpPercent);
-        }
-
-        public void Heal(float hp)
-        {
-            healthbar.AddHP(hp + GameController.UpgradesManager.GetUpgadeValue(UpgradeType.Healing));
-        }
+        public void RestoreHP(float hpPercent) { healthbar.AddPercentage(hpPercent); }
+        public void Heal(float hp) { healthbar.AddHP(hp + GameController.UpgradesManager.GetUpgadeValue(UpgradeType.Healing)); }
 
         public void Revive()
         {
             Character.PlayReviveAnimation();
             reviveParticle.Play();
-
             invincible = true;
             IsMovingAlowed = false;
             healthbar.ResetHP(1f);
-
             Character.SetSortingOrder(102);
 
-            reviveBackgroundSpriteRenderer.DoAlpha(0f, 0.3f, reviveBottomHideDelay).SetUnscaledTime(true).SetOnFinish(() => reviveBackgroundSpriteRenderer.gameObject.SetActive(false));
+            reviveBackgroundSpriteRenderer.DoAlpha(0f, 0.3f, reviveBackgroundHideDelay).SetUnscaledTime(true).SetOnFinish(() => reviveBackgroundSpriteRenderer.gameObject.SetActive(false));
             reviveBottomSpriteRenderer.DoAlpha(0f, 0.3f, reviveBottomHideDelay).SetUnscaledTime(true).SetOnFinish(() => reviveBottomSpriteRenderer.gameObject.SetActive(false));
 
             GameController.AudioManager.PlaySound(REVIVE_HASH);
-            EasingManager.DoAfter(1f, () =>
-            {
-                IsMovingAlowed = true;
-                Character.SetSortingOrder(0);
-            });
-
+            EasingManager.DoAfter(1f, () => { IsMovingAlowed = true; Character.SetSortingOrder(0); });
             EasingManager.DoAfter(3, () => invincible = false);
         }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public bool IsInsideMagnetRadius(Transform target) => (transform.position - target.position).sqrMagnitude <= MagnetRadiusSqr;
 
         public void CheckTriggerEnter2D(Collider2D collision)
         {
             if (collision.gameObject.layer == 7)
             {
                 if (invincible) return;
-
                 var enemy = collision.GetComponent<EnemyBehavior>();
-
                 if (enemy != null)
                 {
                     enemiesInside.Add(enemy);
                     enemy.LastTimeDamagedPlayer = Time.time;
-
                     enemy.onEnemyDied += OnEnemyDied;
                     TakeDamage(enemy.GetDamage());
                 }
@@ -283,12 +262,9 @@ namespace OctoberStudio
             else
             {
                 if (invincible) return;
-
                 var projectile = collision.GetComponent<SimpleEnemyProjectileBehavior>();
                 if (projectile != null)
-                {
                     TakeDamage(projectile.Damage);
-                }
             }
         }
 
@@ -297,9 +273,7 @@ namespace OctoberStudio
             if (collision.gameObject.layer == 7)
             {
                 if (invincible) return;
-
                 var enemy = collision.GetComponent<EnemyBehavior>();
-
                 if (enemy != null)
                 {
                     enemiesInside.Remove(enemy);
@@ -319,9 +293,7 @@ namespace OctoberStudio
         public void TakeDamage(float damage)
         {
             if (invincible || healthbar.IsZero) return;
-
             healthbar.Subtract(damage * DamageReductionMultiplier);
-
             Character.FlashHit();
 
             if (healthbar.IsZero)
@@ -337,21 +309,16 @@ namespace OctoberStudio
                 reviveBottomSpriteRenderer.DoAlpha(reviveBottomAlpha, 0.3f, reviveBottomSpawnDelay).SetUnscaledTime(true);
 
                 GameController.AudioManager.PlaySound(DEATH_HASH);
-
-                EasingManager.DoAfter(0.5f, () =>
-                {
-                    onPlayerDied?.Invoke();
-                }).SetUnscaledTime(true);
-
+                EasingManager.DoAfter(0.5f, () => { onPlayerDied?.Invoke(); }).SetUnscaledTime(true);
                 GameController.VibrationManager.StrongVibration();
-            } else
+            }
+            else
             {
-                if(Time.time - lastTimeVibrated > 0.05f)
+                if (Time.time - lastTimeVibrated > 0.05f)
                 {
                     GameController.VibrationManager.LightVibration();
                     lastTimeVibrated = Time.time;
                 }
-                
                 GameController.AudioManager.PlaySound(RECEIVING_DAMAGE_HASH);
             }
         }

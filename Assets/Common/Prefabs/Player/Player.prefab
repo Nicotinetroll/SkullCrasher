@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 9021942874561794502}
   - component: {fileID: 1640726080333332736}
   - component: {fileID: -5157754982475648978}
+  - component: {fileID: 7713893738355203352}
   m_Layer: 6
   m_Name: Player
   m_TagString: Untagged
@@ -153,7 +154,30 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   criticalChance: 10
-  criticalMultiplier: 2
+  criticalMultiplierMin: 1.5
+  criticalMultiplierMax: 3
+--- !u!114 &7713893738355203352
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2107940006198640416}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b71fab1bcec497c4588b5a2c779a8350, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damageMultiplier: 1
+  speedMultiplier: 1
+  magnetRadiusMultiplier: 1
+  xpMultiplier: 1
+  cooldownMultiplier: 1
+  damageReductionExtraPercent: 0
+  projectileSpeedMultiplier: 1
+  sizeMultiplier: 1
+  durationMultiplier: 1
+  goldMultiplier: 1
 --- !u!1 &2440361492150374506
 GameObject:
   m_ObjectHideFlags: 0
