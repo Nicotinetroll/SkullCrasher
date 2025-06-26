@@ -2,6 +2,7 @@ using UnityEngine;
 using TMPro;
 using OctoberStudio;
 using System.Collections.Generic;
+using UnityEngine.InputSystem;
 
 namespace PalbaGames
 {
@@ -13,6 +14,9 @@ namespace PalbaGames
     {
         [SerializeField] private TextMeshProUGUI text;
         [SerializeField] private float highlightDuration = 5f;
+        [SerializeField] private Key toggleKey = Key.F1;
+
+        private bool visible = true;
 
         private PlayerBehavior player;
         private PlayerStatModifier modifier;
@@ -55,7 +59,14 @@ namespace PalbaGames
 
         private void Update()
         {
-            if (player == null || healthbar == null) return;
+            if (Keyboard.current[toggleKey].wasPressedThisFrame)
+            {
+                visible = !visible;
+                text.enabled = visible;
+                return;
+            }
+
+            if (!visible || player == null || healthbar == null) return;
 
             dmg.Check(player.Damage);
             spd.Check(player.Speed);
@@ -97,7 +108,7 @@ namespace PalbaGames
             }
 
             text.text =
-                "<b>PLAYER STATS</b>\n" +
+                "<b>PLAYER STATS (F1)</b>\n" +
                 dmg.FormatValueOnly("Damage") +
                 spd.FormatValueOnly("Speed") +
                 $"HP: <color={hpColor}>{maxHP:F0}/{currentHP:F0}</color>\n" +
@@ -148,4 +159,4 @@ namespace PalbaGames
             return $"{label}: <color={ColorTag}>{current.ToString($"F{decimals}")}{suffix}</color>\\n";
         }
     }
-} 
+}
