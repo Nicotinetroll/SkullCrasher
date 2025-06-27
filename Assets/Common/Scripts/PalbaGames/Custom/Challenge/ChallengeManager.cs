@@ -10,7 +10,19 @@ namespace PalbaGames.Challenges
     {
         public static ChallengeManager Instance { get; private set; }
 
+        [SerializeField] private ChallengeUI challengeUI;
+
         private readonly List<BaseChallenge> activeChallenges = new();
+
+        /// <summary>
+        /// Currently active challenge (only one at a time).
+        /// </summary>
+        public BaseChallenge CurrentChallenge => activeChallenges.Count > 0 ? activeChallenges[0] : null;
+
+        /// <summary>
+        /// Last completed challenge (used for debug display).
+        /// </summary>
+        public BaseChallenge LastChallenge { get; private set; }
 
         private void Awake()
         {
@@ -22,8 +34,23 @@ namespace PalbaGames.Challenges
         {
             for (int i = activeChallenges.Count - 1; i >= 0; i--)
             {
-                if (activeChallenges[i].UpdateChallenge(Time.deltaTime))
+                var challenge = activeChallenges[i];
+
+                if (challenge.UpdateChallenge(Time.deltaTime))
+                {
+                    bool success = challenge.WasSuccessful;
+
+                    // Save for debug info
+                    LastChallenge = challenge;
+
+                    // Notify debug UI
+                    var debugUI = FindObjectOfType<PlayerStatsDebugUI>();
+                    debugUI?.ShowChallengeResult(success);
+
+                    // Cleanup
                     activeChallenges.RemoveAt(i);
+                    challengeUI?.Hide();
+                }
             }
         }
 
@@ -35,34 +62,8 @@ namespace PalbaGames.Challenges
             Debug.Log($"[ChallengeManager] Started challenge: {challenge.GetType().Name}");
             activeChallenges.Add(challenge);
             challenge.Start();
-        }
 
-        /// <summary>
-        /// LEGACY HARDCODED MODE – DEPRECATED.
-        /// Left here only as fallback.
-        /// </summary>
-        public void TriggerChallenge(string challengeId)
-        {
-            if (challengeId == "Kill10In5s")
-            {
-                AddChallenge(new KillEnemiesInTimeChallenge(
-                    kills: 10,
-                    seconds: 5f,
-                    onSuccess: () =>
-                    {
-                        Debug.Log("[ChallengeManager] Reward: DamageBoost");
-                        BuffManager.Instance.ApplyBuff(BuffType.DamageBoost, 10f);
-                    },
-                    onFail: () =>
-                    {
-                        Debug.Log("[ChallengeManager] Challenge failed – no reward.");
-                    }
-                ));
-            }
-            else
-            {
-                Debug.LogWarning($"[ChallengeManager] Unknown challengeId: {challengeId}");
-            }
+            challengeUI?.ShowChallenge(challenge);
         }
     }
 }

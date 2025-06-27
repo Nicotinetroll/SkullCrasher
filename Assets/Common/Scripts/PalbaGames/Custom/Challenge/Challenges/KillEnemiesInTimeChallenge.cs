@@ -47,6 +47,7 @@ namespace PalbaGames.Challenges
             if (currentKills >= killsRequired)
             {
                 Debug.Log("[Challenge] SUCCESS! Challenge completed.");
+                WasSuccessful = true;
                 onSuccess?.Invoke();
                 return true;
             }
@@ -54,11 +55,20 @@ namespace PalbaGames.Challenges
             if (timeRemaining <= 0f)
             {
                 Debug.Log("[Challenge] FAILED. Time ran out.");
+                WasSuccessful = false;
                 onFail?.Invoke();
                 return true;
             }
 
+
             return false;
+        }
+
+        public override string GetDisplayName() => "Kill Enemies";
+        public override string GetProgressString()
+        {
+            int currentKills = GameController.SaveManager.GetSave<StageSave>("Stage").EnemiesKilled - killsBefore;
+            return $"{currentKills}/{killsRequired} KILLS";
         }
     }
 }

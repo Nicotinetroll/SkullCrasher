@@ -2031,11 +2031,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   challengeType: 0
   amount: 10
-  duration: 20
+  duration: 30
   reward: 0
-  enableDropReward: 0
-  dropReward: 0
-  dropCount: 0
+  enableDropReward: 1
+  dropReward: 100
+  dropCount: 1
   penalty: 0
 --- !u!114 &2295668183432415732
 MonoBehaviour:
