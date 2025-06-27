@@ -63,10 +63,21 @@ namespace PalbaGames.Challenges
         }
 
         public override string GetDisplayName() => "Deal Damage";
+
         public override string GetProgressString()
         {
             float currentDamage = DamageTracker.Instance.TotalDamage - damageBefore;
             return $"{currentDamage:F0}/{damageRequired:F0} DMG";
+        }
+
+        // Normalized progress from 0 to 1 for UI slider
+        public override float ProgressNormalized
+        {
+            get
+            {
+                float currentDamage = DamageTracker.Instance.TotalDamage - damageBefore;
+                return Mathf.Clamp01(currentDamage / damageRequired);
+            }
         }
     }
 }

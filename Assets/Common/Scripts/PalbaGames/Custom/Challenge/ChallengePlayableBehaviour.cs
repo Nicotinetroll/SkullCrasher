@@ -10,7 +10,7 @@ namespace PalbaGames.Timeline
         public ChallengeType challengeType;
         public int amount;
         public float duration;
-        public string description; // Add this line
+        public string description;
 
         public RewardType reward;
         public bool enableDropReward;
@@ -29,7 +29,11 @@ namespace PalbaGames.Timeline
 
                 if (enableDropReward && dropCount > 0)
                 {
-                    RewardSystem.ApplyDrop(dropReward, dropCount);
+                    Vector2 playerPos = new Vector2(
+                        PlayerBehavior.Player.transform.position.x,
+                        PlayerBehavior.Player.transform.position.y
+                    );
+                    RewardSystem.ApplyDropAtPosition(dropReward, playerPos, dropCount, 2f);
                 }
             };
 
@@ -50,19 +54,17 @@ namespace PalbaGames.Timeline
 
             if (challenge != null)
             {
-                // Use custom description if provided, otherwise generate one
                 string finalDescription = !string.IsNullOrEmpty(description) ? description :
                     challengeType switch
                     {
                         ChallengeType.KillEnemiesInTime => $"Kill {amount} enemies in {duration} seconds",
-                        ChallengeType.DealDamageInTime => $"Deal {amount} damage in {duration} seconds", 
+                        ChallengeType.DealDamageInTime => $"Deal {amount} damage in {duration} seconds",
                         ChallengeType.DontMoveForTime => $"Don't move for {duration} seconds",
                         ChallengeType.DontTakeDamage => $"Don't take damage for {duration} seconds",
                         ChallengeType.Survive => $"Survive for {duration} seconds",
                         _ => challenge.GetDisplayName()
                     };
 
-                // Let ChallengeManager handle the entire UI sequence
                 ChallengeManager.Instance.AddChallenge(challenge, finalDescription);
             }
         }

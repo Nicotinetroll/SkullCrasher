@@ -22,23 +22,37 @@ namespace PalbaGames.Challenges
                 default:
                     break;
             }
-
-            Debug.Log($"[Reward] Applied: {type}");
         }
 
         public static void ApplyDrop(DropType dropType, int count)
         {
-            var pos = new Vector2(
+            Vector2 playerPos = new Vector2(
                 PlayerBehavior.Player.transform.position.x,
                 PlayerBehavior.Player.transform.position.y
             );
 
+            float dropRadius = 2f;
+
             for (int i = 0; i < count; i++)
             {
-                StageController.DropManager.Drop(dropType, pos);
-            }
+                float angle = Random.Range(0f, Mathf.PI * 2f);
+                Vector2 offset = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle)) * dropRadius;
+                Vector2 dropPos = playerPos + offset;
 
-            Debug.Log($"[Reward] Dropped {count}x {dropType}");
+                StageController.DropManager.Drop(dropType, dropPos);
+            }
+        }
+
+        public static void ApplyDropAtPosition(DropType dropType, Vector2 position, int count, float radius = 2f)
+        {
+            for (int i = 0; i < count; i++)
+            {
+                float angle = Random.Range(0f, Mathf.PI * 2f);
+                Vector2 offset = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle)) * radius;
+                Vector2 dropPos = position + offset;
+
+                StageController.DropManager.Drop(dropType, dropPos);
+            }
         }
 
         public static void ApplyPenalty(PenaltyType type)
@@ -61,8 +75,6 @@ namespace PalbaGames.Challenges
                 default:
                     break;
             }
-
-            Debug.Log($"[Penalty] Applied: {type}");
         }
     }
 }
