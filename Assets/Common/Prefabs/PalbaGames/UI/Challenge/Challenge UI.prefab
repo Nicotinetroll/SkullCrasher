@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3858480611266043536}
   - component: {fileID: 8454451083663050310}
   - component: {fileID: 6477149388100778687}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: Text (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -147,7 +147,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1923632011348051705}
   - component: {fileID: 1866765596532053235}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: Slider_Basic01_White
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -238,7 +238,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6512231263190963401}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: FillArea
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -274,7 +274,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2843775431979537074}
-  m_Layer: 5
+  - component: {fileID: 6111154625747227939}
+  - component: {fileID: 6804803978002477555}
+  m_Layer: 0
   m_Name: Progress Block
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -301,6 +303,394 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: -28}
   m_SizeDelta: {x: 300, y: 56}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &6111154625747227939
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4405561594744634583}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b821aa41cbf734458af19d8c6507e92, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ChannelMode: 0
+  Channel: 0
+  MMChannelDefinition: {fileID: 0}
+  ShakeDuration: 0.5
+  PlayOnAwake: 0
+  PermanentShake: 0
+  Interruptible: 1
+  AlwaysResetTargetValuesAfterShake: 0
+  OnlyUseShakerValues: 0
+  CooldownBetweenShakes: 0
+  Shaking: 0
+  ForwardDirection: 1
+  TimescaleMode: 0
+  Mode: 0
+  TargetTransform: {fileID: 0}
+  TargetRectTransform: {fileID: 0}
+  ShakeSpeed: 20
+  ShakeRange: 50
+  ShakeMainDirection: {x: 0, y: 1, z: 0}
+  RandomizeDirection: 0
+  ShakeAltDirection: {x: 0, y: 1, z: 0}
+  RandomizeDirectionOnPlay: 0
+  AddDirectionalNoise: 1
+  DirectionalNoiseStrengthMin: {x: 0.25, y: 0.25, z: 0.25}
+  DirectionalNoiseStrengthMax: {x: 0.25, y: 0.25, z: 0.25}
+  RandomnessSeed: {x: 0, y: 0, z: 0}
+  RandomizeSeedOnShake: 1
+  UseAttenuation: 1
+  AttenuationCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 0.5
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  StartShakingButton: 0
+--- !u!114 &6804803978002477555
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4405561594744634583}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6da43522623d4704e979466dc7650b65, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Feedbacks: []
+  InitializationMode: 2
+  AutoInitialization: 1
+  SafeMode: 3
+  Direction: 0
+  AutoChangeDirectionOnEnd: 0
+  AutoPlayOnStart: 0
+  AutoPlayOnEnable: 0
+  ForceTimescaleMode: 0
+  ForcedTimescaleMode: 1
+  DurationMultiplier: 1
+  TimescaleMultiplier: 1
+  RandomizeDuration: 0
+  RandomDurationMultiplier: {x: 0.5, y: 1.5}
+  DisplayFullDurationDetails: 0
+  PlayerTimescaleMode: 1
+  OnlyPlayIfWithinRange: 0
+  RangeCenter: {fileID: 0}
+  RangeDistance: 5
+  UseRangeFalloff: 0
+  RangeFalloff:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  RemapRangeFalloff: {x: 0, y: 1}
+  IgnoreRangeEvents: 0
+  CooldownDuration: 0
+  InitialDelay: 0
+  CanPlay: 1
+  CanPlayWhileAlreadyPlaying: 1
+  ChanceToPlay: 100
+  FeedbacksIntensity: 1
+  Events:
+    TriggerMMFeedbacksEvents: 0
+    TriggerUnityEvents: 1
+    OnPlay:
+      m_PersistentCalls:
+        m_Calls: []
+    OnPause:
+      m_PersistentCalls:
+        m_Calls: []
+    OnStop:
+      m_PersistentCalls:
+        m_Calls: []
+    OnResume:
+      m_PersistentCalls:
+        m_Calls: []
+    OnChangeDirection:
+      m_PersistentCalls:
+        m_Calls: []
+    OnComplete:
+      m_PersistentCalls:
+        m_Calls: []
+    OnRestoreInitialValues:
+      m_PersistentCalls:
+        m_Calls: []
+    OnSkipToTheEnd:
+      m_PersistentCalls:
+        m_Calls: []
+    OnInitializationComplete:
+      m_PersistentCalls:
+        m_Calls: []
+    OnEnable:
+      m_PersistentCalls:
+        m_Calls: []
+    OnDisable:
+      m_PersistentCalls:
+        m_Calls: []
+  DebugActive: 0
+  InScriptDrivenPause: 0
+  FeedbacksList:
+  - rid: 7910012618271359153
+  - rid: 7910012618271359154
+  KeepPlayModeChanges: 0
+  PerformanceMode: 0
+  RestoreInitialValuesOnDisable: 0
+  StopFeedbacksOnDisable: 0
+  PlayCount: 0
+  references:
+    version: 2
+    RefIds:
+    - rid: 7910012618271359153
+      type: {class: MMF_RotationShake, ns: MoreMountains.Feedbacks, asm: MoreMountains.Tools}
+      data:
+        Active: 1
+        UniqueID: -568446340
+        Label: Rotation Shake
+        OriginalLabel: Rotation Shake
+        ChannelMode: 0
+        Channel: 0
+        MMChannelDefinition: {fileID: 0}
+        Chance: 100
+        Timing:
+          TimescaleMode: 0
+          ExcludeFromHoldingPauses: 0
+          ContributeToTotalDuration: 1
+          InitialDelay: 0
+          CooldownDuration: 0
+          InterruptsOnStop: 1
+          NumberOfRepeats: 0
+          RepeatForever: 0
+          DelayBetweenRepeats: 1
+          PlayCount: 0
+          LimitPlayCount: 0
+          MaxPlayCount: 3
+          SetPlayCountToZeroOnReset: 0
+          MMFeedbacksDirectionCondition: 0
+          PlayDirection: 0
+          ConstantIntensity: 0
+          UseIntensityInterval: 0
+          IntensityIntervalMin: 0
+          IntensityIntervalMax: 0
+          Sequence: {fileID: 0}
+          TrackID: 0
+          Quantized: 0
+          TargetBPM: 120
+        AutomatedTargetAcquisition:
+          Mode: 0
+          ChildIndex: 0
+        RandomizeOutput: 0
+        RandomMultiplier: {x: 0.8, y: 1}
+        RandomizeDuration: 0
+        RandomDurationMultiplier: {x: 0.5, y: 2}
+        UseRange: 0
+        RangeDistance: 5
+        UseRangeFalloff: 0
+        RangeFalloff:
+          serializedVersion: 2
+          m_Curve:
+          - serializedVersion: 3
+            time: 0
+            value: 1
+            inSlope: 0
+            outSlope: 0
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0
+          - serializedVersion: 3
+            time: 1
+            value: 0
+            inSlope: 0
+            outSlope: 0
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 4
+        RemapRangeFalloff: {x: 0, y: 1}
+        AutomaticShakerSetupButton:
+          ButtonText: 
+        Owner: {fileID: 6804803978002477555}
+        DebugActive: 0
+        TargetShaker: {fileID: 6111154625747227939}
+        Duration: 0.3
+        ResetShakerValuesAfterShake: 1
+        ResetTargetValuesAfterShake: 1
+        ShakeSpeed: 40
+        ShakeRange: 30
+        ShakeMainDirection: {x: 0, y: 0.7, z: 0}
+        RandomizeDirection: 1
+        ShakeAltDirection: {x: 0, y: 1.4, z: 0}
+        RandomizeDirectionOnPlay: 0
+        AddDirectionalNoise: 1
+        DirectionalNoiseStrengthMin: {x: 0.25, y: 0.25, z: 0.25}
+        DirectionalNoiseStrengthMax: {x: 0.25, y: 0.25, z: 0.25}
+        RandomnessSeed: {x: 0, y: 0, z: 0}
+        RandomizeSeedOnShake: 1
+        UseAttenuation: 1
+        AttenuationCurve:
+          serializedVersion: 2
+          m_Curve:
+          - serializedVersion: 3
+            time: 0
+            value: 0
+            inSlope: 0
+            outSlope: 0
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0
+          - serializedVersion: 3
+            time: 0.5
+            value: 1
+            inSlope: 0
+            outSlope: 0
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0
+          - serializedVersion: 3
+            time: 1
+            value: 0
+            inSlope: 0
+            outSlope: 0
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 4
+    - rid: 7910012618271359154
+      type: {class: MMF_DebugLog, ns: MoreMountains.Feedbacks, asm: MoreMountains.Tools}
+      data:
+        Active: 1
+        UniqueID: 1079079641
+        Label: Log
+        OriginalLabel: Log
+        ChannelMode: 0
+        Channel: 0
+        MMChannelDefinition: {fileID: 0}
+        Chance: 100
+        Timing:
+          TimescaleMode: 0
+          ExcludeFromHoldingPauses: 0
+          ContributeToTotalDuration: 1
+          InitialDelay: 0
+          CooldownDuration: 0
+          InterruptsOnStop: 1
+          NumberOfRepeats: 0
+          RepeatForever: 0
+          DelayBetweenRepeats: 1
+          PlayCount: 0
+          LimitPlayCount: 0
+          MaxPlayCount: 3
+          SetPlayCountToZeroOnReset: 0
+          MMFeedbacksDirectionCondition: 0
+          PlayDirection: 0
+          ConstantIntensity: 0
+          UseIntensityInterval: 0
+          IntensityIntervalMin: 0
+          IntensityIntervalMax: 0
+          Sequence: {fileID: 0}
+          TrackID: 0
+          Quantized: 0
+          TargetBPM: 120
+        AutomatedTargetAcquisition:
+          Mode: 0
+          ChildIndex: 0
+        RandomizeOutput: 0
+        RandomMultiplier: {x: 0.8, y: 1}
+        RandomizeDuration: 0
+        RandomDurationMultiplier: {x: 0.5, y: 2}
+        UseRange: 0
+        RangeDistance: 5
+        UseRangeFalloff: 0
+        RangeFalloff:
+          serializedVersion: 2
+          m_Curve:
+          - serializedVersion: 3
+            time: 0
+            value: 1
+            inSlope: 0
+            outSlope: 0
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0
+          - serializedVersion: 3
+            time: 1
+            value: 0
+            inSlope: 0
+            outSlope: 0
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 4
+        RemapRangeFalloff: {x: 0, y: 1}
+        AutomaticShakerSetupButton:
+          ButtonText: 
+        Owner: {fileID: 6804803978002477555}
+        DebugActive: 0
+        DebugLogMode: 0
+        DebugMessage: SHAKE
+        DebugColor: {r: 0, g: 1, b: 1, a: 1}
+        DisplayFrameCount: 1
 --- !u!1 &4419906884102164969
 GameObject:
   m_ObjectHideFlags: 0
@@ -310,7 +700,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4951331099415495127}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: Intro Block
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -350,7 +740,7 @@ GameObject:
   - component: {fileID: 9050792651196749783}
   - component: {fileID: 8492067208215118956}
   - component: {fileID: 2389669474215646884}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: Resoult Block
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -441,7 +831,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2808444864329444660}
   - component: {fileID: 2637698935345312230}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: Challenge UI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -506,7 +896,7 @@ GameObject:
   - component: {fileID: 374470699264826269}
   - component: {fileID: 4793091749885767879}
   - component: {fileID: 2447521301957821496}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: Label_Parallelogram_White
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -623,7 +1013,7 @@ GameObject:
   - component: {fileID: 2539966558494112435}
   - component: {fileID: 314287131976574782}
   - component: {fileID: 7467927534110178019}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: Light
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -698,7 +1088,8 @@ GameObject:
   - component: {fileID: 2929256494059830392}
   - component: {fileID: 3198249076848115043}
   - component: {fileID: 4468339278516704162}
-  m_Layer: 5
+  - component: {fileID: 4803995038578306318}
+  m_Layer: 0
   m_Name: Challenge Call
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -763,6 +1154,22 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &4803995038578306318
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6489911341294989448}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee158225ee1e59f4791627785501d950, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentShaderType: 0
+  normalStrength: 5
+  normalSmoothing: 1
+  computingNormal: 0
 --- !u!1 &7366007329402861846
 GameObject:
   m_ObjectHideFlags: 0
@@ -774,7 +1181,7 @@ GameObject:
   - component: {fileID: 8441727481215561799}
   - component: {fileID: 3175394788066392993}
   - component: {fileID: 1255332294426976240}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: Timer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -912,7 +1319,7 @@ GameObject:
   - component: {fileID: 4152515069324583539}
   - component: {fileID: 1746805323921760332}
   - component: {fileID: 6057653940113269538}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: FillMask
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1001,7 +1408,7 @@ GameObject:
   - component: {fileID: 2967234250751619854}
   - component: {fileID: 2767807163635883713}
   - component: {fileID: 3421534396054182341}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: Bg
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1076,7 +1483,7 @@ GameObject:
   - component: {fileID: 1110483267614986066}
   - component: {fileID: 1602361459626059914}
   - component: {fileID: 4914278645313052655}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: Text (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1213,7 +1620,7 @@ GameObject:
   - component: {fileID: 5259404918611815330}
   - component: {fileID: 8309281758657897969}
   - component: {fileID: 753282135681337675}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: Fill
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1288,7 +1695,7 @@ GameObject:
   - component: {fileID: 2365323980796660139}
   - component: {fileID: 2079569126878432848}
   - component: {fileID: 8003260541708223255}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: Text (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1426,7 +1833,7 @@ GameObject:
   - component: {fileID: 3346724807112313420}
   - component: {fileID: 4558225594860450600}
   - component: {fileID: 771171128187405246}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: Light
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1521,7 +1928,7 @@ GameObject:
   - component: {fileID: 102399402024108441}
   - component: {fileID: 6371091751541206577}
   - component: {fileID: 1540700277806444865}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: Text_Title
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1658,7 +2065,7 @@ GameObject:
   - component: {fileID: 3174545338086142457}
   - component: {fileID: 525993932762240289}
   - component: {fileID: 3610998023658293457}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: Gradient
   m_TagString: Untagged
   m_Icon: {fileID: 0}
