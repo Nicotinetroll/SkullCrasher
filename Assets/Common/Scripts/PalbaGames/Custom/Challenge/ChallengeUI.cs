@@ -74,10 +74,23 @@ namespace PalbaGames.Challenges
 
             if (introBlock != null)
             {
+                Debug.Log("[ChallengeUI] Activating Intro Block");
+                
+                // Force deactivate and wait a frame before activating to reset OnEnable and state
+                introBlock.SetActive(false);
+                yield return null;
                 introBlock.SetActive(true);
 
                 var shineScheduled = introBlock.GetComponentInChildren<ChallengeCallShine>();
-                shineScheduled?.ScheduleAutoHide(introDisplayTime);
+                if (shineScheduled != null)
+                {
+                    // Reset private isHiding flag via reflection
+                    var fi = typeof(ChallengeCallShine).GetField("isHiding", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+                    if (fi != null)
+                        fi.SetValue(shineScheduled, false);
+
+                    shineScheduled.ScheduleAutoHide(introDisplayTime);
+                }
 
                 if (introTitle != null) introTitle.text = "NEW CHALLENGE";
 

@@ -70,8 +70,6 @@ namespace PalbaGames
                 {
                     total += dmg;
                 }
-
-                Debug.Log($"[DamageTracker] TotalDamage = {total}");
                 return total;
             }
         }

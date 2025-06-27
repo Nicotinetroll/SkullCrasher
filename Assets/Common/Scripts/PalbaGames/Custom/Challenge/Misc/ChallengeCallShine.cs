@@ -5,10 +5,6 @@ using MoreMountains.Feedbacks;
 
 namespace PalbaGames.UI
 {
-    /// <summary>
-    /// Spustí AllIn1Shader shine efekt + MMFeedbacks intro animáciu pri aktivácii,
-    /// a automaticky spustí výstupnú animáciu tesne pred deaktiváciou (ak bola oznámená cez ScheduleAutoHide).
-    /// </summary>
     [RequireComponent(typeof(Image))]
     public class ChallengeCallShine : MonoBehaviour
     {
@@ -35,6 +31,11 @@ namespace PalbaGames.UI
             material.EnableKeyword("SHINE_ON");
             feedbacksIn?.PlayFeedbacks();
             StartCoroutine(AnimateShine());
+        }
+
+        public void ResetHiding()
+        {
+            isHiding = false;
         }
 
         public void ScheduleAutoHide(float timeUntilHide)
@@ -112,6 +113,5 @@ namespace PalbaGames.UI
             material.SetFloat("_ShineLocation", 0f);
             material.SetFloat("_ShineGlow", 0f);
         }
-
     }
 }
