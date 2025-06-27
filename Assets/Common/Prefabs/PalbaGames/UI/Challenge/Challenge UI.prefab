@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3858480611266043536}
   - component: {fileID: 8454451083663050310}
   - component: {fileID: 6477149388100778687}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Text (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -147,7 +147,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1923632011348051705}
   - component: {fileID: 1866765596532053235}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Slider_Basic01_White
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -173,9 +173,9 @@ RectTransform:
   - {fileID: 8441727481215561799}
   m_Father: {fileID: 2843775431979537074}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 1}
-  m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: -392}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 300, y: 56}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1866765596532053235
@@ -238,7 +238,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6512231263190963401}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: FillArea
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -276,7 +276,7 @@ GameObject:
   - component: {fileID: 2843775431979537074}
   - component: {fileID: 6111154625747227939}
   - component: {fileID: 6804803978002477555}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Progress Block
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -300,8 +300,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: -28}
-  m_SizeDelta: {x: 300, y: 56}
+  m_AnchoredPosition: {x: 0, y: -379}
+  m_SizeDelta: {x: 300, y: 14}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &6111154625747227939
 MonoBehaviour:
@@ -700,7 +700,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4951331099415495127}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Intro Block
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -725,8 +725,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: -83.80005}
-  m_SizeDelta: {x: 690, y: 167.6001}
+  m_AnchoredPosition: {x: 0, y: -359}
+  m_SizeDelta: {x: 1284, y: 156.69995}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &5048984963910742688
 GameObject:
@@ -740,7 +740,7 @@ GameObject:
   - component: {fileID: 9050792651196749783}
   - component: {fileID: 8492067208215118956}
   - component: {fileID: 2389669474215646884}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Resoult Block
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -763,10 +763,10 @@ RectTransform:
   - {fileID: 2365323980796660139}
   m_Father: {fileID: 2808444864329444660}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0.5}
-  m_AnchorMax: {x: 1, y: 0.5}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 128}
+  m_SizeDelta: {x: 1284, y: 123.69995}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &9050792651196749783
 CanvasRenderer:
@@ -789,7 +789,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0, g: 0, b: 0, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -831,7 +831,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2808444864329444660}
   - component: {fileID: 2637698935345312230}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Challenge UI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -896,7 +896,7 @@ GameObject:
   - component: {fileID: 374470699264826269}
   - component: {fileID: 4793091749885767879}
   - component: {fileID: 2447521301957821496}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Label_Parallelogram_White
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -919,9 +919,9 @@ RectTransform:
   - {fileID: 3858480611266043536}
   m_Father: {fileID: 4951331099415495127}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 1}
-  m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: -1.5643309e-10, y: -418.9}
+  m_AnchorMin: {x: 0.5, y: 0}
+  m_AnchorMax: {x: 0.5, y: 0}
+  m_AnchoredPosition: {x: -1.5643309e-10, y: 33}
   m_SizeDelta: {x: 0, y: 66}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &9081940687006966179
@@ -1013,7 +1013,7 @@ GameObject:
   - component: {fileID: 2539966558494112435}
   - component: {fileID: 314287131976574782}
   - component: {fileID: 7467927534110178019}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Light
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1089,7 +1089,7 @@ GameObject:
   - component: {fileID: 3198249076848115043}
   - component: {fileID: 4468339278516704162}
   - component: {fileID: 4803995038578306318}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Challenge Call
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1113,7 +1113,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: -366}
+  m_AnchoredPosition: {x: 0, y: -71.5}
   m_SizeDelta: {x: 690, y: 143}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3198249076848115043
@@ -1181,7 +1181,7 @@ GameObject:
   - component: {fileID: 8441727481215561799}
   - component: {fileID: 3175394788066392993}
   - component: {fileID: 1255332294426976240}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Timer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1319,7 +1319,7 @@ GameObject:
   - component: {fileID: 4152515069324583539}
   - component: {fileID: 1746805323921760332}
   - component: {fileID: 6057653940113269538}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: FillMask
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1408,7 +1408,7 @@ GameObject:
   - component: {fileID: 2967234250751619854}
   - component: {fileID: 2767807163635883713}
   - component: {fileID: 3421534396054182341}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Bg
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1483,7 +1483,7 @@ GameObject:
   - component: {fileID: 1110483267614986066}
   - component: {fileID: 1602361459626059914}
   - component: {fileID: 4914278645313052655}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Text (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1620,7 +1620,7 @@ GameObject:
   - component: {fileID: 5259404918611815330}
   - component: {fileID: 8309281758657897969}
   - component: {fileID: 753282135681337675}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Fill
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1695,7 +1695,7 @@ GameObject:
   - component: {fileID: 2365323980796660139}
   - component: {fileID: 2079569126878432848}
   - component: {fileID: 8003260541708223255}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Text (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1833,7 +1833,7 @@ GameObject:
   - component: {fileID: 3346724807112313420}
   - component: {fileID: 4558225594860450600}
   - component: {fileID: 771171128187405246}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Light
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1928,7 +1928,7 @@ GameObject:
   - component: {fileID: 102399402024108441}
   - component: {fileID: 6371091751541206577}
   - component: {fileID: 1540700277806444865}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Text_Title
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2065,7 +2065,7 @@ GameObject:
   - component: {fileID: 3174545338086142457}
   - component: {fileID: 525993932762240289}
   - component: {fileID: 3610998023658293457}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Gradient
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2112,7 +2112,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.11372549, g: 0.6117647, b: 0.27450982, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
