@@ -18,6 +18,8 @@ namespace PalbaGames.Timeline
 
         public PenaltyType penalty;
 
+        public string description; // 🟢 Added
+
         public override void OnBehaviourPlay(Playable playable, FrameData info)
         {
             if (!Application.isPlaying) return;
@@ -45,7 +47,9 @@ namespace PalbaGames.Timeline
             };
 
             if (challenge != null)
-                ChallengeManager.Instance.AddChallenge(challenge);
+            {
+                ChallengeManager.Instance.AddChallenge(challenge, description); // 🟢 Add description here
+            }
         }
     }
 }

@@ -40,14 +40,11 @@ namespace PalbaGames.Challenges
                 {
                     bool success = challenge.WasSuccessful;
 
-                    // Save for debug info
                     LastChallenge = challenge;
 
-                    // Notify debug UI
                     var debugUI = FindObjectOfType<PlayerStatsDebugUI>();
                     debugUI?.ShowChallengeResult(success);
 
-                    // Cleanup
                     activeChallenges.RemoveAt(i);
                     challengeUI?.Hide();
                 }
@@ -57,13 +54,13 @@ namespace PalbaGames.Challenges
         /// <summary>
         /// Adds and starts a new runtime challenge.
         /// </summary>
-        public void AddChallenge(BaseChallenge challenge)
+        public void AddChallenge(BaseChallenge challenge, string description = null)
         {
             Debug.Log($"[ChallengeManager] Started challenge: {challenge.GetType().Name}");
             activeChallenges.Add(challenge);
             challenge.Start();
 
-            challengeUI?.ShowChallenge(challenge);
+            challengeUI?.ShowChallenge(challenge, description ?? challenge.GetProgressString());
         }
     }
 }

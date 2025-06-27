@@ -3,6 +3,9 @@ using UnityEngine;
 
 namespace PalbaGames.Challenges
 {
+    /// <summary>
+    /// Challenge: Deal specific amount of damage within a time limit.
+    /// </summary>
     public class DealDamageInTimeChallenge : BaseChallenge
     {
         private float damageRequired;
@@ -43,6 +46,7 @@ namespace PalbaGames.Challenges
             if (currentDamage >= damageRequired)
             {
                 Debug.Log("[Challenge] SUCCESS! Challenge completed.");
+                WasSuccessful = true;
                 onSuccess?.Invoke();
                 return true;
             }
@@ -50,11 +54,19 @@ namespace PalbaGames.Challenges
             if (timeRemaining <= 0f)
             {
                 Debug.Log("[Challenge] FAILED. Time ran out.");
+                WasSuccessful = false;
                 onFail?.Invoke();
                 return true;
             }
 
             return false;
+        }
+
+        public override string GetDisplayName() => "Deal Damage";
+        public override string GetProgressString()
+        {
+            float currentDamage = DamageTracker.Instance.TotalDamage - damageBefore;
+            return $"{currentDamage:F0}/{damageRequired:F0} DMG";
         }
     }
 }

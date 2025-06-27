@@ -4,12 +4,14 @@ using UnityEngine;
 
 namespace PalbaGames.Challenges
 {
+    /// <summary>
+    /// Challenge: Stay still for a specific duration without moving.
+    /// </summary>
     public class DontMoveForTimeChallenge : BaseChallenge
     {
         private Action onSuccess;
         private Action onFail;
         private Vector3 lastPosition;
-        private float movedTimer;
 
         public DontMoveForTimeChallenge(float seconds, Action onSuccess, Action onFail)
         {
@@ -22,7 +24,6 @@ namespace PalbaGames.Challenges
         {
             timeRemaining = timeLimit;
             lastPosition = PlayerBehavior.Player.transform.position;
-            movedTimer = 0f;
             Debug.Log($"[Challenge] Started: Don't move for {timeLimit} seconds.");
         }
 
@@ -34,6 +35,7 @@ namespace PalbaGames.Challenges
             if (movedDistance > 0.1f)
             {
                 Debug.Log("[Challenge] FAILED. Player moved.");
+                WasSuccessful = false;
                 onFail?.Invoke();
                 return true;
             }
@@ -41,11 +43,18 @@ namespace PalbaGames.Challenges
             if (timeRemaining <= 0f)
             {
                 Debug.Log("[Challenge] SUCCESS! Completed without moving.");
+                WasSuccessful = true;
                 onSuccess?.Invoke();
                 return true;
             }
 
             return false;
+        }
+
+        public override string GetDisplayName() => "Don't Move";
+        public override string GetProgressString()
+        {
+            return $"{timeLimit - timeRemaining:F1}/{timeLimit:F1} s STILL";
         }
     }
 }

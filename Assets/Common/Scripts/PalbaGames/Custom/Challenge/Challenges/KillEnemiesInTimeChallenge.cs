@@ -60,15 +60,24 @@ namespace PalbaGames.Challenges
                 return true;
             }
 
-
             return false;
         }
 
         public override string GetDisplayName() => "Kill Enemies";
+
         public override string GetProgressString()
         {
             int currentKills = GameController.SaveManager.GetSave<StageSave>("Stage").EnemiesKilled - killsBefore;
             return $"{currentKills}/{killsRequired} KILLS";
+        }
+
+        public override float ProgressNormalized
+        {
+            get
+            {
+                int currentKills = GameController.SaveManager.GetSave<StageSave>("Stage").EnemiesKilled - killsBefore;
+                return Mathf.Clamp01((float)currentKills / killsRequired);
+            }
         }
     }
 }

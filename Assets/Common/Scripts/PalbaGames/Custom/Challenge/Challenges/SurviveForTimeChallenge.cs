@@ -4,6 +4,9 @@ using UnityEngine;
 
 namespace PalbaGames.Challenges
 {
+    /// <summary>
+    /// Challenge: Survive for a duration without dying.
+    /// </summary>
     public class SurviveForTimeChallenge : BaseChallenge
     {
         private Action onSuccess;
@@ -30,6 +33,7 @@ namespace PalbaGames.Challenges
             if (timeRemaining <= 0f)
             {
                 Debug.Log("[Challenge] SUCCESS! Survived.");
+                WasSuccessful = true;
                 PlayerBehavior.Player.onPlayerDied -= Fail;
                 onSuccess?.Invoke();
                 return true;
@@ -41,8 +45,15 @@ namespace PalbaGames.Challenges
         private void Fail()
         {
             Debug.Log("[Challenge] FAILED. Player died.");
+            WasSuccessful = false;
             PlayerBehavior.Player.onPlayerDied -= Fail;
             onFail?.Invoke();
+        }
+
+        public override string GetDisplayName() => "Survive!";
+        public override string GetProgressString()
+        {
+            return $"{timeLimit - timeRemaining:F1}/{timeLimit:F1} s";
         }
     }
 }
