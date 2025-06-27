@@ -35,7 +35,7 @@ namespace PalbaGames.Challenges
         {
             timeRemaining -= deltaTime;
 
-            int currentKills = GameController.SaveManager.GetSave<StageSave>("Stage").EnemiesKilled - killsBefore;
+            int currentKills = GetCurrentKills();
 
             float floored = Mathf.Floor(timeRemaining);
             if (floored != lastLoggedSecond)
@@ -63,11 +63,16 @@ namespace PalbaGames.Challenges
             return false;
         }
 
-        public override string GetDisplayName() => "Kill Enemies";
+        private int GetCurrentKills()
+        {
+            return GameController.SaveManager.GetSave<StageSave>("Stage").EnemiesKilled - killsBefore;
+        }
 
+        public override string GetDisplayName() => "Kill Enemies";
+        
         public override string GetProgressString()
         {
-            int currentKills = GameController.SaveManager.GetSave<StageSave>("Stage").EnemiesKilled - killsBefore;
+            int currentKills = GetCurrentKills();
             return $"{currentKills}/{killsRequired} KILLS";
         }
 
@@ -75,7 +80,7 @@ namespace PalbaGames.Challenges
         {
             get
             {
-                int currentKills = GameController.SaveManager.GetSave<StageSave>("Stage").EnemiesKilled - killsBefore;
+                int currentKills = GetCurrentKills();
                 return Mathf.Clamp01((float)currentKills / killsRequired);
             }
         }

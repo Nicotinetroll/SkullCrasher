@@ -2032,6 +2032,7 @@ MonoBehaviour:
   challengeType: 0
   amount: 10
   duration: 30
+  description: Kill 30 enemies in 30 sec
   reward: 0
   enableDropReward: 1
   dropReward: 100

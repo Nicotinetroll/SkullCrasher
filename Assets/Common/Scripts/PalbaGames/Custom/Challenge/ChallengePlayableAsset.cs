@@ -17,10 +17,8 @@ namespace PalbaGames.Timeline
         [Tooltip("Duration of the challenge in seconds.")]
         public float duration = 5f;
 
-        [Header("UI")]
-        [Tooltip("Description string shown in challenge UI.")]
-        [TextArea]
-        public string description;
+        [Tooltip("Custom description text for the challenge intro. If empty, auto-generated description will be used.")]
+        public string description = "";
 
         [Header("Reward")]
         [Tooltip("Main reward applied when the challenge is completed successfully.")]
@@ -47,8 +45,7 @@ namespace PalbaGames.Timeline
             behaviour.challengeType = challengeType;
             behaviour.amount = amount;
             behaviour.duration = duration;
-
-            behaviour.description = description;
+            behaviour.description = description; // Add this line
 
             behaviour.reward = reward;
             behaviour.enableDropReward = enableDropReward;
