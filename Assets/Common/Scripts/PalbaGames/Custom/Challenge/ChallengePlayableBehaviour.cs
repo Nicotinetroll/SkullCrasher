@@ -12,12 +12,15 @@ namespace PalbaGames.Timeline
         public float duration;
         public string description;
 
-        public RewardType reward;
-        public bool enableDropReward;
-        public DropType dropReward;
-        public int dropCount;
+        public bool enableStatBuffRewards;
+        public StatModifierEntry[] rewardStatBuffs;
 
-        public PenaltyType penalty;
+        public bool enableDropReward;
+        public DropType rewardDropType;
+        public int rewardDropCount;
+
+        public bool enableStatDebuffPenalties;
+        public StatModifierEntry[] penaltyStatDebuffs;
 
         public override void OnBehaviourPlay(Playable playable, FrameData info)
         {
@@ -25,21 +28,30 @@ namespace PalbaGames.Timeline
 
             System.Action onSuccess = () =>
             {
-                RewardSystem.Apply(reward);
+                // Apply stat buff rewards if enabled
+                if (enableStatBuffRewards && StatBuffManager.Instance != null && rewardStatBuffs.Length > 0)
+                {
+                    StatBuffManager.Instance.ApplyStatBuffs(rewardStatBuffs);
+                }
 
-                if (enableDropReward && dropCount > 0)
+                // Apply drop reward if enabled
+                if (enableDropReward && rewardDropCount > 0)
                 {
                     Vector2 playerPos = new Vector2(
                         PlayerBehavior.Player.transform.position.x,
                         PlayerBehavior.Player.transform.position.y
                     );
-                    RewardSystem.ApplyDropAtPosition(dropReward, playerPos, dropCount, 2f);
+                    RewardSystem.ApplyDropAtPosition(rewardDropType, playerPos, rewardDropCount, 2f);
                 }
             };
 
             System.Action onFail = () =>
             {
-                RewardSystem.ApplyPenalty(penalty);
+                // Apply stat debuff penalties if enabled
+                if (enableStatDebuffPenalties && StatPenaltyManager.Instance != null && penaltyStatDebuffs.Length > 0)
+                {
+                    StatPenaltyManager.Instance.ApplyStatPenalties(penaltyStatDebuffs);
+                }
             };
 
             BaseChallenge challenge = challengeType switch

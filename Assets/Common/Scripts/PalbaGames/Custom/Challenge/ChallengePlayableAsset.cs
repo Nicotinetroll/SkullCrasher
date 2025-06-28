@@ -8,6 +8,7 @@ namespace PalbaGames.Timeline
     [System.Serializable]
     public class ChallengePlayableAsset : PlayableAsset
     {
+        [Header("Challenge Settings")]
         [Tooltip("Type of challenge to trigger during timeline playback.")]
         public ChallengeType challengeType;
 
@@ -20,22 +21,45 @@ namespace PalbaGames.Timeline
         [Tooltip("Custom description text for the challenge intro. If empty, auto-generated description will be used.")]
         public string description = "";
 
-        [Header("Reward")]
-        [Tooltip("Main reward applied when the challenge is completed successfully.")]
-        public RewardType reward;
+        [Header("Rewards (Success)")]
+        [Space(5)]
+        [Tooltip("Enable stat buff rewards when challenge succeeds.\n\n" +
+                 "STAT MODIFIER MODES:\n" +
+                 "• Multiplicative: current × value (1.5 = +50%, 0.5 = -50%)\n" +
+                 "• Additive: current + value (+10 = +10% crit chance)\n" +
+                 "• Absolute: set exact value (0 = disable completely)")]
+        public bool enableStatBuffRewards = false;
 
-        [Tooltip("Enable to also drop a reward item when the challenge is completed.")]
-        public bool enableDropReward;
+        [Tooltip("List of stat buffs to apply on challenge success.\n\n" +
+                 "EXAMPLES:\n" +
+                 "• DamageMultiplier: 2.0, Multiplicative = double damage\n" +
+                 "• CriticalChance: 15, Additive = +15% crit chance\n" +
+                 "• SpeedMultiplier: 0, Absolute = disable movement")]
+        public StatModifierEntry[] rewardStatBuffs = new StatModifierEntry[0];
 
-        [Tooltip("DropType to spawn if drop reward is enabled.")]
-        public DropType dropReward;
+        [Space(5)]
+        [Tooltip("Enable drop reward when challenge succeeds.")]
+        public bool enableDropReward = false;
+
+        [Tooltip("DropType to spawn when challenge succeeds.")]
+        public DropType rewardDropType;
 
         [Tooltip("How many items to drop.")]
-        public int dropCount = 0;
+        public int rewardDropCount = 3;
 
-        [Header("Penalty")]
-        [Tooltip("Penalty applied if the challenge fails.")]
-        public PenaltyType penalty;
+        [Header("Penalties (Failure)")]
+        [Space(5)]
+        [Tooltip("Enable stat debuff penalties when challenge fails.\n\n" +
+                 "COMMON PENALTY EXAMPLES:\n" +
+                 "• DamageMultiplier: 0, Absolute = disable damage completely\n" +
+                 "• SpeedMultiplier: 0.5, Multiplicative = half speed\n" +
+                 "• CriticalChance: 0, Absolute = disable crits")]
+        public bool enableStatDebuffPenalties = false;
+
+        [Tooltip("List of stat debuffs to apply on challenge failure.\n\n" +
+                 "TIP: Use Absolute mode for harsh penalties (disable stats)\n" +
+                 "Use Multiplicative for percentage reductions")]
+        public StatModifierEntry[] penaltyStatDebuffs = new StatModifierEntry[0];
 
         public override Playable CreatePlayable(PlayableGraph graph, GameObject owner)
         {
@@ -45,14 +69,17 @@ namespace PalbaGames.Timeline
             behaviour.challengeType = challengeType;
             behaviour.amount = amount;
             behaviour.duration = duration;
-            behaviour.description = description; // Add this line
+            behaviour.description = description;
 
-            behaviour.reward = reward;
+            behaviour.enableStatBuffRewards = enableStatBuffRewards;
+            behaviour.rewardStatBuffs = rewardStatBuffs;
+
             behaviour.enableDropReward = enableDropReward;
-            behaviour.dropReward = dropReward;
-            behaviour.dropCount = dropCount;
+            behaviour.rewardDropType = rewardDropType;
+            behaviour.rewardDropCount = rewardDropCount;
 
-            behaviour.penalty = penalty;
+            behaviour.enableStatDebuffPenalties = enableStatDebuffPenalties;
+            behaviour.penaltyStatDebuffs = penaltyStatDebuffs;
 
             return playable;
         }
