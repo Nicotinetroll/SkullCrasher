@@ -156,6 +156,18 @@ MonoBehaviour:
   criticalChance: 10
   criticalMultiplierMin: 1.5
   criticalMultiplierMax: 3
+  allIn1Material: {fileID: 0}
+  hitDuration: 0.1
+  enableCustomHitEffect: 1
+  useHitEffect: 1
+  hitEffectMaxBlend: 0.3
+  hitEffectBlendProperty: _HitEffectBlend
+  useChromaticAberration: 1
+  chromaticAberrationMaxAmount: 0.132
+  chromaticAmountProperty: _ChromAberrAmount
+  useGlowIntensity: 0
+  glowIntensityMax: 5
+  glowIntensityProperty: _GlowIntensity
 --- !u!114 &7713893738355203352
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -178,6 +190,9 @@ MonoBehaviour:
   sizeMultiplier: 1
   durationMultiplier: 1
   goldMultiplier: 1
+  criticalChanceModifier: 0
+  criticalMultiplierMinModifier: 0
+  criticalMultiplierMaxModifier: 0
 --- !u!1 &2440361492150374506
 GameObject:
   m_ObjectHideFlags: 0
