@@ -6,7 +6,7 @@ using MoreMountains.Feedbacks;
 namespace PalbaGames
 {
     /// <summary>
-    /// Extends PlayerBehavior with Critical Strike logic, AllIn1Shader hit effects and Feel camera shake.
+    /// Extends PlayerBehavior with Critical Strike logic, AllIn1Shader hit effects, Feel camera shake, and Grass Movement animation.
     /// Attach to the same GameObject as PlayerBehavior.
     /// </summary>
     public class PlayerBehavior_Extended : MonoBehaviour
@@ -47,19 +47,30 @@ namespace PalbaGames
         [SerializeField] private float glowIntensityMax = 5f;
         [SerializeField] private string glowIntensityProperty = "_GlowIntensity";
 
+        [Header("Grass Movement / Wind Effect")]
+        [SerializeField] private bool useGrassMovement = true;
+        [SerializeField] private float grassMovementValue = 0.6f;
+        [SerializeField] private float grassAnimationSpeed = 2f;
+        [SerializeField] private string grassMovementProperty = "_GrassManualAnim";
+
         private OctoberStudio.PlayerBehavior player;
         private CharacterBehavior characterBehavior;
         private SpriteRenderer spriteRenderer;
         private IEasingCoroutine hitCoroutine;
+        private IEasingCoroutine grassCoroutine;
 
         // Property IDs for performance
         private int hitEffectBlendID;
         private int chromaticAmountID;
         private int glowIntensityID;
+        private int grassMovementID;
 
         // Track last HP to detect damage
         private float lastHP;
         private HealthbarBehavior healthbar;
+
+        // Movement tracking for grass effect
+        private bool wasMoving = false;
 
         private void Awake()
         {
@@ -75,6 +86,7 @@ namespace PalbaGames
             hitEffectBlendID = Shader.PropertyToID(hitEffectBlendProperty);
             chromaticAmountID = Shader.PropertyToID(chromaticAmountProperty);
             glowIntensityID = Shader.PropertyToID(glowIntensityProperty);
+            grassMovementID = Shader.PropertyToID(grassMovementProperty);
         }
 
         private void Start()
@@ -112,38 +124,6 @@ namespace PalbaGames
                     {
                         Debug.LogWarning("[PlayerBehavior_Extended] MMF_Player pre camera shake sa nenašiel!");
                     }
-                    else
-                    {
-                        Debug.Log("[PlayerBehavior_Extended] MMF_Player auto-found.");
-                    }
-                }
-                
-                if (damageShakeFeedback != null)
-                {
-                    Debug.Log("[PlayerBehavior_Extended] Camera shake feedback pripravený.");
-                    
-                    // Check if MMF_Player has camera shake feedback
-                    var cameraShake = damageShakeFeedback.GetFeedbackOfType<MMF_CameraShake>();
-                    if (cameraShake == null)
-                    {
-                        Debug.LogError("[PlayerBehavior_Extended] MMF_Player nemá MMF_CameraShake feedback!");
-                    }
-                    else
-                    {
-                        Debug.Log("[PlayerBehavior_Extended] MMF_CameraShake feedback found in MMF_Player.");
-                    }
-                }
-
-                // Check MMCameraShaker
-                var cameraShaker = FindObjectOfType<MMCameraShaker>();
-                if (cameraShaker != null)
-                {
-                    Debug.Log($"[DEBUG] MMCameraShaker found - Channel: {cameraShaker.Channel}");
-                    Debug.Log($"[DEBUG] MMCameraShaker enabled: {cameraShaker.enabled}");
-                }
-                else
-                {
-                    Debug.LogError("[DEBUG] MMCameraShaker NOT FOUND na kamere!");
                 }
             }
         }
@@ -159,8 +139,6 @@ namespace PalbaGames
                     float damageAmount = lastHP - currentHP;
                     float maxHP = healthbar.MaxHP;
                     
-                    Debug.Log($"[DEBUG] Player dostal damage: {damageAmount}, HP: {currentHP}/{maxHP}");
-                    
                     // Trigger camera shake
                     if (enableCameraShake)
                     {
@@ -175,6 +153,63 @@ namespace PalbaGames
                 }
                 lastHP = currentHP;
             }
+
+            // Handle grass movement effect based on player movement
+            if (useGrassMovement && player != null)
+            {
+                HandleGrassMovementEffect();
+            }
+        }
+
+        /// <summary>
+        /// Handles grass movement effect based on player movement input.
+        /// </summary>
+        private void HandleGrassMovementEffect()
+        {
+            if (spriteRenderer == null) return;
+            
+            // Use direct string check instead of cached ID
+            if (!spriteRenderer.material.HasProperty("_GrassManualAnim")) return;
+
+            var input = GameController.InputManager.MovementValue;
+            bool isMoving = !Mathf.Approximately(input.magnitude, 0) && player.IsMovingAlowed;
+
+            // State changed - animate transition
+            if (isMoving != wasMoving)
+            {
+                AnimateGrassMovement(isMoving);
+                wasMoving = isMoving;
+            }
+        }
+
+        /// <summary>
+        /// Animates grass movement property between 0 and target value.
+        /// </summary>
+        private void AnimateGrassMovement(bool startMoving)
+        {
+            if (grassCoroutine.ExistsAndActive())
+            {
+                grassCoroutine.Stop();
+            }
+
+            Material mat = spriteRenderer.material;
+            
+            // Use direct string instead of cached ID for debugging
+            string propertyName = "_GrassManualAnim";
+            
+            if (!mat.HasProperty(propertyName))
+            {
+                Debug.LogError($"[Grass] Material doesn't have property: {propertyName}");
+                return;
+            }
+            
+            float currentValue = mat.GetFloat(propertyName);
+            float targetValue = startMoving ? grassMovementValue : 0f;
+            
+            Debug.Log($"[Grass] Animating {propertyName} from {currentValue:F2} to {targetValue:F2}");
+
+            grassCoroutine = EasingManager.DoFloat(currentValue, targetValue, grassAnimationSpeed, 
+                (value) => mat.SetFloat(propertyName, value));
         }
 
         /// <summary>
@@ -182,38 +217,10 @@ namespace PalbaGames
         /// </summary>
         public void TriggerDamageCameraShake(float damageAmount, float maxHP)
         {
-            Debug.Log($"[DEBUG] TriggerDamageCameraShake called: damage={damageAmount}");
-            
-            if (!enableCameraShake || damageShakeFeedback == null) 
-            {
-                Debug.Log($"[DEBUG] Shake cancelled: enabled={enableCameraShake}, feedback assigned={damageShakeFeedback != null}");
-                return;
-            }
+            if (!enableCameraShake || damageShakeFeedback == null) return;
 
-            // Debug MMF_Player stav
-            Debug.Log($"[DEBUG] MMF_Player active: {damageShakeFeedback.gameObject.activeInHierarchy}");
-            Debug.Log($"[DEBUG] MMF_Player enabled: {damageShakeFeedback.enabled}");
-            
-            // Debug MMF_CameraShake feedback
-            var cameraShake = damageShakeFeedback.GetFeedbackOfType<MMF_CameraShake>();
-            if (cameraShake != null)
-            {
-                Debug.Log($"[DEBUG] CameraShake feedback found - Active: {cameraShake.Active}");
-                Debug.Log($"[DEBUG] CameraShake Channel: {cameraShake.Channel}");
-                Debug.Log($"[DEBUG] CameraShake settings configured");
-            }
-            else
-            {
-                Debug.LogError("[DEBUG] CameraShake feedback NOT FOUND!");
-                return;
-            }
-
-            Debug.Log("[DEBUG] Playing shake feedback NOW!");
-            
-            // Enable MMF_Player ak nie je enabled
             if (!damageShakeFeedback.enabled)
             {
-                Debug.Log("[DEBUG] Enabling MMF_Player before playing!");
                 damageShakeFeedback.enabled = true;
             }
             
@@ -225,11 +232,8 @@ namespace PalbaGames
         /// </summary>
         public void TriggerCameraShake()
         {
-            Debug.Log("[DEBUG] Manual camera shake triggered");
             if (enableCameraShake && damageShakeFeedback != null)
                 damageShakeFeedback.PlayFeedbacks();
-            else
-                Debug.Log($"[DEBUG] Manual shake failed: enabled={enableCameraShake}, feedback={damageShakeFeedback != null}");
         }
 
         /// <summary>
@@ -363,6 +367,76 @@ namespace PalbaGames
         public void TestCameraShake() => TriggerCameraShake();
 
         /// <summary>
+        /// Test grass movement effect in editor.
+        /// </summary>
+        [ContextMenu("Test Grass Movement")]
+        public void TestGrassMovement()
+        {
+            // Refresh property ID in case it was changed in inspector
+            grassMovementID = Shader.PropertyToID(grassMovementProperty);
+            
+            if (spriteRenderer != null)
+            {
+                AnimateGrassMovement(true);
+            }
+        }
+
+        /// <summary>
+        /// Refresh all cached property IDs - useful when changing property names in inspector.
+        /// </summary>
+        [ContextMenu("Refresh Property IDs")]
+        public void RefreshPropertyIDs()
+        {
+            hitEffectBlendID = Shader.PropertyToID(hitEffectBlendProperty);
+            chromaticAmountID = Shader.PropertyToID(chromaticAmountProperty);
+            glowIntensityID = Shader.PropertyToID(glowIntensityProperty);
+            grassMovementID = Shader.PropertyToID(grassMovementProperty);
+            
+            Debug.Log($"[PropertyIDs] Refreshed: {hitEffectBlendProperty}, {chromaticAmountProperty}, {glowIntensityProperty}, {grassMovementProperty}");
+        }
+
+        /// <summary>
+        /// List all material properties for debugging.
+        /// </summary>
+        [ContextMenu("List Material Properties")]
+        public void ListMaterialProperties()
+        {
+            if (spriteRenderer?.material != null)
+            {
+                var material = spriteRenderer.material;
+                var shader = material.shader;
+                
+                Debug.Log($"[DEBUG] Material: {material.name}, Shader: {shader.name}");
+                Debug.Log($"[DEBUG] Total properties: {shader.GetPropertyCount()}");
+                
+                for (int i = 0; i < shader.GetPropertyCount(); i++)
+                {
+                    string propName = shader.GetPropertyName(i);
+                    var propType = shader.GetPropertyType(i);
+                    
+                    // Try to get current value if it's a float
+                    string currentValue = "";
+                    if (propType == UnityEngine.Rendering.ShaderPropertyType.Float || 
+                        propType == UnityEngine.Rendering.ShaderPropertyType.Range)
+                    {
+                        try
+                        {
+                            float val = material.GetFloat(propName);
+                            currentValue = $" = {val:F3}";
+                        }
+                        catch { currentValue = " = (error)"; }
+                    }
+                    
+                    Debug.Log($"[PROP] {i}: {propName} ({propType}){currentValue}");
+                }
+            }
+            else
+            {
+                Debug.LogError("[DEBUG] SpriteRenderer or material is null!");
+            }
+        }
+
+        /// <summary>
         /// Enable/disable camera shake at runtime.
         /// </summary>
         public void SetCameraShakeEnabled(bool enabled)
@@ -376,6 +450,14 @@ namespace PalbaGames
         public void SetCustomHitEffectEnabled(bool enabled)
         {
             enableCustomHitEffect = enabled;
+        }
+
+        /// <summary>
+        /// Enable/disable grass movement effect at runtime.
+        /// </summary>
+        public void SetGrassMovementEnabled(bool enabled)
+        {
+            useGrassMovement = enabled;
         }
     }
 }

@@ -14,7 +14,10 @@ Material:
   m_ValidKeywords:
   - CHROMABERR_ON
   - HITEFFECT_ON
-  m_InvalidKeywords: []
+  - MANUALWIND_ON
+  - WIND_ON
+  m_InvalidKeywords:
+  - _GRASSMANUALTOGGLE_ON
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -128,8 +131,8 @@ Material:
     - _GradBoostX: 1.27
     - _GradBoostY: 1.2
     - _GradIsRadial: 0
-    - _GrassManualAnim: 0.045
-    - _GrassManualToggle: 0
+    - _GrassManualAnim: 0
+    - _GrassManualToggle: 1
     - _GrassRadialBend: 0.08
     - _GrassSpeed: 2
     - _GrassWind: 0.2
