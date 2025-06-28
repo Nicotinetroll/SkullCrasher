@@ -2071,15 +2071,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 499f041be5b6ce74299d9f2439f62af4, type: 3}
   m_Name: ChallengePlayableAsset
   m_EditorClassIdentifier: 
-  challengeType: 2
+  challengeType: 0
   amount: 50
-  duration: 20
-  description: Dont Move Bitch
+  duration: 2
+  description: HUHU
   reward: 0
   enableDropReward: 1
   dropReward: 2
   dropCount: 1
-  penalty: 0
+  penalty: 4
 --- !u!114 &2295668183432415732
 MonoBehaviour:
   m_ObjectHideFlags: 1
