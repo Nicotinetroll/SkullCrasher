@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 6888026018349220815}
   - component: {fileID: 1982295306974641257}
   - component: {fileID: -6379916213030662198}
+  - component: {fileID: 2317515811656693971}
   m_Layer: 7
   m_Name: Enemy Fire Slime
   m_TagString: Untagged
@@ -135,6 +136,47 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4c986db93e08d9c42a6280e6ac170cb9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  enableDeathLightingEffect: 1
+  lightCollider: {fileID: 0}
+  defaultShadowTranslucency: 0.652
+  disableOriginalShadowAnimation: 1
+--- !u!114 &2317515811656693971
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1090571174421192766}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5783dbbad6a59184fa58aa75d79bcc02, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shadowType: 1
+  shadowLayer: 0
+  shadowDistance: 0
+  shadowDistanceMin: 0.5
+  shadowDistanceMax: 1
+  shadowTranslucency: 0.652
+  maskType: 1
+  maskLit: 0
+  maskPivot: 0
+  maskLayer: 0
+  maskLitCustom: 1
+  bumpMapMode:
+    type: 0
+    textureType: 0
+    texture: {fileID: 0}
+    sprite: {fileID: 0}
+    invertX: 0
+    invertY: 0
+    depth: 1
+    spriteRenderer: {fileID: 0}
+  mainShape:
+    shadowType: 1
+    maskType: 1
+    maskPivot: 0
+    transform: {fileID: 0}
 --- !u!1 &3889113030108507502
 GameObject:
   m_ObjectHideFlags: 0

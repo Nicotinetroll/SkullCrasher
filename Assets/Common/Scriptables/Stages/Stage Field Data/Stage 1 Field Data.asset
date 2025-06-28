@@ -35,4 +35,4 @@ MonoBehaviour:
   - prefab: {fileID: 1028214238412592778, guid: 2accda9df7a5e08479ce38f9b320104f,
       type: 3}
     maxAmount: 3
-    chance: 75
+    chance: 0
