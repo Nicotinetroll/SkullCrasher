@@ -36,7 +36,7 @@ namespace PalbaGames
             
             if (lightCollider == null)
             {
-                Debug.LogWarning($"LightCollider2D not found on {gameObject.name} or its children!");
+                //Debug.LogWarning($"LightCollider2D not found on {gameObject.name} or its children!");
             }
         }
 
@@ -70,7 +70,7 @@ namespace PalbaGames
             {
                 if (sprite.name.ToLower().Contains("shadow"))
                 {
-                    Debug.Log($"🔥 Found shadow sprite: {sprite.name} - stopping animations");
+                 //   Debug.Log($"🔥 Found shadow sprite: {sprite.name} - stopping animations");
                     // Stop any ongoing animations on shadow sprite
                     // sprite.DOKill(); // if using DoTween
                 }
@@ -82,7 +82,7 @@ namespace PalbaGames
             if (lightCollider != null)
             {
                 lightCollider.shadowTranslucency = defaultShadowTranslucency;
-                Debug.Log($"🔥 RESET: Set shadow translucency to {defaultShadowTranslucency} for {gameObject.name}");
+             //   Debug.Log($"🔥 RESET: Set shadow translucency to {defaultShadowTranslucency} for {gameObject.name}");
             }
         }
 
@@ -101,7 +101,7 @@ namespace PalbaGames
         /// </summary>
         private void HandleEnemyDeath(EnemyBehavior enemy)
         {
-            Debug.Log($"🔥 DEATH: Enemy died: {enemy.name}");
+        //    Debug.Log($"🔥 DEATH: Enemy died: {enemy.name}");
             
             if (enableDeathLightingEffect && lightCollider != null && GlobalLightingController.Instance != null)
             {
@@ -118,7 +118,7 @@ namespace PalbaGames
             yield return null; // Čakaj 1 frame
             
             float currentValue = lightCollider.shadowTranslucency;
-            Debug.Log($"🔥 DELAYED: Starting fade from {currentValue} to 1");
+            //Debug.Log($"🔥 DELAYED: Starting fade from {currentValue} to 1");
             
             GlobalLightingController.Instance.FadeEnemyShadow(lightCollider, currentValue);
         }

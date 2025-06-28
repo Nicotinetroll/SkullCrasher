@@ -74,7 +74,7 @@ namespace OctoberStudio.Input
         {
             if (ActiveInput != InputType.Keyboard && Keyboard.current != null && Keyboard.current.wasUpdatedThisFrame && !Keyboard.current.CheckStateIsAtDefaultIgnoringNoise())
             {
-                Debug.Log("Switching To Keyboard");
+              //  Debug.Log("Switching To Keyboard");
 
                 var prevInput = ActiveInput;
                 ActiveInput = InputType.Keyboard;
@@ -91,7 +91,7 @@ namespace OctoberStudio.Input
                 ActiveInput == InputType.Gamepad && Gamepad.current == null || 
                 Touchscreen.current != null && Touchscreen.current.wasUpdatedThisFrame))
             {
-                Debug.Log("Switching To UI Joystick");
+             //   Debug.Log("Switching To UI Joystick");
 
                 var prevInput = ActiveInput;
                 ActiveInput = InputType.UIJoystick;
@@ -116,7 +116,7 @@ namespace OctoberStudio.Input
         {
             if (ActiveInput != InputType.Gamepad)
             {
-                Debug.Log("Switching To Gamepad");
+              //  Debug.Log("Switching To Gamepad");
 
                 var prevInput = ActiveInput;
                 ActiveInput = InputType.Gamepad;

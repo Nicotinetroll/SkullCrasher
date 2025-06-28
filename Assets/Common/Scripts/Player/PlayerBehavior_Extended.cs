@@ -1,12 +1,12 @@
 using UnityEngine;
 using OctoberStudio;
 using OctoberStudio.Easing;
-using FunkyCode; // Smart Lighting 2D
+using MoreMountains.Feedbacks;
 
 namespace PalbaGames
 {
     /// <summary>
-    /// Extends PlayerBehavior with Critical Strike logic, AllIn1Shader hit effects, and Smart Lighting 2D effects.
+    /// Extends PlayerBehavior with Critical Strike logic, AllIn1Shader hit effects and Feel camera shake.
     /// Attach to the same GameObject as PlayerBehavior.
     /// </summary>
     public class PlayerBehavior_Extended : MonoBehaviour
@@ -22,6 +22,10 @@ namespace PalbaGames
 
         [Tooltip("Maximum critical damage multiplier (e.g., 5 = +400%)")]
         public float criticalMultiplierMax = 3f;
+
+        [Header("Camera Shake (Feel Plugin)")]
+        [SerializeField] private MMF_Player damageShakeFeedback;
+        [SerializeField] private bool enableCameraShake = true;
 
         [Header("AllIn1Shader Hit Effect")]
         [SerializeField] private Material allIn1Material;
@@ -43,13 +47,6 @@ namespace PalbaGames
         [SerializeField] private float glowIntensityMax = 5f;
         [SerializeField] private string glowIntensityProperty = "_GlowIntensity";
 
-        [Header("Smart Lighting 2D Hit Effects")]
-        [SerializeField] private bool enableLightingHitEffect = true;
-        [SerializeField] private Light2D mainPlayerLight;
-        [SerializeField] private Color lightHitFlashColor = Color.red;
-        [SerializeField] private float lightFlashDuration = 0.15f;
-        [SerializeField] private AnimationCurve lightFlashCurve = AnimationCurve.EaseInOut(0, 1, 1, 0);
-
         private OctoberStudio.PlayerBehavior player;
         private CharacterBehavior characterBehavior;
         private SpriteRenderer spriteRenderer;
@@ -63,10 +60,6 @@ namespace PalbaGames
         // Track last HP to detect damage
         private float lastHP;
         private HealthbarBehavior healthbar;
-
-        // Lighting effects
-        private Color originalLightColor;
-        private Coroutine currentLightFlashCoroutine;
 
         private void Awake()
         {
@@ -103,36 +96,140 @@ namespace PalbaGames
                 SetupAllIn1HitEffect();
             }
 
-            // Setup lighting hit effect
-            if (enableLightingHitEffect)
-            {
-                SetupLightingHitEffect();
-            }
-
             // Initialize HP tracking
             if (healthbar != null)
             {
                 lastHP = healthbar.HP;
             }
+
+            // Auto-find shake feedback if not assigned
+            if (enableCameraShake)
+            {
+                if (damageShakeFeedback == null)
+                {
+                    damageShakeFeedback = FindObjectOfType<MMF_Player>();
+                    if (damageShakeFeedback == null)
+                    {
+                        Debug.LogWarning("[PlayerBehavior_Extended] MMF_Player pre camera shake sa nenašiel!");
+                    }
+                    else
+                    {
+                        Debug.Log("[PlayerBehavior_Extended] MMF_Player auto-found.");
+                    }
+                }
+                
+                if (damageShakeFeedback != null)
+                {
+                    Debug.Log("[PlayerBehavior_Extended] Camera shake feedback pripravený.");
+                    
+                    // Check if MMF_Player has camera shake feedback
+                    var cameraShake = damageShakeFeedback.GetFeedbackOfType<MMF_CameraShake>();
+                    if (cameraShake == null)
+                    {
+                        Debug.LogError("[PlayerBehavior_Extended] MMF_Player nemá MMF_CameraShake feedback!");
+                    }
+                    else
+                    {
+                        Debug.Log("[PlayerBehavior_Extended] MMF_CameraShake feedback found in MMF_Player.");
+                    }
+                }
+
+                // Check MMCameraShaker
+                var cameraShaker = FindObjectOfType<MMCameraShaker>();
+                if (cameraShaker != null)
+                {
+                    Debug.Log($"[DEBUG] MMCameraShaker found - Channel: {cameraShaker.Channel}");
+                    Debug.Log($"[DEBUG] MMCameraShaker enabled: {cameraShaker.enabled}");
+                }
+                else
+                {
+                    Debug.LogError("[DEBUG] MMCameraShaker NOT FOUND na kamere!");
+                }
+            }
         }
 
         private void Update()
         {
-            // Monitor HP changes to detect hits and trigger custom effects
+            // Monitor HP changes to detect hits and trigger effects
             if (healthbar != null)
             {
                 float currentHP = healthbar.HP;
                 if (currentHP < lastHP)
                 {
-                    // Player took damage - trigger all hit effects
-                    if (enableCustomHitEffect)
-                        PlayAllIn1HitEffect();
+                    float damageAmount = lastHP - currentHP;
+                    float maxHP = healthbar.MaxHP;
                     
-                    if (enableLightingHitEffect)
-                        TriggerLightHitFlash();
+                    Debug.Log($"[DEBUG] Player dostal damage: {damageAmount}, HP: {currentHP}/{maxHP}");
+                    
+                    // Trigger camera shake
+                    if (enableCameraShake)
+                    {
+                        TriggerDamageCameraShake(damageAmount, maxHP);
+                    }
+                    
+                    // Trigger AllIn1 hit effect
+                    if (enableCustomHitEffect)
+                    {
+                        PlayAllIn1HitEffect();
+                    }
                 }
                 lastHP = currentHP;
             }
+        }
+
+        /// <summary>
+        /// Triggers camera shake using prepared MMF_Player.
+        /// </summary>
+        public void TriggerDamageCameraShake(float damageAmount, float maxHP)
+        {
+            Debug.Log($"[DEBUG] TriggerDamageCameraShake called: damage={damageAmount}");
+            
+            if (!enableCameraShake || damageShakeFeedback == null) 
+            {
+                Debug.Log($"[DEBUG] Shake cancelled: enabled={enableCameraShake}, feedback assigned={damageShakeFeedback != null}");
+                return;
+            }
+
+            // Debug MMF_Player stav
+            Debug.Log($"[DEBUG] MMF_Player active: {damageShakeFeedback.gameObject.activeInHierarchy}");
+            Debug.Log($"[DEBUG] MMF_Player enabled: {damageShakeFeedback.enabled}");
+            
+            // Debug MMF_CameraShake feedback
+            var cameraShake = damageShakeFeedback.GetFeedbackOfType<MMF_CameraShake>();
+            if (cameraShake != null)
+            {
+                Debug.Log($"[DEBUG] CameraShake feedback found - Active: {cameraShake.Active}");
+                Debug.Log($"[DEBUG] CameraShake Channel: {cameraShake.Channel}");
+                Debug.Log($"[DEBUG] CameraShake settings configured");
+            }
+            else
+            {
+                Debug.LogError("[DEBUG] CameraShake feedback NOT FOUND!");
+                return;
+            }
+
+            Debug.Log("[DEBUG] Playing shake feedback NOW!");
+            
+            // Enable MMF_Player ak nie je enabled
+            if (!damageShakeFeedback.enabled)
+            {
+                Debug.Log("[DEBUG] Enabling MMF_Player before playing!");
+                damageShakeFeedback.enabled = true;
+            }
+            
+            damageShakeFeedback.PlayFeedbacks();
+        }
+
+        /// <summary>
+        /// Manually trigger camera shake.
+        /// </summary>
+        public void TriggerCameraShake()
+        {
+            Debug.Log("[DEBUG] Manual camera shake triggered");
+            if (enableCameraShake && damageShakeFeedback != null)
+                damageShakeFeedback.PlayFeedbacks();
+            else
+                Debug.Log($"[DEBUG] Manual shake failed: enabled={enableCameraShake}, feedback={damageShakeFeedback != null}");
         }
 
         /// <summary>
@@ -194,31 +291,6 @@ namespace PalbaGames
         }
 
         /// <summary>
-        /// Setup Smart Lighting 2D hit effect
-        /// </summary>
-        private void SetupLightingHitEffect()
-        {
-            // Auto-find main light if not assigned
-            if (mainPlayerLight == null)
-            {
-                mainPlayerLight = GetComponentInChildren<Light2D>();
-                
-                if (mainPlayerLight == null)
-                    mainPlayerLight = FindObjectOfType<Light2D>();
-            }
-
-            if (mainPlayerLight != null)
-            {
-                originalLightColor = mainPlayerLight.color;
-            }
-            else
-            {
-                Debug.LogWarning("[PlayerBehavior_Extended] Light2D not found for lighting hit effect!");
-                enableLightingHitEffect = false;
-            }
-        }
-
-        /// <summary>
         /// Custom hit effect using AllIn1Shader Hit Effect and Chromatic Aberration.
         /// </summary>
         public void PlayAllIn1HitEffect()
@@ -230,42 +302,6 @@ namespace PalbaGames
             
             // Start multiple effect animations simultaneously
             StartCoroutine(AnimateHitEffects(mat));
-        }
-
-        /// <summary>
-        /// Trigger red flash effect on player light when hit
-        /// </summary>
-        public void TriggerLightHitFlash()
-        {
-            if (!enableLightingHitEffect || mainPlayerLight == null) return;
-            
-            // Stop any existing flash
-            if (currentLightFlashCoroutine != null)
-                StopCoroutine(currentLightFlashCoroutine);
-            
-            currentLightFlashCoroutine = StartCoroutine(LightHitFlashCoroutine());
-        }
-
-        private System.Collections.IEnumerator LightHitFlashCoroutine()
-        {
-            float elapsedTime = 0f;
-            
-            while (elapsedTime < lightFlashDuration)
-            {
-                elapsedTime += Time.deltaTime;
-                float progress = elapsedTime / lightFlashDuration;
-                float curveValue = lightFlashCurve.Evaluate(progress);
-                
-                // Interpolate between original and hit color
-                Color currentColor = Color.Lerp(originalLightColor, lightHitFlashColor, curveValue);
-                mainPlayerLight.color = currentColor;
-                
-                yield return null;
-            }
-            
-            // Return to original color
-            mainPlayerLight.color = originalLightColor;
-            currentLightFlashCoroutine = null;
         }
 
         private System.Collections.IEnumerator AnimateHitEffects(Material mat)
@@ -321,25 +357,17 @@ namespace PalbaGames
         }
 
         /// <summary>
-        /// Test all hit effects in editor.
+        /// Test camera shake in editor.
         /// </summary>
-        [ContextMenu("Test All Hit Effects")]
-        public void TestAllHitEffects()
-        {
-            if (enableCustomHitEffect)
-                PlayAllIn1HitEffect();
-            
-            if (enableLightingHitEffect)
-                TriggerLightHitFlash();
-        }
+        [ContextMenu("Test Camera Shake")]
+        public void TestCameraShake() => TriggerCameraShake();
 
         /// <summary>
-        /// Test lighting hit effect in editor.
+        /// Enable/disable camera shake at runtime.
         /// </summary>
-        [ContextMenu("Test Light Hit Flash")]
-        public void TestLightHitFlash()
+        public void SetCameraShakeEnabled(bool enabled)
         {
-            TriggerLightHitFlash();
+            enableCameraShake = enabled;
         }
 
         /// <summary>
@@ -348,24 +376,6 @@ namespace PalbaGames
         public void SetCustomHitEffectEnabled(bool enabled)
         {
             enableCustomHitEffect = enabled;
-        }
-
-        /// <summary>
-        /// Enable/disable lighting hit effect at runtime.
-        /// </summary>
-        public void SetLightingHitEffectEnabled(bool enabled)
-        {
-            enableLightingHitEffect = enabled;
-        }
-
-        /// <summary>
-        /// Update original light color (if light color changes during gameplay)
-        /// </summary>
-        public void UpdateOriginalLightColor(Color newColor)
-        {
-            originalLightColor = newColor;
-            if (currentLightFlashCoroutine == null && mainPlayerLight != null)
-                mainPlayerLight.color = newColor;
         }
     }
 }

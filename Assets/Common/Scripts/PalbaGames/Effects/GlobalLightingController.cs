@@ -59,7 +59,7 @@ namespace PalbaGames
         {
             float elapsedTime = 0f;
 
-            Debug.Log($"🔥 FADE START: From {startTranslucency} to 1 over {shadowFadeOutDuration}s");
+            // Debug.Log($"🔥 FADE START: From {startTranslucency} to 1 over {shadowFadeOutDuration}s");
 
             // 🔥 Force set starting value to override any conflicting animations
             lightCollider.shadowTranslucency = startTranslucency;
@@ -77,7 +77,7 @@ namespace PalbaGames
                 // Debug každých 0.3s
                 if (elapsedTime % 0.3f < Time.deltaTime)
                 {
-                    Debug.Log($"🔥 FADE: Progress {progress:F2}, Value {newValue:F3}");
+                 //   Debug.Log($"🔥 FADE: Progress {progress:F2}, Value {newValue:F3}");
                 }
                 
                 yield return null;
@@ -87,7 +87,7 @@ namespace PalbaGames
             if (lightCollider != null)
             {
                 lightCollider.shadowTranslucency = 1f;
-                Debug.Log($"🔥 FADE END: Final value = {lightCollider.shadowTranslucency}");
+               // Debug.Log($"🔥 FADE END: Final value = {lightCollider.shadowTranslucency}");
             }
         }
     }
