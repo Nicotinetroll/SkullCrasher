@@ -1,11 +1,12 @@
 using UnityEngine;
 using OctoberStudio;
 using OctoberStudio.Easing;
+using FunkyCode; // Smart Lighting 2D
 
 namespace PalbaGames
 {
     /// <summary>
-    /// Extends PlayerBehavior with Critical Strike logic and AllIn1Shader hit effects.
+    /// Extends PlayerBehavior with Critical Strike logic, AllIn1Shader hit effects, and Smart Lighting 2D effects.
     /// Attach to the same GameObject as PlayerBehavior.
     /// </summary>
     public class PlayerBehavior_Extended : MonoBehaviour
@@ -42,6 +43,13 @@ namespace PalbaGames
         [SerializeField] private float glowIntensityMax = 5f;
         [SerializeField] private string glowIntensityProperty = "_GlowIntensity";
 
+        [Header("Smart Lighting 2D Hit Effects")]
+        [SerializeField] private bool enableLightingHitEffect = true;
+        [SerializeField] private Light2D mainPlayerLight;
+        [SerializeField] private Color lightHitFlashColor = Color.red;
+        [SerializeField] private float lightFlashDuration = 0.15f;
+        [SerializeField] private AnimationCurve lightFlashCurve = AnimationCurve.EaseInOut(0, 1, 1, 0);
+
         private OctoberStudio.PlayerBehavior player;
         private CharacterBehavior characterBehavior;
         private SpriteRenderer spriteRenderer;
@@ -55,6 +63,10 @@ namespace PalbaGames
         // Track last HP to detect damage
         private float lastHP;
         private HealthbarBehavior healthbar;
+
+        // Lighting effects
+        private Color originalLightColor;
+        private Coroutine currentLightFlashCoroutine;
 
         private void Awake()
         {
@@ -91,6 +103,12 @@ namespace PalbaGames
                 SetupAllIn1HitEffect();
             }
 
+            // Setup lighting hit effect
+            if (enableLightingHitEffect)
+            {
+                SetupLightingHitEffect();
+            }
+
             // Initialize HP tracking
             if (healthbar != null)
             {
@@ -100,14 +118,18 @@ namespace PalbaGames
 
         private void Update()
         {
-            // Monitor HP changes to detect hits and trigger custom effect
-            if (enableCustomHitEffect && healthbar != null)
+            // Monitor HP changes to detect hits and trigger custom effects
+            if (healthbar != null)
             {
                 float currentHP = healthbar.HP;
                 if (currentHP < lastHP)
                 {
-                    // Player took damage - trigger our AllIn1 hit effect
-                    PlayAllIn1HitEffect();
+                    // Player took damage - trigger all hit effects
+                    if (enableCustomHitEffect)
+                        PlayAllIn1HitEffect();
+                    
+                    if (enableLightingHitEffect)
+                        TriggerLightHitFlash();
                 }
                 lastHP = currentHP;
             }
@@ -172,6 +194,31 @@ namespace PalbaGames
         }
 
         /// <summary>
+        /// Setup Smart Lighting 2D hit effect
+        /// </summary>
+        private void SetupLightingHitEffect()
+        {
+            // Auto-find main light if not assigned
+            if (mainPlayerLight == null)
+            {
+                mainPlayerLight = GetComponentInChildren<Light2D>();
+                
+                if (mainPlayerLight == null)
+                    mainPlayerLight = FindObjectOfType<Light2D>();
+            }
+
+            if (mainPlayerLight != null)
+            {
+                originalLightColor = mainPlayerLight.color;
+            }
+            else
+            {
+                Debug.LogWarning("[PlayerBehavior_Extended] Light2D not found for lighting hit effect!");
+                enableLightingHitEffect = false;
+            }
+        }
+
+        /// <summary>
         /// Custom hit effect using AllIn1Shader Hit Effect and Chromatic Aberration.
         /// </summary>
         public void PlayAllIn1HitEffect()
@@ -183,6 +230,42 @@ namespace PalbaGames
             
             // Start multiple effect animations simultaneously
             StartCoroutine(AnimateHitEffects(mat));
+        }
+
+        /// <summary>
+        /// Trigger red flash effect on player light when hit
+        /// </summary>
+        public void TriggerLightHitFlash()
+        {
+            if (!enableLightingHitEffect || mainPlayerLight == null) return;
+            
+            // Stop any existing flash
+            if (currentLightFlashCoroutine != null)
+                StopCoroutine(currentLightFlashCoroutine);
+            
+            currentLightFlashCoroutine = StartCoroutine(LightHitFlashCoroutine());
+        }
+
+        private System.Collections.IEnumerator LightHitFlashCoroutine()
+        {
+            float elapsedTime = 0f;
+            
+            while (elapsedTime < lightFlashDuration)
+            {
+                elapsedTime += Time.deltaTime;
+                float progress = elapsedTime / lightFlashDuration;
+                float curveValue = lightFlashCurve.Evaluate(progress);
+                
+                // Interpolate between original and hit color
+                Color currentColor = Color.Lerp(originalLightColor, lightHitFlashColor, curveValue);
+                mainPlayerLight.color = currentColor;
+                
+                yield return null;
+            }
+            
+            // Return to original color
+            mainPlayerLight.color = originalLightColor;
+            currentLightFlashCoroutine = null;
         }
 
         private System.Collections.IEnumerator AnimateHitEffects(Material mat)
@@ -238,12 +321,25 @@ namespace PalbaGames
         }
 
         /// <summary>
-        /// Test hit effect in editor.
+        /// Test all hit effects in editor.
         /// </summary>
-        [ContextMenu("Test AllIn1 Hit Effect")]
-        public void TestHitEffect()
+        [ContextMenu("Test All Hit Effects")]
+        public void TestAllHitEffects()
         {
-            PlayAllIn1HitEffect();
+            if (enableCustomHitEffect)
+                PlayAllIn1HitEffect();
+            
+            if (enableLightingHitEffect)
+                TriggerLightHitFlash();
+        }
+
+        /// <summary>
+        /// Test lighting hit effect in editor.
+        /// </summary>
+        [ContextMenu("Test Light Hit Flash")]
+        public void TestLightHitFlash()
+        {
+            TriggerLightHitFlash();
         }
 
         /// <summary>
@@ -252,6 +348,24 @@ namespace PalbaGames
         public void SetCustomHitEffectEnabled(bool enabled)
         {
             enableCustomHitEffect = enabled;
+        }
+
+        /// <summary>
+        /// Enable/disable lighting hit effect at runtime.
+        /// </summary>
+        public void SetLightingHitEffectEnabled(bool enabled)
+        {
+            enableLightingHitEffect = enabled;
+        }
+
+        /// <summary>
+        /// Update original light color (if light color changes during gameplay)
+        /// </summary>
+        public void UpdateOriginalLightColor(Color newColor)
+        {
+            originalLightColor = newColor;
+            if (currentLightFlashCoroutine == null && mainPlayerLight != null)
+                mainPlayerLight.color = newColor;
         }
     }
 }
