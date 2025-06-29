@@ -160,8 +160,8 @@ namespace PalbaGames.Challenges
             if (resultText != null)
             {
                 resultText.text = success
-                    ? "<color=#00FF00>✔ CHALLENGE COMPLETE!</color>"
-                    : "<color=#FF0000>✘ CHALLENGE FAILED</color>";
+                    ? "<color=#00FF00>CHALLENGE COMPLETE!</color>"
+                    : "<color=#FF0000>CHALLENGE FAILED — now you really got fucked up!</color>";
             }
 
             yield return new WaitForSeconds(resultDisplayTime);

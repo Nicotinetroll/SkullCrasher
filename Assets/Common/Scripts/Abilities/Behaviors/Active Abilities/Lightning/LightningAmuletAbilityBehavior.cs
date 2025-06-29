@@ -4,11 +4,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using PalbaGames;
+using FunkyCode; // Smart Lighting 2D
 
 namespace OctoberStudio.Abilities
 {
     /// <summary>
-    /// Active ability that spawns lightning strikes dealing damage and possibly crits to enemies in range.
+    /// Active ability that spawns lightning strikes with smooth light fade-out effects.
     /// </summary>
     public class LightningAmuletAbilityBehavior : AbilityBehavior<LightningAmuletAbilityData, LightningAmuletAbilityLevel>
     {
@@ -16,6 +17,11 @@ namespace OctoberStudio.Abilities
 
         [SerializeField] GameObject lightningPrefab;
         public GameObject LightningPrefab => lightningPrefab;
+
+        [Header("Light Fade Settings")]
+        [SerializeField] private float lightDuration = 0.5f;
+        [SerializeField] private float lightFadeDuration = 0.3f;
+        [SerializeField] private AnimationCurve lightFadeCurve = AnimationCurve.EaseInOut(0, 1, 1, 0);
 
         public PoolComponent<ParticleSystem> lightningPool;
 
@@ -87,19 +93,72 @@ namespace OctoberStudio.Abilities
                         particle.transform.position = PlayerBehavior.Player.transform.position + Vector3.up + Vector3.left;
                     }
 
-                    IEasingCoroutine easingCoroutine = null;
-                    easingCoroutine = EasingManager.DoAfter(1f, () =>
-                    {
-                        particle.gameObject.SetActive(false);
-                        easingCoroutines.Remove(easingCoroutine);
-                    });
-                    easingCoroutines.Add(easingCoroutine);
+                    // 🔥 Start lightning effect with smooth light fade
+                    StartCoroutine(HandleLightningEffect(particle));
 
                     GameController.AudioManager.PlaySound(LIGHTNING_AMULET_HASH);
                 }
 
                 yield return new WaitForSeconds(AbilityLevel.AbilityCooldown * PlayerBehavior.Player.CooldownMultiplier - AbilityLevel.DurationBetweenHits);
             }
+        }
+
+        /// <summary>
+        /// Handle lightning effect with smooth light fade-out
+        /// </summary>
+        private IEnumerator HandleLightningEffect(ParticleSystem particle)
+        {
+            // Find Light2D component in the lightning prefab
+            Light2D lightComponent = particle.GetComponentInChildren<Light2D>();
+            
+            float originalAlpha = 1f;
+            if (lightComponent != null)
+            {
+                originalAlpha = lightComponent.color.a;
+            }
+
+            // Wait for light duration before starting fade
+            yield return new WaitForSeconds(lightDuration);
+
+            // Fade out the light
+            if (lightComponent != null)
+            {
+                yield return StartCoroutine(FadeLightCoroutine(lightComponent, originalAlpha));
+            }
+
+            // Wait a bit more for complete effect cleanup
+            yield return new WaitForSeconds(0.1f);
+
+            // Deactivate the particle system
+            particle.gameObject.SetActive(false);
+        }
+
+        /// <summary>
+        /// Smooth fade-out coroutine for Light2D alpha
+        /// </summary>
+        private IEnumerator FadeLightCoroutine(Light2D lightComponent, float startAlpha)
+        {
+            float elapsedTime = 0f;
+            Color originalColor = lightComponent.color;
+
+            while (elapsedTime < lightFadeDuration)
+            {
+                elapsedTime += Time.deltaTime;
+                float progress = elapsedTime / lightFadeDuration;
+                float curveValue = lightFadeCurve.Evaluate(progress);
+
+                // Fade from original alpha to 0
+                float currentAlpha = Mathf.Lerp(startAlpha, 0f, curveValue);
+                lightComponent.color = new Color(originalColor.r, originalColor.g, originalColor.b, currentAlpha);
+
+                yield return null;
+            }
+
+            // Ensure final alpha is 0
+            lightComponent.color = new Color(originalColor.r, originalColor.g, originalColor.b, 0f);
+            
+            // Reset alpha for next use
+            lightComponent.color = new Color(originalColor.r, originalColor.g, originalColor.b, startAlpha);
         }
 
         public override void Clear()

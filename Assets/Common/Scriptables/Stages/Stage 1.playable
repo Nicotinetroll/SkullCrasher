@@ -400,9 +400,9 @@ MonoBehaviour:
   m_Children: []
   m_Clips:
   - m_Version: 1
-    m_Start: 175
+    m_Start: 629.3166666666667
     m_ClipIn: 0
-    m_Asset: {fileID: 6552528272748752163}
+    m_Asset: {fileID: 7491260068709142420}
     m_Duration: 5
     m_TimeScale: 1
     m_ParentTrack: {fileID: -9133120068218355185}
@@ -469,7 +469,7 @@ MonoBehaviour:
     m_PreExtrapolationTime: 0
     m_DisplayName: Boss
   - m_Version: 1
-    m_Start: 355
+    m_Start: 598.2833333333333
     m_ClipIn: 0
     m_Asset: {fileID: 4298440419453778954}
     m_Duration: 5
@@ -538,9 +538,9 @@ MonoBehaviour:
     m_PreExtrapolationTime: 0
     m_DisplayName: Boss
   - m_Version: 1
-    m_Start: 595
+    m_Start: 590
     m_ClipIn: 0
-    m_Asset: {fileID: 7491260068709142420}
+    m_Asset: {fileID: 6552528272748752163}
     m_Duration: 5
     m_TimeScale: 1
     m_ParentTrack: {fileID: -9133120068218355185}
@@ -842,49 +842,13 @@ MonoBehaviour:
     m_BlendOutDuration: -1
     m_MixInCurve:
       serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      - serializedVersion: 3
-        time: 1
-        value: 1
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
+      m_Curve: []
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
     m_MixOutCurve:
       serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 1
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      - serializedVersion: 3
-        time: 1
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
+      m_Curve: []
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
@@ -944,25 +908,7 @@ MonoBehaviour:
     m_BlendOutDuration: -1
     m_MixInCurve:
       serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      - serializedVersion: 3
-        time: 1
-        value: 1
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
+      m_Curve: []
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
@@ -1013,49 +959,13 @@ MonoBehaviour:
     m_BlendOutDuration: -1
     m_MixInCurve:
       serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      - serializedVersion: 3
-        time: 1
-        value: 1
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
+      m_Curve: []
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
     m_MixOutCurve:
       serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 1
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      - serializedVersion: 3
-        time: 1
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
+      m_Curve: []
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
@@ -1082,25 +992,7 @@ MonoBehaviour:
     m_BlendOutDuration: -1
     m_MixInCurve:
       serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      - serializedVersion: 3
-        time: 1
-        value: 1
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
+      m_Curve: []
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
@@ -1175,25 +1067,40 @@ MonoBehaviour:
       m_RotationOrder: 4
     m_MixOutCurve:
       serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 1
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      - serializedVersion: 3
-        time: 1
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    m_BlendInCurveMode: 0
+    m_BlendOutCurveMode: 0
+    m_ExposedParameterNames: []
+    m_AnimationCurves: {fileID: 0}
+    m_Recordable: 0
+    m_PostExtrapolationMode: 0
+    m_PreExtrapolationMode: 0
+    m_PostExtrapolationTime: 0
+    m_PreExtrapolationTime: 0
+    m_DisplayName: Maintain
+  - m_Version: 1
+    m_Start: 48
+    m_ClipIn: 0
+    m_Asset: {fileID: -1633649491852349898}
+    m_Duration: 30
+    m_TimeScale: 1
+    m_ParentTrack: {fileID: -8342276710104939331}
+    m_EaseInDuration: 0
+    m_EaseOutDuration: 0
+    m_BlendInDuration: -1
+    m_BlendOutDuration: -1
+    m_MixInCurve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    m_MixOutCurve:
+      serializedVersion: 2
+      m_Curve: []
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
@@ -1210,29 +1117,6 @@ MonoBehaviour:
   m_Markers:
     m_Objects: []
   enemyType: 1
---- !u!114 &-7965061456526272618
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 499f041be5b6ce74299d9f2439f62af4, type: 3}
-  m_Name: ChallengePlayableAsset(Clone)(Clone)
-  m_EditorClassIdentifier: 
-  challengeType: 1
-  amount: 1000
-  duration: 60
-  description: Deal Damage or die
-  enableStatBuffRewards: 0
-  rewardStatBuffs: []
-  enableDropReward: 1
-  rewardDropType: 0
-  rewardDropCount: 3
-  enableStatDebuffPenalties: 0
-  penaltyStatDebuffs: []
 --- !u!114 &-7860424880642223810
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1296,7 +1180,7 @@ MonoBehaviour:
       chance: 0
     disableOffscreenTeleport: 0
   circularSpawn: 1
-  enemiesCount: 7
+  enemiesCount: 70
 --- !u!114 &-7248627832352753297
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1373,7 +1257,7 @@ MonoBehaviour:
     dropOverride: []
     disableOffscreenTeleport: 0
   circularSpawn: 0
-  continuousSpawnPerSecond: 2
+  continuousSpawnPerSecond: 5
 --- !u!114 &-4855611932077331412
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1427,7 +1311,7 @@ MonoBehaviour:
     dropOverride: []
     disableOffscreenTeleport: 0
   circularSpawn: 0
-  continuousSpawnPerSecond: 1
+  continuousSpawnPerSecond: 4
 --- !u!114 &-3780683128003735821
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1537,6 +1421,32 @@ MonoBehaviour:
   circularSpawn: 1
   enemiesCount: 40
   burstCount: 1
+--- !u!114 &-1633649491852349898
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e14369e9041d3e74a96df20a5d208ec6, type: 3}
+  m_Name: KeepAmountWave(Clone)(Clone)
+  m_EditorClassIdentifier: 
+  waveOverride:
+    useDamageOverride: 0
+    damageOverride: 0
+    useHPOverride: 0
+    hpOverride: 0
+    useSpeedOverride: 0
+    speedOverride: 0
+    useDropOverride: 0
+    dropOverride:
+    - dropType: 0
+      chance: 0
+    disableOffscreenTeleport: 0
+  circularSpawn: 1
+  enemiesCount: 196
 --- !u!114 &-1504345727421355554
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1585,10 +1495,10 @@ MonoBehaviour:
   m_Children: []
   m_Clips:
   - m_Version: 1
-    m_Start: 54.99999999999999
+    m_Start: 23.3
     m_ClipIn: 0
     m_Asset: {fileID: 8263192796273274862}
-    m_Duration: 45.00000000000001
+    m_Duration: 76.7
     m_TimeScale: 1
     m_ParentTrack: {fileID: -1332082529065791036}
     m_EaseInDuration: 0
@@ -1621,7 +1531,7 @@ MonoBehaviour:
     m_Start: 100
     m_ClipIn: 0
     m_Asset: {fileID: 3327646263228418039}
-    m_Duration: 25
+    m_Duration: 80
     m_TimeScale: 1
     m_ParentTrack: {fileID: -1332082529065791036}
     m_EaseInDuration: 0
@@ -1966,29 +1876,6 @@ MonoBehaviour:
     m_ScenePreview: 1
   m_DurationMode: 0
   m_MarkerTrack: {fileID: -8803894874215066732}
---- !u!114 &793726098646702580
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 499f041be5b6ce74299d9f2439f62af4, type: 3}
-  m_Name: ChallengePlayableAsset(Clone)(Clone)(Clone)(Clone)
-  m_EditorClassIdentifier: 
-  challengeType: 2
-  amount: 20
-  duration: 20
-  description: Dont move
-  enableStatBuffRewards: 0
-  rewardStatBuffs: []
-  enableDropReward: 0
-  rewardDropType: 0
-  rewardDropCount: 3
-  enableStatDebuffPenalties: 0
-  penaltyStatDebuffs: []
 --- !u!114 &1202852977869983047
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2076,19 +1963,11 @@ MonoBehaviour:
   m_Name: ChallengePlayableAsset
   m_EditorClassIdentifier: 
   challengeType: 0
-  amount: 30
+  amount: 1600
   duration: 60
   description: Kill Enemies in Time
-  enableStatBuffRewards: 1
-  rewardStatBuffs:
-  - statType: 10
-    value: 100
-    mode: 2
-    duration: 30
-  - statType: 4
-    value: 0.1
-    mode: 2
-    duration: 30
+  enableStatBuffRewards: 0
+  rewardStatBuffs: []
   enableDropReward: 1
   rewardDropType: 100
   rewardDropCount: 1
@@ -2099,7 +1978,7 @@ MonoBehaviour:
     mode: 0
     duration: 50
   - statType: 1
-    value: 0.5
+    value: 0.2
     mode: 2
     duration: 50
 --- !u!114 &2295668183432415732
@@ -2189,7 +2068,7 @@ MonoBehaviour:
     dropOverride: []
     disableOffscreenTeleport: 0
   circularSpawn: 0
-  continuousSpawnPerSecond: 5
+  continuousSpawnPerSecond: 20
 --- !u!114 &3327646263228418039
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2213,7 +2092,7 @@ MonoBehaviour:
     dropOverride: []
     disableOffscreenTeleport: 0
   circularSpawn: 0
-  enemiesCount: 7
+  enemiesCount: 40
 --- !u!114 &3698408199910835473
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2237,7 +2116,7 @@ MonoBehaviour:
     dropOverride: []
     disableOffscreenTeleport: 0
   circularSpawn: 1
-  enemiesCount: 10
+  enemiesCount: 60
   burstCount: 1
 --- !u!114 &3974732416258905762
 MonoBehaviour:
@@ -2306,6 +2185,37 @@ MonoBehaviour:
   bossRedCircleStayDuration: 2
   bossSpawnOffsetFromPlayer: {x: 0, y: 1.5}
   shouldSpawnChest: 1
+--- !u!114 &4461357205180494102
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 499f041be5b6ce74299d9f2439f62af4, type: 3}
+  m_Name: ChallengePlayableAsset(Clone)(Clone)
+  m_EditorClassIdentifier: 
+  challengeType: 2
+  amount: 20
+  duration: 20
+  description: Dont move!
+  enableStatBuffRewards: 0
+  rewardStatBuffs: []
+  enableDropReward: 1
+  rewardDropType: 100
+  rewardDropCount: 1
+  enableStatDebuffPenalties: 1
+  penaltyStatDebuffs:
+  - statType: 0
+    value: 0
+    mode: 0
+    duration: 50
+  - statType: 1
+    value: 0.2
+    mode: 2
+    duration: 50
 --- !u!114 &4730785631893838425
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2329,7 +2239,7 @@ MonoBehaviour:
     dropOverride: []
     disableOffscreenTeleport: 0
   circularSpawn: 1
-  enemiesCount: 8
+  enemiesCount: 40
   burstCount: 5
 --- !u!114 &4771298989609250133
 MonoBehaviour:
@@ -2392,7 +2302,7 @@ MonoBehaviour:
     dropOverride: []
     disableOffscreenTeleport: 0
   circularSpawn: 0
-  continuousSpawnPerSecond: 5
+  continuousSpawnPerSecond: 20
 --- !u!114 &5434482563291951568
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2836,7 +2746,7 @@ MonoBehaviour:
     dropOverride: []
     disableOffscreenTeleport: 0
   circularSpawn: 0
-  enemiesCount: 25
+  enemiesCount: 70
 --- !u!114 &5932854868463665786
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2885,7 +2795,7 @@ MonoBehaviour:
     dropOverride: []
     disableOffscreenTeleport: 0
   circularSpawn: 1
-  enemiesCount: 5
+  enemiesCount: 40
   burstCount: 7
 --- !u!114 &6535436607405345518
 MonoBehaviour:
@@ -2910,7 +2820,7 @@ MonoBehaviour:
     dropOverride: []
     disableOffscreenTeleport: 0
   circularSpawn: 0
-  enemiesCount: 60
+  enemiesCount: 150
 --- !u!114 &6552528272748752163
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2979,7 +2889,7 @@ MonoBehaviour:
     dropOverride: []
     disableOffscreenTeleport: 0
   circularSpawn: 0
-  continuousSpawnPerSecond: 5
+  continuousSpawnPerSecond: 7
 --- !u!114 &7267383853780467874
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3468,10 +3378,10 @@ MonoBehaviour:
   m_Children: []
   m_Clips:
   - m_Version: 1
-    m_Start: 215
+    m_Start: 66.38333333333334
     m_ClipIn: 0
     m_Asset: {fileID: 7179366488066843314}
-    m_Duration: 70
+    m_Duration: 113.61666666666666
     m_TimeScale: 1
     m_ParentTrack: {fileID: 7649540114541299300}
     m_EaseInDuration: 0
@@ -3752,7 +3662,7 @@ MonoBehaviour:
     dropOverride: []
     disableOffscreenTeleport: 0
   circularSpawn: 0
-  continuousSpawnPerSecond: 0.7
+  continuousSpawnPerSecond: 2
 --- !u!114 &8487286461575823994
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3860,10 +3770,10 @@ MonoBehaviour:
     m_PreExtrapolationTime: 0
     m_DisplayName: Continuous
   - m_Version: 1
-    m_Start: 38
+    m_Start: 9.816666666666666
     m_ClipIn: 0
     m_Asset: {fileID: 6056135806104939498}
-    m_Duration: 10
+    m_Duration: 38.18333333333334
     m_TimeScale: 1
     m_ParentTrack: {fileID: 8636216251335140267}
     m_EaseInDuration: 0
@@ -4304,10 +4214,61 @@ MonoBehaviour:
   m_Children: []
   m_Clips:
   - m_Version: 1
-    m_Start: 60.88333333333333
+    m_Start: 120
+    m_ClipIn: 0
+    m_Asset: {fileID: 4461357205180494102}
+    m_Duration: 5
+    m_TimeScale: 1
+    m_ParentTrack: {fileID: 9026503889325213718}
+    m_EaseInDuration: 0
+    m_EaseOutDuration: 0
+    m_BlendInDuration: -1
+    m_BlendOutDuration: -1
+    m_MixInCurve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    m_MixOutCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    m_BlendInCurveMode: 0
+    m_BlendOutCurveMode: 0
+    m_ExposedParameterNames: []
+    m_AnimationCurves: {fileID: 0}
+    m_Recordable: 0
+    m_PostExtrapolationMode: 0
+    m_PreExtrapolationMode: 0
+    m_PostExtrapolationTime: 0
+    m_PreExtrapolationTime: 0
+    m_DisplayName: ChallengePlayableAsset
+  - m_Version: 1
+    m_Start: 23.3
     m_ClipIn: 0
     m_Asset: {fileID: 2268481988125218156}
-    m_Duration: 5
+    m_Duration: 60
     m_TimeScale: 1
     m_ParentTrack: {fileID: 9026503889325213718}
     m_EaseInDuration: 0
@@ -4340,163 +4301,7 @@ MonoBehaviour:
       m_RotationOrder: 4
     m_MixOutCurve:
       serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 1
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      - serializedVersion: 3
-        time: 1
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    m_BlendInCurveMode: 0
-    m_BlendOutCurveMode: 0
-    m_ExposedParameterNames: []
-    m_AnimationCurves: {fileID: 0}
-    m_Recordable: 0
-    m_PostExtrapolationMode: 0
-    m_PreExtrapolationMode: 0
-    m_PostExtrapolationTime: 0
-    m_PreExtrapolationTime: 0
-    m_DisplayName: ChallengePlayableAsset
-  - m_Version: 1
-    m_Start: 73
-    m_ClipIn: 0
-    m_Asset: {fileID: -7965061456526272618}
-    m_Duration: 5
-    m_TimeScale: 1
-    m_ParentTrack: {fileID: 9026503889325213718}
-    m_EaseInDuration: 0
-    m_EaseOutDuration: 0
-    m_BlendInDuration: -1
-    m_BlendOutDuration: -1
-    m_MixInCurve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      - serializedVersion: 3
-        time: 1
-        value: 1
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    m_MixOutCurve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 1
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      - serializedVersion: 3
-        time: 1
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    m_BlendInCurveMode: 0
-    m_BlendOutCurveMode: 0
-    m_ExposedParameterNames: []
-    m_AnimationCurves: {fileID: 0}
-    m_Recordable: 0
-    m_PostExtrapolationMode: 0
-    m_PreExtrapolationMode: 0
-    m_PostExtrapolationTime: 0
-    m_PreExtrapolationTime: 0
-    m_DisplayName: ChallengePlayableAsset
-  - m_Version: 1
-    m_Start: 175
-    m_ClipIn: 0
-    m_Asset: {fileID: 793726098646702580}
-    m_Duration: 5
-    m_TimeScale: 1
-    m_ParentTrack: {fileID: 9026503889325213718}
-    m_EaseInDuration: 0
-    m_EaseOutDuration: 0
-    m_BlendInDuration: -1
-    m_BlendOutDuration: -1
-    m_MixInCurve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      - serializedVersion: 3
-        time: 1
-        value: 1
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    m_MixOutCurve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 1
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      - serializedVersion: 3
-        time: 1
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
+      m_Curve: []
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4

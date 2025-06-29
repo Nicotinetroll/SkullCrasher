@@ -48,6 +48,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   abilityCollider: {fileID: 3086591919675459276}
   visuals: {fileID: 4076839695825159774}
+  abilityLight: {fileID: 0}
+  enableHorrorFlicker: 1
+  flickerSpeed: 6
+  minAlpha: 0.3
+  maxAlpha: 1
+  noiseScale: 10
+  enableSizeStress: 1
+  minSize: 0.7
+  maxSize: 1.2
 --- !u!58 &3086591919675459276
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -56,6 +65,7 @@ CircleCollider2D:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6046089768498997805}
   m_Enabled: 1
+  serializedVersion: 3
   m_Density: 1
   m_Material: {fileID: 0}
   m_IncludeLayers:
@@ -79,9 +89,9 @@ CircleCollider2D:
     m_Bits: 4294967295
   m_IsTrigger: 1
   m_UsedByEffector: 0
-  m_UsedByComposite: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
-  serializedVersion: 2
   m_Radius: 0.5
 --- !u!1001 &9002766920209665613
 PrefabInstance:
@@ -145,6 +155,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7878980790387996732, guid: 515960b9001e5e84ea0ca89bf0d97e91,
+        type: 3}
+      propertyPath: size
+      value: 3.3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
