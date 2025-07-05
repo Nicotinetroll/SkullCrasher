@@ -47,7 +47,7 @@ namespace PalbaGames.Challenges
             }
         }
 
-        public void StartChallengeSequence(BaseChallenge challenge, string description = "")
+        public void StartChallengeSequence(BaseChallenge challenge, string description = "", bool enableParticles = false, GameObject particlePrefab = null, float particleIntensity = 1.0f)
         {
             currentChallenge = challenge;
 
@@ -127,7 +127,7 @@ namespace PalbaGames.Challenges
             {
                 progressBlock.SetActive(true);
 
-                // Play shake feedback at start
+                // Play MMF feedbacks (including particles if enabled)
                 var feedbacks = progressBlock.GetComponentInChildren<MoreMountains.Feedbacks.MMF_Player>();
                 if (feedbacks != null)
                 {
@@ -193,6 +193,7 @@ namespace PalbaGames.Challenges
                     progressSlider.value = Mathf.Clamp01(objectiveProgress);
                     previousSliderValue = progressSlider.value;
 
+                    // Trigger MMF feedbacks on progress change (includes particles)
                     var feedbacks = progressSlider.GetComponentInParent<MoreMountains.Feedbacks.MMF_Player>();
                     if (feedbacks != null)
                     {

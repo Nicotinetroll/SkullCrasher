@@ -21,6 +21,18 @@ namespace PalbaGames.Timeline
         [Tooltip("Custom description text for the challenge intro. If empty, auto-generated description will be used.")]
         public string description = "";
 
+        [Header("Particle Effects")]
+        [Space(5)]
+        [Tooltip("Enable particle effects when progress bar fills during this challenge.")]
+        public bool enableProgressParticles = false;
+
+        [Tooltip("Particle prefab to spawn (drag your custom particle prefab here).")]
+        public GameObject particlePrefab;
+
+        [Tooltip("Particle effect intensity (0.1 = subtle, 1.0 = normal, 2.0 = intense).")]
+        [Range(0.1f, 3.0f)]
+        public float particleIntensity = 1.0f;
+
         [Header("Rewards (Success)")]
         [Space(5)]
         [Tooltip("Enable stat buff rewards when challenge succeeds.\n\n" +
@@ -70,6 +82,11 @@ namespace PalbaGames.Timeline
             behaviour.amount = amount;
             behaviour.duration = duration;
             behaviour.description = description;
+
+            // Particle settings
+            behaviour.enableProgressParticles = enableProgressParticles;
+            behaviour.particlePrefab = particlePrefab;
+            behaviour.particleIntensity = particleIntensity;
 
             behaviour.enableStatBuffRewards = enableStatBuffRewards;
             behaviour.rewardStatBuffs = rewardStatBuffs;

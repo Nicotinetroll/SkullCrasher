@@ -199,14 +199,14 @@ namespace PalbaGames
             
             if (!mat.HasProperty(propertyName))
             {
-                Debug.LogError($"[Grass] Material doesn't have property: {propertyName}");
+   //             Debug.LogError($"[Grass] Material doesn't have property: {propertyName}");
                 return;
             }
             
             float currentValue = mat.GetFloat(propertyName);
             float targetValue = startMoving ? grassMovementValue : 0f;
             
-            Debug.Log($"[Grass] Animating {propertyName} from {currentValue:F2} to {targetValue:F2}");
+//            Debug.Log($"[Grass] Animating {propertyName} from {currentValue:F2} to {targetValue:F2}");
 
             grassCoroutine = EasingManager.DoFloat(currentValue, targetValue, grassAnimationSpeed, 
                 (value) => mat.SetFloat(propertyName, value));

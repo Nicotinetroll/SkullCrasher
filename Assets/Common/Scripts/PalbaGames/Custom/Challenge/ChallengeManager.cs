@@ -51,12 +51,12 @@ namespace PalbaGames.Challenges
         /// <summary>
         /// Adds a new challenge with UI sequence
         /// </summary>
-        public void AddChallenge(BaseChallenge challenge, string description = "")
+        public void AddChallenge(BaseChallenge challenge, string description = "", bool enableParticles = false, GameObject particlePrefab = null, float particleIntensity = 1.0f)
         {
             DebugLogger.Log($"[ChallengeManager] Adding challenge: {challenge.GetType().Name}");
             
             // Start UI sequence immediately
-            challengeUI?.StartChallengeSequence(challenge, description);
+            challengeUI?.StartChallengeSequence(challenge, description, enableParticles, particlePrefab, particleIntensity);
             
             // Start challenge logic after delay
             StartCoroutine(StartChallengeAfterDelay(challenge, preStartDelay));

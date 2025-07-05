@@ -12,6 +12,11 @@ namespace PalbaGames.Timeline
         public float duration;
         public string description;
 
+        // Particle settings
+        public bool enableProgressParticles;
+        public GameObject particlePrefab;
+        public float particleIntensity = 1.0f;
+
         public bool enableStatBuffRewards;
         public StatModifierEntry[] rewardStatBuffs;
 
@@ -77,7 +82,8 @@ namespace PalbaGames.Timeline
                         _ => challenge.GetDisplayName()
                     };
 
-                ChallengeManager.Instance.AddChallenge(challenge, finalDescription);
+                // Pass particle settings to ChallengeManager
+                ChallengeManager.Instance.AddChallenge(challenge, finalDescription, enableProgressParticles, particlePrefab, particleIntensity);
             }
         }
     }

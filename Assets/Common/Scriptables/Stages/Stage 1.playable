@@ -1966,6 +1966,10 @@ MonoBehaviour:
   amount: 1600
   duration: 60
   description: Kill Enemies in Time
+  enableProgressParticles: 1
+  particlePrefab: {fileID: 3106912800745226460, guid: 5bfd1693bc079794d9b3b5450e18fa98,
+    type: 3}
+  particleIntensity: 1
   enableStatBuffRewards: 0
   rewardStatBuffs: []
   enableDropReward: 1
@@ -2201,6 +2205,9 @@ MonoBehaviour:
   amount: 20
   duration: 20
   description: Dont move!
+  enableProgressParticles: 0
+  particlePrefab: {fileID: 0}
+  particleIntensity: 1
   enableStatBuffRewards: 0
   rewardStatBuffs: []
   enableDropReward: 1
@@ -4265,7 +4272,7 @@ MonoBehaviour:
     m_PreExtrapolationTime: 0
     m_DisplayName: ChallengePlayableAsset
   - m_Version: 1
-    m_Start: 23.3
+    m_Start: 9.816666666666666
     m_ClipIn: 0
     m_Asset: {fileID: 2268481988125218156}
     m_Duration: 60
